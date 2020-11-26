@@ -1,0 +1,63 @@
+<h1>1. Etsi kokoonpano</h1>
+<form>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Junanumero</label>
+    <div class="col-10">
+      <input class="form-control" type="text" [(ngModel)]="trainNumber" name="trainNumber"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="departure-input" class="col-2 col-form-label">Lähtöpäivämäärä</label>
+    <div class="col-10">
+      <input class="form-control" type="text" [(ngModel)]="departureDate" id="departure-input" name="departureDate"/>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" (click)="fetchComposition()">
+    <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>Etsi kokoonpano
+  </button>
+</form>
+<br><br>
+
+<h1>2. Valitse versio</h1>
+<div class="form-group">
+  <select class="form-control" [(ngModel)]="selectedComposition">
+    <option selected="selected">Valitse versio</option>
+    <option *ngFor="let c of compositions | async" [ngValue]="c">{{ c.id.fetchDate | date: 'dd.MM.yyyy HH:mm:ss'}}: {{c.version}}</option>
+  </select>
+  <small id="passwordHelpBlock" class="form-text text-muted">Tippi: voit selailla versiota eteen-/taaksepäin nuolinäppäimillä focuksen ollessa alasvetovalikossa</small>
+</div>
+
+<br><br>
+<table class="table table-condensed" *ngIf="selectedComposition != null">
+  <tr>
+    <th>Junan tyyppi</th>
+    <th>Junan kategoria</th>
+    <th>Pituus</th>
+    <th>Maksiminopeus</th>
+    <th>Lähtö</th>
+    <th>Saapuminen</th>
+    <th>Veturit</th>
+    <th>Vaunut</th>
+  </tr>
+  <tr>
+  <tr *ngFor="let entity of selectedComposition?.journeySections ">
+    <td>{{ selectedComposition.trainType }}</td>
+    <td>{{ selectedComposition.trainCategory }}</td>
+    <td>{{ entity.totalLength }} m</td>
+    <td>{{ entity.maximumSpeed }} km/h</td>
+    <td>{{ entity.beginTimeTableRow.scheduledTime | date: 'HH:mm:ss'}} {{ entity.beginTimeTableRow.stationShortCode }}</td>
+    <td>{{ entity.endTimeTableRow.scheduledTime | date: 'HH:mm:ss'}} {{ entity.endTimeTableRow.stationShortCode }}</td>
+    <td>
+      <span *ngFor="let loco of entity.locomotives ">
+       {{ loco.locomotiveType }}
+      </span>
+    </td>
+    <td>
+      <span *ngFor="let wagon of entity.wagons ">
+       {{ wagon.wagonType }}
+      </span>
+    </td>
+  </tr>
+</table>
+

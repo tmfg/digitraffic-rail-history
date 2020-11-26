@@ -1,0 +1,89 @@
+<h1>1. Etsi aikataulu</h1>
+<form>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Junanumero</label>
+    <div class="col-10">
+      <input class="form-control" type="text" [(ngModel)]="trainNumber" name="trainNumber"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="departure-input" class="col-2 col-form-label">Lähtöpäivämäärä</label>
+    <div class="col-10">
+      <input class="form-control" type="text" [(ngModel)]="departureDate" id="departure-input" name="departureDate"/>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" (click)="fetchTrain()">
+    <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>Etsi aikataulu
+  </button>
+</form>
+<br><br>
+
+<h1>2. Valitse versio</h1>
+<div class="form-group">
+  <select class="form-control" [(ngModel)]="selectedTrain">
+    <option selected="selected">Valitse versio</option>
+    <option *ngFor="let c of trains | async" [ngValue]="c">{{ c.id.fetchDate | date: 'dd.MM.yyyy HH:mm:ss'}}:
+      {{c.version}}
+    </option>
+  </select>
+  <small id="passwordHelpBlock" class="form-text text-muted">Tippi: voit selailla versiota eteen-/taaksepäin
+    nuolinäppäimillä focuksen ollessa alasvetovalikossa
+  </small>
+</div>
+
+
+<div *ngIf="selectedTrain != null" >
+
+<small>Operaattori: {{selectedTrain?.operatorShortCode}}, Tyyppi: {{selectedTrain?.trainType}}/{{selectedTrain?.trainCategory}}, Lähilinjatunnus: {{selectedTrain?.commuterLineID}}, Hyväksytty: {{ selectedTrain.timetableAcceptanceDate | date: 'dd.MM.yyyy HH:mm:ss'}}, Kulussa: {{selectedTrain?.runningCurrently}}, Peruttu: {{selectedTrain?.cancelled}}</small>
+<br><br>
+
+<table class="table table-condensed">
+  <tr>
+    <th>Liikennepaikka</th>
+    <th>Raide</th>
+    <th>Tyyppi</th>
+    <th>Aikatauluaika</th>
+    <th>Toteunut aika</th>
+    <th>Ennuste</th>
+    <th>Ennusteen lähde</th>
+    <th>Ennuste epävarma</th>
+    <th>Peruttu</th>
+    <th>Lähtövalmius</th>
+    <th>Syykoodit</th>
+  </tr>
+  <tr
+    *ngFor="let entity of selectedTrain?.timeTableRows ">
+    <td>{{ entity.stationShortCode }}</td>
+    <td>{{ entity.commercialTrack }}</td>
+    <td>{{ entity.type }}</td>
+    <td>{{ entity.scheduledTime | date: 'HH:mm:ss'}}</td>
+    <td *ngIf="entity?.actualTime != null;else emptyTrainReady">
+      {{ entity.actualTime | date: 'HH:mm:ss' }} ({{ entity.differenceInMinutes }})
+    </td>
+    <td *ngIf="entity?.liveEstimateTime != null;else emptyTrainReady">
+      {{ entity.liveEstimateTime | date: 'HH:mm:ss' }} ({{ entity.differenceInMinutes }})
+    </td>
+    <td>{{ entity.estimateSource }}</td>
+    <td *ngIf="entity?.unknownDelay != null;else emptyTrainReady">
+      {{ entity.unknownDelay }}
+    </td>
+    <td>{{ entity.cancelled }}</td>
+
+
+
+    <td *ngIf="entity?.trainReady != null;else emptyTrainReady">
+      {{ entity.trainReady.accepted }} ({{ entity.trainReady.source }})
+    </td>
+    <td>
+      <span *ngFor="let c of entity.causes ">
+       {{ c.categoryCode }} {{ c.detailedCategoryCode }} {{c.thirdCategoryCode}}
+      </span>
+    </td>
+    <ng-template #emptyTrainReady>
+      <td>&nbsp;</td>
+    </ng-template>
+
+  </tr>
+</table>
+</div>
