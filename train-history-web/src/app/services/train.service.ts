@@ -1,6 +1,6 @@
 import 'rxjs/Rx';
 import {Injectable} from "@angular/core";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {JsonService} from "./json.service";
 
 @Injectable()
