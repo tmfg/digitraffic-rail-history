@@ -1,5 +1,3 @@
-
-import {refCount, publishLast} from 'rxjs/operators';
 import 'rxjs/Rx';
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
@@ -13,7 +11,7 @@ export class JsonService {
 
   public getJSON(trainNumber: number, departureDate: string, entityName: string): Observable<any> {
     let url = `https://rata.digitraffic.fi/api/v1/${entityName}s/history/${departureDate}/${trainNumber}`
-    return this.http.get(url).pipe(publishLast(),refCount(),);
+    return this.http.get(url);
   }
 
 }
