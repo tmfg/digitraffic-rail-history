@@ -65,3 +65,5 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+/train-history-web/node_modules/
