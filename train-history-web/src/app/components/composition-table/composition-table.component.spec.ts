@@ -1,16 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync as} from '@angular/core/testing';
 
-import { CompositionTableComponent } from './composition-table.component';
+import {CompositionTableComponent} from './composition-table.component';
+import {waitForAsync} from "@angular/core/testing";
 
 describe('CompositionTableComponent', () => {
   let component: CompositionTableComponent;
   let fixture: ComponentFixture<CompositionTableComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompositionTableComponent ]
+      declarations: [CompositionTableComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
