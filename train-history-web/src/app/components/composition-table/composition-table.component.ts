@@ -10,11 +10,11 @@ import {CompositionService} from "../../services/composition.service";
 export class CompositionTableComponent implements OnInit {
   compositions: Observable<any>;
 
-  selectedComposition: any;
+  public selectedComposition: any;
   private compositionService: CompositionService;
-  trainNumber: number = 1;
-  departureDate: string;
-  loading: boolean = false;
+  public trainNumber: number = 1;
+  public departureDate: string;
+  public loading: boolean = false;
 
   public selectComposition(composition: any) {
     this.selectedComposition = composition;

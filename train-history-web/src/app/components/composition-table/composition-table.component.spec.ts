@@ -1,7 +1,6 @@
-import {ComponentFixture, TestBed, waitForAsync as} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {CompositionTableComponent} from './composition-table.component';
-import {waitForAsync} from "@angular/core/testing";
 
 describe('CompositionTableComponent', () => {
   let component: CompositionTableComponent;
