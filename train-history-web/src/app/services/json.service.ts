@@ -10,7 +10,7 @@ export class JsonService {
   }
 
   public getJSON(trainNumber: number, departureDate: string, entityName: string): Observable<any> {
-    let url = `https://rata.digitraffic.fi/api/v1/${entityName}s/history/${departureDate}/${trainNumber}`
+    let url = `/api/v1/${entityName}s/history/${departureDate}/${trainNumber}`
     return this.http.get(url);
   }
 
