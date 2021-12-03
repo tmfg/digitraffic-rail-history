@@ -1,46 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from "rxjs";
 import {CompositionService} from "../../services/composition.service";
+import {FormControl} from "@angular/forms";
+import {TrainService} from "../../services/train.service";
 
 @Component({
   selector: 'app-composition-table',
   templateUrl: './composition-table.component.html',
-  styleUrls: ['./composition-table.component.css']
+  styleUrls: ['./../train-table/train-table.component.scss']
 })
-export class CompositionTableComponent implements OnInit {
-  compositions: Observable<any>;
-
-  public selectedComposition: any;
-  private compositionService: CompositionService;
-  public trainNumber: number = 1;
-  public departureDate: string;
+export class CompositionTableComponent {
+  public displayedColumns: string[] = ['totalLength', 'maximumSpeed','beginTimeTableRow','endTimeTableRow','locomotives','wagons'];
+  public compositions: any[];
   public loading: boolean = false;
+  public departureDateFormControl = new FormControl(new Date().toISOString().substring(0, 10))
+  public trainNumberFormControl = new FormControl(1)
+  public selectedVersionFormControl = new FormControl()
+  public dataSource
 
-  public selectComposition(composition: any) {
-    this.selectedComposition = composition;
+  public constructor(private compositionService: CompositionService) {
+    this.selectedVersionFormControl.valueChanges.subscribe(value => {
+      this.dataSource = value.journeySections
+    })
   }
 
-  private endLoading(s:Observable<any>) {
-    this.loading = false;
-    this.selectComposition(s[0]);
-  }
+  public selectVersion = (version: any) => {
+    this.selectedVersionFormControl.setValue(version.json);
+  };
 
-  public fetchComposition() {
+  public fetchTrain() {
     this.loading = true;
-    this.compositions = this.compositionService.getJSON(this.trainNumber, this.departureDate);
-    this.compositions.subscribe(
-      s=> this.endLoading(s)
-    );
+    this.compositionService.getJSON(this.trainNumberFormControl.value, this.departureDateFormControl.value).then(result => {
+      this.compositions = result
+      this.endLoading(result)
+    });
   }
 
-  constructor(compositionService: CompositionService) {
-    this.compositionService = compositionService;
-
-    var now = new Date();
-    this.departureDate = now.toISOString().substring(0, 10);
+  private endLoading(s: any[]) {
+    this.loading = false;
+    this.selectVersion(s[0]);
   }
-
-  ngOnInit() {
-  }
-
 }

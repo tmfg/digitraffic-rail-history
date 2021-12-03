@@ -1,63 +1,73 @@
-<h1>1. Etsi kokoonpano</h1>
-<form>
-  <div class="form-group row">
-    <label class="col-2 col-form-label">Junanumero</label>
-    <div class="col-10">
-      <input class="form-control" type="text" [(ngModel)]="trainNumber" name="trainNumber"/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="departure-input" class="col-2 col-form-label">Lähtöpäivämäärä</label>
-    <div class="col-10">
-      <input class="form-control" type="text" [(ngModel)]="departureDate" id="departure-input" name="departureDate"/>
-    </div>
+<div class="container">
+  <h1>1. Etsi kokoonpano</h1>
+  <mat-form-field appearance="standard">
+    <mat-label>Junanumero</mat-label>
+    <input matInput placeholder="Placeholder" [formControl]="this.trainNumberFormControl">
+    <mat-hint>Esim. IC 46:n junanumero on "46"</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Lähtöpäivämäärä</mat-label>
+    <input matInput placeholder="Placeholder" [formControl]="this.departureDateFormControl">
+    <mat-hint>Ensimmäisen lähdön päivämäärä</mat-hint>
+  </mat-form-field>
+
+
+  <div>
+    <button mat-raised-button color="accent" (click)="this.fetchTrain()">Etsi aikataulu</button>
+    <mat-spinner *ngIf="this.loading"></mat-spinner>
   </div>
 
-  <button class="btn btn-primary" (click)="fetchComposition()">
-    <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>Etsi kokoonpano
-  </button>
-</form>
-<br><br>
+  <ng-container *ngIf="compositions != null">
+    <h1>2. Valitse versio</h1>
+    <mat-form-field appearance="standard">
+      <mat-label>Versio</mat-label>
+      <mat-select [formControl]="this.selectedVersionFormControl">
+        <mat-option *ngFor="let c of compositions"
+                    [value]="c.json">{{ c.id.fetchDate | date: 'dd.MM.yyyy HH:mm:ss'}} ({{c.version}})
+        </mat-option>
+      </mat-select>
+      <mat-hint>Tippi: voit käyttää nuolinäppäimiä</mat-hint>
+    </mat-form-field>
+  </ng-container>
 
-<h1>2. Valitse versio</h1>
-<div class="form-group">
-  <select class="form-control" [(ngModel)]="selectedComposition">
-    <option selected="selected">Valitse versio</option>
-    <option *ngFor="let c of compositions | async" [ngValue]="c">{{ c.id.fetchDate | date: 'dd.MM.yyyy HH:mm:ss'}}: {{c.version}}</option>
-  </select>
-  <small id="passwordHelpBlock" class="form-text text-muted">Tippi: voit selailla versiota eteen-/taaksepäin nuolinäppäimillä focuksen ollessa alasvetovalikossa</small>
+  <ng-container *ngIf="this.selectedVersionFormControl.value != null">
+    <small>Junatyyppi: {{this.selectedVersionFormControl.value?.trainType}},
+      Junakategoria: {{this.selectedVersionFormControl.value?.trainCategory}}
+      </small>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="totalLength">
+        <th mat-header-cell *matHeaderCellDef>Pituus</th>
+        <td mat-cell *matCellDef="let element"> {{element.totalLength}} m</td>
+      </ng-container>
+      <ng-container matColumnDef="maximumSpeed">
+        <th mat-header-cell *matHeaderCellDef>Maksiminopeus</th>
+        <td mat-cell *matCellDef="let element"> {{element.maximumSpeed}} km/h</td>
+      </ng-container>
+      <ng-container matColumnDef="beginTimeTableRow">
+        <th mat-header-cell *matHeaderCellDef>Lähtö</th>
+        <td mat-cell *matCellDef="let element">{{ element.beginTimeTableRow.scheduledTime | date: 'HH:mm:ss'}} {{ element.beginTimeTableRow.stationShortCode }}</td>
+      </ng-container>
+      <ng-container matColumnDef="endTimeTableRow">
+        <th mat-header-cell *matHeaderCellDef>Saapuminen</th>
+        <td mat-cell *matCellDef="let element">{{ element.endTimeTableRow.scheduledTime | date: 'HH:mm:ss'}} {{ element.endTimeTableRow.stationShortCode }}</td>
+      </ng-container>
+      <ng-container matColumnDef="locomotives">
+        <th mat-header-cell *matHeaderCellDef>Veturit</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngFor="let loco of element.locomotives ">{{ loco.locomotiveType }}&nbsp;</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="wagons">
+        <th mat-header-cell *matHeaderCellDef>Vaunut</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngFor="let loco of element.wagons ">{{ loco.wagonType }}&nbsp;</span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </ng-container>
 </div>
-
-<br><br>
-<table class="table table-condensed" *ngIf="selectedComposition != null">
-  <tr>
-    <th>Junan tyyppi</th>
-    <th>Junan kategoria</th>
-    <th>Pituus</th>
-    <th>Maksiminopeus</th>
-    <th>Lähtö</th>
-    <th>Saapuminen</th>
-    <th>Veturit</th>
-    <th>Vaunut</th>
-  </tr>
-  <tr>
-  <tr *ngFor="let entity of selectedComposition?.journeySections ">
-    <td>{{ selectedComposition.trainType }}</td>
-    <td>{{ selectedComposition.trainCategory }}</td>
-    <td>{{ entity.totalLength }} m</td>
-    <td>{{ entity.maximumSpeed }} km/h</td>
-    <td>{{ entity.beginTimeTableRow.scheduledTime | date: 'HH:mm:ss'}} {{ entity.beginTimeTableRow.stationShortCode }}</td>
-    <td>{{ entity.endTimeTableRow.scheduledTime | date: 'HH:mm:ss'}} {{ entity.endTimeTableRow.stationShortCode }}</td>
-    <td>
-      <span *ngFor="let loco of entity.locomotives ">
-       {{ loco.locomotiveType }}
-      </span>
-    </td>
-    <td>
-      <span *ngFor="let wagon of entity.wagons ">
-       {{ wagon.wagonType }}
-      </span>
-    </td>
-  </tr>
-</table>
-

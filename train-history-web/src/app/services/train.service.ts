@@ -1,12 +1,10 @@
-import 'rxjs/Rx';
 import {Injectable} from "@angular/core";
-import {Observable} from "rxjs";
 import {JsonService} from "./json.service";
 
 @Injectable()
 export class TrainService extends JsonService {
 
-  public getJSON(trainNumber: number, departureDate: string): Observable<any> {
+  public getJSON(trainNumber: number, departureDate: string): Promise<any> {
     return super.getJSON(trainNumber, departureDate, "train");
   }
 
