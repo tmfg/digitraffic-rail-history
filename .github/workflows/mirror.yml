@@ -1,7 +1,8 @@
 name: 'Mirror repo to public'
 on: [push]
 jobs:
-  build:
+  mirror:
+    if: ${{ secrets.SSH_PRIVATE_KEY != ''}}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
