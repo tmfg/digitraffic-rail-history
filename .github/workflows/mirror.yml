@@ -1,0 +1,15 @@
+name: 'Mirror repo to public'
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Mirror
+        run: git push --mirror git@github.com:mprencipe/digitraffic-rail-history-test
+
