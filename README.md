@@ -1,4 +1,4 @@
-# Repositoryn tarkoitus
+# Projekti
 Sisältää lähdekoodin palvelulle [rata.digitraffic.fi/history/](https://rata.digitraffic.fi/history/)
 
 # Arkkitehtuuri
