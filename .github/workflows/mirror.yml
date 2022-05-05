@@ -6,7 +6,7 @@ env:
 on: [push]
 jobs:
   mirror:
-        if: ${{ env.secret != '' }}
+    if: ${{ env.secret != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
