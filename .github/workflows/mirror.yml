@@ -17,5 +17,5 @@ jobs:
           pip3 install git-filter-repo
       - name: Mirror
         run: |
-          git filter-repo --path .github --invert-paths
+          git filter-repo --path .github --invert-paths --force
           git push --mirror git@github.com:mprencipe/digitraffic-rail-history-test
