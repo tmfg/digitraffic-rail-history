@@ -12,12 +12,10 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install git-filter-repo
+        run: |
+          pip3 install git-filter-repo
       - name: Mirror
         run: |
-          git config --global user.name Digitraffic
-          git config --global user.email digitraffic@fintraffic.fi
-          rm -rf .git .github
-          git init
-          git add .
-          git commit -m "Digitraffic rail history"
+          git filter-repo --path .github --invert-paths
           git push --mirror git@github.com:mprencipe/digitraffic-rail-history-test
