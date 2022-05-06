@@ -26,4 +26,4 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Mirror
         run: |
-          git push --mirror git@github.com:mprencipe/digitraffic-rail-history-test
+          git push --mirror git@github.com:tmfg/digitraffic-rail-history
