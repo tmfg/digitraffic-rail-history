@@ -32,17 +32,17 @@ jobs:
         with:
           name: train-history-web
           path: |
-            train-history-web/*/train-history-web.tar
+            train-history-web/train-history-web.tar
       - name: Archive backend artifact
         uses: actions/upload-artifact@v3
         with:
           name: train-history-backend
           path: |
-            train-history-backend/target/*/train-history-backend-0.0.1-SNAPSHOT.jar
+            train-history-backend/target/train-history-backend-0.0.1-SNAPSHOT.jar
       - name: Archive backend artifact
         uses: actions/upload-artifact@v3
         with:
           name: train-history-updater
           path: |
-            train-history-updater/target/*/train-history-updater-0.0.1-SNAPSHOT.jar
+            train-history-updater/target/train-history-updater-0.0.1-SNAPSHOT.jar
 
