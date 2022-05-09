@@ -1,0 +1,29 @@
+name: Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Build frontend
+        run: |
+          cd train-history-web
+          npm ci
+          npx ng build --base-href /history/
+          tar -czvf train-history-web.tar dist nginx.conf
+          cd ..
+      - name: Build backend
+        run: |
+          cd train-history-backend
+          mvn install -DskipTests=true
+          cd ..
+      - name: Build updater
+        run: |
+          cd train-history-updater
+          mvn install -DskipTests=true
+          cd ..
