@@ -63,5 +63,4 @@ jobs:
           name: train-history-updater
       - name: Extract artifacts
         run: |
-          unzip train-history-web
           ls
