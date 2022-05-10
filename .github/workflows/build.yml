@@ -33,6 +33,9 @@ jobs:
           npx ng build --base-href /history/
           tar -czvf train-history-web.tar dist nginx.conf
           cd ..
+          ls
+          ls train-history-web
+          ls train-history-web/train-history-web.tar
           docker build --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
             --build-arg APP_FILE=train-history-web/train-history-web.tar \
