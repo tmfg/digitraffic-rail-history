@@ -61,6 +61,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: train-history-updater
-      - name: Extract artifacts
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
+      - name: Checkout config repo
         run: |
+          git clone ${{ secrets.CONFIG_REPO_URL }}
           ls
