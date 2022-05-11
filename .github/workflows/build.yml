@@ -32,15 +32,9 @@ jobs:
           npm ci
           npx ng build --base-href /history/
           tar -czvf train-history-web.tar dist nginx.conf
-          cd ..
-          echo "ls"
-          ls
-          echo "ls train-history-web"
-          ls train-history-web
-          echo "ls train-history-web/"
-          ls train-history-web/train-history-web.tar
           docker build --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
-            --build-arg APP_FILE=train-history-web/train-history-web.tar \
+            --build-arg APP_FILE=train-history-web.tar \
             -t ${{ github.event.inputs.app == 'beta' && secrets.ECR_URL_BETA || secrets.ECR_URL_PROD }} \
-            --pull=true --file=config/aws/Dockerfile-rail-train-history-web .
+            --pull=true --file=../config/aws/Dockerfile-rail-train-history-web .
+          cd ..
