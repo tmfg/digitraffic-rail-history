@@ -26,6 +26,14 @@ jobs:
       - name: Checkout config repo
         run: |
           git clone ${{ secrets.CONFIG_REPO_URL }} config
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: gh-actions-build-rail-history-${{ github.event.inputs.env }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
       - name: Build frontend
         run: |
           cd train-history-web
