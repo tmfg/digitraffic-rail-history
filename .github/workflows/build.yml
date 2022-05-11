@@ -42,6 +42,5 @@ jobs:
           docker build --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
             --build-arg APP_FILE=train-history-web/train-history-web.tar \
-            --build-arg PROPERTY_FILE= config/aws/conf/train-history-web-${{ github.event.inputs.env }}.properties \
             -t ${{ github.event.inputs.app == 'beta' && secrets.ECR_URL_BETA || secrets.ECR_URL_PROD }} \
             --pull=true --file=config/aws/Dockerfile-rail-train-history-web
