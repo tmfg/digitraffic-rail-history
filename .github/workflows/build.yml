@@ -52,3 +52,16 @@ jobs:
             -t ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA} \
             --pull=true --file=Dockerfile-rail-train-history-web .
           docker push ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA}
+      - name: Build backend
+        run: |
+          cd train-history-backend
+          mvn install -DskipTests=true -Ddependency-check.skip=true
+          cp target/train-history-backend-0.0.1-SNAPSHOT.jar ../config/aws/train-history-backend.jar
+          cd ../config/aws
+          docker build --no-cache \
+            --build-arg ENV=${{ github.event.inputs.env }} \
+            --build-arg APP_FILE=train-history-backend.jar \
+            --build-arg PROPERTY_FILE=train-history-backend-${{ github.event.inputs.env }}.properties \
+            -t ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA} \
+            --pull=true --file=Dockerfile-rail-train-history-backend .
+          docker push ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA}
