@@ -10,7 +10,7 @@ on:
           - beta
           - prod
 jobs:
-  build_artifacts:
+  install:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
