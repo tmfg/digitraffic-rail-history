@@ -12,3 +12,12 @@ jobs:
         with:
           mirror-repo: git@github.com:tmfg/digitraffic-rail-history
           ssh-private-key: ${{ secrets.MIRROR_SSH_PRIVATE_KEY }}
+      - name: Notify Slack
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: FAILED Rail-history Mirror
+          fields: repo, job, took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
