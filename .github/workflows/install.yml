@@ -87,3 +87,4 @@ jobs:
           SLACK_ICON_EMOJI: ':github:'
           SLACK_TITLE: Rail-history install failed
           SLACK_FOOTER: ''
+          MSG_MINIMAL: true
