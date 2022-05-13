@@ -78,3 +78,8 @@ jobs:
             -t ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA} \
             --pull=true --file=Dockerfile-rail-train-history-updater .
           docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
+      - name: Notify Slack
+        if: failure()
+        uses: rtcamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
