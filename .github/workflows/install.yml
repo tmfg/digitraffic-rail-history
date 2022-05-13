@@ -80,7 +80,7 @@ jobs:
           docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
       - name: Notify Slack
         if: failure()
-        uses: 8398a7/action-slack@09d38354556399a0f7a8d78d617c8e61a3682b63
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           custom_payload: |
