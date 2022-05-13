@@ -82,7 +82,10 @@ jobs:
         if: failure()
         uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
+          status: failure
+          text: FAILED Rail-history Install
+          icon_emoji: ':github:'
+          fields: repo, job, took
           custom_payload: |
             {
               attachments: [{
