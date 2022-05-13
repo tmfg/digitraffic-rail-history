@@ -5,10 +5,8 @@ on:
       env:
         description: 'Environment'
         required: true
-        type: choice
-        options:
-          - beta
-          - prod
+        type: environment
+        default: 'beta'
 jobs:
   install:
     runs-on: ubuntu-latest
