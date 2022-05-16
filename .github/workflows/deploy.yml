@@ -13,10 +13,11 @@ on:
         type: string
       config-branch:
         description: 'Config repo branch'
+        default: master
         required: true
         type: string
 jobs:
-  install:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
