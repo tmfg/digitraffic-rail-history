@@ -40,6 +40,14 @@ jobs:
           ci-repo-url: ${{ env.CONFIG_REPO_NAME }}
           ci-repo-branch: ${{ github.event.inputs.config-branch }}
           ci-ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
+      - name: Update ECS service
+        uses: tmfg/digitraffic-actions@ecs-service-update/v1
+        with:
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          service-name: train-history-web
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
+          desired-count: 1
       - name: Notify Slack
         if: failure()
         uses: 8398a7/action-slack@v3
