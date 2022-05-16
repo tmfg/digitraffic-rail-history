@@ -29,7 +29,7 @@ jobs:
         run: |
           CONFIG_REPO_NAME=$(echo ${{ secrets.CONFIG_REPO_URL }} | sed -e s/git@github.com:// -e s/\\.git//)
           echo "CONFIG_REPO_NAME=$CONFIG_REPO_NAME" >> $GITHUB_ENV
-      - name: Update task definition
+      - name: Update frontend task definition
         uses: tmfg/digitraffic-actions@update-task-def/v1
         with:
           task-def-file-name: rail-${{ github.event.inputs.env }}-train-history-web
@@ -40,12 +40,50 @@ jobs:
           ci-repo-url: ${{ env.CONFIG_REPO_NAME }}
           ci-repo-branch: ${{ github.event.inputs.config-branch }}
           ci-ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
-      - name: Update ECS service
+      - name: Update frontend ECS service
         uses: tmfg/digitraffic-actions@ecs-service-update/v1
         with:
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           service-name: train-history-web
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
+          desired-count: 1
+      - name: Update backend task definition
+        uses: tmfg/digitraffic-actions@update-task-def/v1
+        with:
+          task-def-file-name: rail-${{ github.event.inputs.env }}-train-history-backend
+          family-name: train-history-backend
+          image-arn: ${{ secrets.ECR_URL }}/train-history-backend:${{ github.event.inputs.commit-hash }}
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          ci-repo-url: ${{ env.CONFIG_REPO_NAME }}
+          ci-repo-branch: ${{ github.event.inputs.config-branch }}
+          ci-ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
+      - name: Update backend ECS service
+        uses: tmfg/digitraffic-actions@ecs-service-update/v1
+        with:
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          service-name: train-history-backend
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
+          desired-count: 1
+      - name: Update updater task definition
+        uses: tmfg/digitraffic-actions@update-task-def/v1
+        with:
+          task-def-file-name: rail-${{ github.event.inputs.env }}-train-history-updater
+          family-name: train-history-updater
+          image-arn: ${{ secrets.ECR_URL }}/train-history-updater:${{ github.event.inputs.commit-hash }}
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          ci-repo-url: ${{ env.CONFIG_REPO_NAME }}
+          ci-repo-branch: ${{ github.event.inputs.config-branch }}
+          ci-ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
+      - name: Update updater ECS service
+        uses: tmfg/digitraffic-actions@ecs-service-update/v1
+        with:
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          service-name: train-history-updater
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           desired-count: 1
       - name: Notify Slack
