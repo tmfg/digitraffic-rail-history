@@ -34,7 +34,7 @@ jobs:
         with:
           task-def-file-name: rail-${{ github.event.inputs.env }}-train-history-web
           family-name: train-history-web
-          image-arn: ${{ secrets.ECR_URL }}/train-history-frontend:${{ github.event.inputs.commit-hash }}
+          image-arn: ${{ secrets.ECR_URL }}/train-history-web:${{ github.event.inputs.commit-hash }}
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           ci-repo-url: ${{ env.CONFIG_REPO_NAME }}
