@@ -32,7 +32,8 @@ jobs:
       - name: Update task definition
         uses: tmfg/digitraffic-actions@update-task-def/v1
         with:
-          family-name: rail-${{ github.event.inputs.env }}-train-history-web
+          config-file-name: rail-${{ github.event.inputs.env }}-train-history-web
+          family-name: train-history-web
           image-arn: ${{ secrets.ECR_URL }}/train-history-frontend:${{ github.event.inputs.commit-hash }}
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
