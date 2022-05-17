@@ -17,16 +17,8 @@ on:
         required: true
         type: string
 jobs:
-  set-config-repo-name:
-    runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.env }}
-    steps:
-      - name: Set config repo name
-        run: |
-          CONFIG_REPO_NAME=$(echo ${{ secrets.CONFIG_REPO_URL }} | sed -e s/git@github.com:// -e s/\\.git//)
-          echo "CONFIG_REPO_NAME=$CONFIG_REPO_NAME" >> $GITHUB_ENV
   install:
-    needs: set-config-repo-name
+    environment: ${{ github.event.inputs.env }}
     strategy:
       matrix:
         app: [ web, backend, updater ]
@@ -36,6 +28,10 @@ jobs:
       contents: read
       actions: read
     steps:
+      - name: Set config repo name
+        run: |
+          CONFIG_REPO_NAME=$(echo ${{ secrets.CONFIG_REPO_URL }} | sed -e s/git@github.com:// -e s/\\.git//)
+          echo "CONFIG_REPO_NAME=$CONFIG_REPO_NAME" >> $GITHUB_ENV
       - name: Update ${{ matrix.app }} task definition
         uses: tmfg/digitraffic-actions@update-task-def/v1
         with:
