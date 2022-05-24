@@ -10,10 +10,21 @@
 
     <name>train-history</name>
 
-
-
     <modules>
         <module>/train-history-backend/</module>
         <module>/train-history-updater/</module>
     </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>7.0.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 </project>
