@@ -67,3 +67,4 @@ nbdist/
 .nb-gradle/
 
 /train-history-web/node_modules/
+train-history-web/.angular/cache
