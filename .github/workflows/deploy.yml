@@ -49,6 +49,7 @@ jobs:
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           service-name: train-history-${{ matrix.app }}
+          task-definition: train-history-${{ matrix.app }}
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           desired-count: 1
       - name: Notify Slack
