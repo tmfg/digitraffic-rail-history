@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
 import fi.livi.trainhistoryupdater.deserializers.DeserializerObjectMapper;
 import fi.livi.trainhistoryupdater.entities.JsonEntity;
 import fi.livi.trainhistoryupdater.entities.TrainId;
@@ -34,13 +33,11 @@ public class EntityFetchAndSaveService {
     private String DIGITRAFFIC_URL;
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    private RestTemplate restTemplate;
 
-    @PostConstruct
-    public void setup() {
+    private RestTemplate getRestTemplate() {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
                 HttpClientBuilder.create().build());
-        restTemplate = new RestTemplate(clientHttpRequestFactory);
+        return new RestTemplate(clientHttpRequestFactory);
     }
 
     @Transactional
@@ -53,8 +50,7 @@ public class EntityFetchAndSaveService {
             urlString = String.format(url, DIGITRAFFIC_URL, maxVersion);
         }
 
-
-        byte[] responesBytes = restTemplate.getForObject(urlString, byte[].class);
+        byte[] responesBytes = getRestTemplate().getForObject(urlString, byte[].class);
         final JsonNode jsonNode = objectMapper.readTree(responesBytes);
 
         ZonedDateTime fetchDate = ZonedDateTime.now();
