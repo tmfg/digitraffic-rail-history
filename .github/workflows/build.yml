@@ -25,7 +25,7 @@ jobs:
       - name: Build updater
         run: |
           cd train-history-updater
-          mvn install -DskipTests=true
+          mvn install
       - name: Notify Slack
         if: failure()
         uses: 8398a7/action-slack@v3
