@@ -40,7 +40,7 @@
                             </scanSet>
                             <nodePackageSkipDevDependencies>true</nodePackageSkipDevDependencies>
                             <nodeAuditSkipDevDependencies>true</nodeAuditSkipDevDependencies>
-                            <failBuildOnCVSS>5</failBuildOnCVSS>
+                            <failBuildOnCVSS>7</failBuildOnCVSS>
                             <suppressionFile>owasp-suppressions.xml</suppressionFile>
                             <formats>html,xml</formats>
                         </configuration>
