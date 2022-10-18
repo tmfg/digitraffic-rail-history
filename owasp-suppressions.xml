@@ -5,21 +5,22 @@
         Temporary suppressions, check and update these periodically
     -->
 
-    <suppress until="2022-10-13">
+    <suppress until="2022-12-01">
+        <!-- Vulnerable features are not enabled -->
+        <notes><![CDATA[file name: jackson-databind-2.13.3.jar]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-databind@.*$</packageUrl>
+        <cve>CVE-2022-42003</cve>
+        <cve>CVE-2022-42004</cve>
+    </suppress>
+
+    <suppress until="2022-12-01">
         <!-- Requires update in upstream org.springframework.boot/spring-boot-starter-parent -->
         <notes><![CDATA[file name: snakeyaml-1.30.jar]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
         <cve>CVE-2022-25857</cve>
-    </suppress>
-
-    <!--
-        Permanent suppressions
-    -->
-
-    <!-- Only vulnerable till spring version 5.3.13. We are not affected. -->
-    <suppress>
-        <notes><![CDATA[file name: spring-web-5.3.22.jar]]></notes>
-        <sha1>fdab9b8d8df2e6a8fb90f2481c361bcf2c129567</sha1>
-        <cve>CVE-2016-1000027</cve>
+        <cve>CVE-2022-38749</cve>
+        <cve>CVE-2022-38750</cve>
+        <cve>CVE-2022-38751</cve>
+        <cve>CVE-2022-38752</cve>
     </suppress>
 </suppressions>
