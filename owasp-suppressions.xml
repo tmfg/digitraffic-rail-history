@@ -5,12 +5,12 @@
         Temporary suppressions, check and update these periodically
     -->
 
-   <suppress until="2022-12-01">
+    <suppress until="2022-12-01">
         <notes><![CDATA[file name: spring-*.jar]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.springframework.*$</packageUrl>
         <!-- RCE through deserialization vulnerability, not using vulnerable version of Spring -->
         <cve>CVE-2016-1000027</cve>
-   Â</suppress>
+    </suppress>
 
     <suppress until="2022-12-01">
         <!-- Vulnerable features are not enabled -->
