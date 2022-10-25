@@ -17,13 +17,13 @@ jobs:
     environment: ${{ github.event.inputs.env }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.4
+        uses: webfactory/ssh-agent@v0.6.0
         with:
           ssh-private-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
       - name: Checkout config repo
