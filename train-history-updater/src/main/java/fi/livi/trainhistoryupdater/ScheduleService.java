@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import fi.livi.trainhistoryupdater.entities.Composition;
 import fi.livi.trainhistoryupdater.entities.Train;
@@ -59,14 +60,26 @@ public class ScheduleService {
     @Scheduled(fixedDelay = 10 * 1000)
     public void getTrains() throws IOException {
         synchronized (Train.class) {
-            entityFetchService.pollForNewEntities(trainRepository::getMaxVersion, "%s/api/v1/trains?version=%s", "trains", Train::new, trainRepository);
+            try {
+                entityFetchService.pollForNewEntities(trainRepository::getMaxVersion, "%s/api/v1/trains?version=%s", "trains", Train::new, trainRepository);
+            } catch (HttpClientErrorException.TooManyRequests tooManyRequests) {
+                handle429();
+            }
         }
     }
 
     @Scheduled(fixedDelay = 30 * 1000)
     public void getCompositions() throws IOException {
         synchronized (Composition.class) {
-            entityFetchService.pollForNewEntities(compositionRepository::getMaxVersion, "%s/api/v1/compositions?version=%s", "compositions", Composition::new, compositionRepository);
+            try {
+                entityFetchService.pollForNewEntities(compositionRepository::getMaxVersion, "%s/api/v1/compositions?version=%s", "compositions", Composition::new, compositionRepository);
+            } catch (HttpClientErrorException.TooManyRequests tooManyRequests) {
+                handle429();
+            }
         }
+    }
+
+    private void handle429() {
+        log.warn("429 for trains");
     }
 }
