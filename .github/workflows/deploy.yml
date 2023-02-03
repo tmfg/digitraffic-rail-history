@@ -18,6 +18,7 @@ on:
         type: string
 jobs:
   install:
+    if: github.repository != 'tmfg/digitraffic-rail-history'
     environment: ${{ github.event.inputs.env }}
     strategy:
       matrix:
