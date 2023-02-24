@@ -7,6 +7,11 @@ on:
         required: true
         type: environment
         default: 'beta'
+      config-repo-branch:
+        description: 'Config repo branch'
+        default: master
+        required: true
+        type: string
 jobs:
   install:
     if: github.repository != 'tmfg/digitraffic-rail-history'
@@ -19,17 +24,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Checkout CI-repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.CONFIG_REPO_NAME }}
+          ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
+          ref: ${{ inputs.config-repo-branch }}
+          path: config
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.6.0
-        with:
-          ssh-private-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
-      - name: Checkout config repo
-        run: |
-          git clone ${{ secrets.CONFIG_REPO_URL }} config
+#      - name: Setup SSH
+#        uses: webfactory/ssh-agent@v0.6.0
+#        with:
+#          ssh-private-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
+#      - name: Checkout config repo
+#        run: |
+#          git clone ${{ secrets.CONFIG_REPO_URL }} config
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
