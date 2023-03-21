@@ -40,6 +40,8 @@
                             <failBuildOnCVSS>7</failBuildOnCVSS>
                             <formats>html,xml</formats>
                             <suppressionFile>../owasp-suppressions.xml</suppressionFile>
+                            <!-- OSS Index can be unstable -->
+                            <ossIndexWarnOnlyOnRemoteErrors>true</ossIndexWarnOnlyOnRemoteErrors>
                         </configuration>
                     </plugin>
                 </plugins>
