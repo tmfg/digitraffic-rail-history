@@ -27,7 +27,7 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>7.1.1</version>
+                        <version>8.1.2</version>
                         <configuration>
                             <scanSet>
                                 <fileSet>
