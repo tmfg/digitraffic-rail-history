@@ -1,16 +1,17 @@
 {
   "name": "train-history-web",
   "version": "0.0.0",
+  "private": true,
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve -H 0.0.0.0",
     "build": "ng build",
-    "test": "ng test",
+    "e2e": "ng e2e",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "ng": "ng",
+    "prettier": "pretty-quick",
+    "start": "ng serve -H 0.0.0.0",
+    "test": "ng test"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^14.3.0",
     "@angular/cdk": "^14.2.7",
@@ -45,6 +46,9 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "prettier": "^2.8.7",
+    "prettier-plugin-packagejson": "^2.4.3",
+    "pretty-quick": "^3.1.3",
     "protractor": "~7.0.0",
     "tslint": "~6.1.0",
     "typescript": "^4.8.4"

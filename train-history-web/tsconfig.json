@@ -10,13 +10,8 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "target": "es2020",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2016",
-      "dom"
-    ]
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2016", "dom"]
   },
   "angularCompilerOptions": {
     "disableTypeScriptVersionCheck": true

@@ -1,27 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
-import {CompositionService} from "../../services/composition.service";
-import {UntypedFormControl} from "@angular/forms";
-import {TrainService} from "../../services/train.service";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { CompositionService } from "../../services/composition.service";
+import { UntypedFormControl } from "@angular/forms";
+import { TrainService } from "../../services/train.service";
 
 @Component({
-  selector: 'app-composition-table',
-  templateUrl: './composition-table.component.html',
-  styleUrls: ['./../train-table/train-table.component.scss']
+  selector: "app-composition-table",
+  templateUrl: "./composition-table.component.html",
+  styleUrls: ["./../train-table/train-table.component.scss"]
 })
 export class CompositionTableComponent {
-  public displayedColumns: string[] = ['totalLength', 'maximumSpeed','beginTimeTableRow','endTimeTableRow','locomotives','wagons'];
+  public displayedColumns: string[] = [
+    "totalLength",
+    "maximumSpeed",
+    "beginTimeTableRow",
+    "endTimeTableRow",
+    "locomotives",
+    "wagons"
+  ];
   public compositions: any[];
   public loading: boolean = false;
-  public departureDateFormControl = new UntypedFormControl(new Date().toISOString().substring(0, 10))
-  public trainNumberFormControl = new UntypedFormControl(1)
-  public selectedVersionFormControl = new UntypedFormControl()
-  public dataSource
+  public departureDateFormControl = new UntypedFormControl(new Date().toISOString().substring(0, 10));
+  public trainNumberFormControl = new UntypedFormControl(1);
+  public selectedVersionFormControl = new UntypedFormControl();
+  public dataSource;
 
   public constructor(private compositionService: CompositionService) {
-    this.selectedVersionFormControl.valueChanges.subscribe(value => {
-      this.dataSource = value.journeySections
-    })
+    this.selectedVersionFormControl.valueChanges.subscribe((value) => {
+      this.dataSource = value.journeySections;
+    });
   }
 
   public selectVersion = (version: any) => {
@@ -30,10 +37,12 @@ export class CompositionTableComponent {
 
   public fetchTrain() {
     this.loading = true;
-    this.compositionService.getJSON(this.trainNumberFormControl.value, this.departureDateFormControl.value).then(result => {
-      this.compositions = result
-      this.endLoading(result)
-    });
+    this.compositionService
+      .getJSON(this.trainNumberFormControl.value, this.departureDateFormControl.value)
+      .then((result) => {
+        this.compositions = result;
+        this.endLoading(result);
+      });
   }
 
   private endLoading(s: any[]) {
