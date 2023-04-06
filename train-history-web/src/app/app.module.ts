@@ -40,7 +40,7 @@ const appRoutes: Routes = [
     MatButtonModule,
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: false, relativeLinkResolution: 'legacy'}
+      { enableTracing: false }
     ),
     BrowserAnimationsModule,
     MatIconModule,
