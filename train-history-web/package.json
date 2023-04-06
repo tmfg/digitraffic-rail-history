@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "ng": "ng",
     "prettier": "pretty-quick",
-    "start": "ng serve -H 0.0.0.0",
+    "start": "ng serve --host 0.0.0.0",
     "test": "ng test"
   },
   "dependencies": {
