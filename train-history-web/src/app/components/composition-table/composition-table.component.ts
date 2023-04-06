@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from "rxjs";
 import {CompositionService} from "../../services/composition.service";
-import {FormControl} from "@angular/forms";
+import {UntypedFormControl} from "@angular/forms";
 import {TrainService} from "../../services/train.service";
 
 @Component({
@@ -13,9 +13,9 @@ export class CompositionTableComponent {
   public displayedColumns: string[] = ['totalLength', 'maximumSpeed','beginTimeTableRow','endTimeTableRow','locomotives','wagons'];
   public compositions: any[];
   public loading: boolean = false;
-  public departureDateFormControl = new FormControl(new Date().toISOString().substring(0, 10))
-  public trainNumberFormControl = new FormControl(1)
-  public selectedVersionFormControl = new FormControl()
+  public departureDateFormControl = new UntypedFormControl(new Date().toISOString().substring(0, 10))
+  public trainNumberFormControl = new UntypedFormControl(1)
+  public selectedVersionFormControl = new UntypedFormControl()
   public dataSource
 
   public constructor(private compositionService: CompositionService) {

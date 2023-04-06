@@ -112,7 +112,6 @@
       }
     }
   },
-  "defaultProject": "train-history-web",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {TrainService} from "../../services/train.service";
-import {FormControl} from "@angular/forms";
+import {UntypedFormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-train-table',
@@ -11,9 +11,9 @@ export class TrainTableComponent {
   public displayedColumns: string[] = ['stationShortCode' ,'commercialTrack', 'type', 'scheduledTime','actualTime','liveEstimateTime','estimateSource','unknownDelay','cancelled','trainReady','causes'];
   public trains: any[];
   public loading: boolean = false;
-  public departureDateFormControl = new FormControl(new Date().toISOString().substring(0, 10))
-  public trainNumberFormControl = new FormControl(1)
-  public selectedVersionFormControl = new FormControl()
+  public departureDateFormControl = new UntypedFormControl(new Date().toISOString().substring(0, 10))
+  public trainNumberFormControl = new UntypedFormControl(1)
+  public selectedVersionFormControl = new UntypedFormControl()
   public dataSource
 
   public constructor(private trainService: TrainService) {
