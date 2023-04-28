@@ -23,14 +23,14 @@ jobs:
     strategy:
       matrix:
         app: [ web, backend, updater ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       id-token: write
       contents: read
       actions: read
     steps:
       - name: Update ${{ matrix.app }} task definition
-        uses: tmfg/digitraffic-actions@update-task-def/v1
+        uses: tmfg/digitraffic-actions@update-task-def/v2
         with:
           task-def-file-name: rail-${{ github.event.inputs.env }}-train-history-${{ matrix.app }}
           family-name: train-history-${{ matrix.app }}
