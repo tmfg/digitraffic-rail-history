@@ -3,9 +3,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 32px;
 }
 
 .container > * {
+  width: 250px;
   margin-bottom: 8px;
 }
 

@@ -1,0 +1,13 @@
+# angular stuff
+.angular
+angular.json
+karma.conf.js
+protractor.conf.js
+
+# output
+dist
+
+# Package manager files
+pnpm-lock.yaml
+shrinkwrap.json
+node_modules

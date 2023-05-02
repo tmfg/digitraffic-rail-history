@@ -1,17 +1,16 @@
 <div class="container">
   <h1>1. Etsi aikataulu</h1>
-  <mat-form-field appearance="standard">
+  <mat-form-field>
     <mat-label>Junanumero</mat-label>
-    <input matInput placeholder="Placeholder" [formControl]="this.trainNumberFormControl">
+    <input matInput placeholder="Placeholder" [formControl]="this.trainNumberFormControl" />
     <mat-hint>Esim. IC 46:n junanumero on "46"</mat-hint>
   </mat-form-field>
 
-  <mat-form-field appearance="standard">
+  <mat-form-field>
     <mat-label>Lähtöpäivämäärä</mat-label>
-    <input matInput placeholder="Placeholder" [formControl]="this.departureDateFormControl">
+    <input matInput placeholder="Placeholder" [formControl]="this.departureDateFormControl" />
     <mat-hint>Ensimmäisen lähdön päivämäärä</mat-hint>
   </mat-form-field>
-
 
   <div>
     <button mat-raised-button color="accent" (click)="this.fetchTrain()">Etsi aikataulu</button>
@@ -20,11 +19,11 @@
 
   <ng-container *ngIf="trains != null">
     <h1>2. Valitse versio</h1>
-    <mat-form-field appearance="standard">
+    <mat-form-field>
       <mat-label>Versio</mat-label>
       <mat-select [formControl]="this.selectedVersionFormControl">
-        <mat-option *ngFor="let c of trains"
-                    [value]="c.json">{{ c.id.fetchDate | date: 'dd.MM.yyyy HH:mm:ss'}} ({{c.version}})
+        <mat-option *ngFor="let c of trains" [value]="c.json"
+          >{{ c.id.fetchDate | date : "dd.MM.yyyy HH:mm:ss" }} ({{ c.version }})
         </mat-option>
       </mat-select>
       <mat-hint>Tippi: voit käyttää nuolinäppäimiä</mat-hint>
@@ -32,75 +31,87 @@
   </ng-container>
 
   <ng-container *ngIf="this.selectedVersionFormControl.value != null">
-    <small>Operaattori: {{this.selectedVersionFormControl.value?.operatorShortCode}},
-      Tyyppi: {{this.selectedVersionFormControl.value?.trainType}}/{{this.selectedVersionFormControl.value?.trainCategory}},
-      Hyväksytty: {{ this.selectedVersionFormControl.value.timetableAcceptanceDate | date: 'dd.MM.yyyy HH:mm:ss'}},
-      Kulussa: {{this.selectedVersionFormControl.value?.runningCurrently}},
-      Peruttu: {{this.selectedVersionFormControl.value?.cancelled}},
-      Lähilinjatunnus: {{this.selectedVersionFormControl.value?.commuterLineID}}</small>
+    <small
+      >Operaattori: {{ this.selectedVersionFormControl.value?.operatorShortCode }}, Tyyppi:
+      {{ this.selectedVersionFormControl.value?.trainType }}/{{
+        this.selectedVersionFormControl.value?.trainCategory
+      }}, Hyväksytty:
+      {{ this.selectedVersionFormControl.value.timetableAcceptanceDate | date : "dd.MM.yyyy HH:mm:ss" }},
+      Kulussa: {{ this.selectedVersionFormControl.value?.runningCurrently }}, Peruttu:
+      {{ this.selectedVersionFormControl.value?.cancelled }}, Lähilinjatunnus:
+      {{ this.selectedVersionFormControl.value?.commuterLineID }}</small
+    >
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container matColumnDef="stationShortCode">
         <th mat-header-cell *matHeaderCellDef>Liikennepaikka</th>
-        <td mat-cell *matCellDef="let element"> {{element.stationShortCode}} </td>
+        <td mat-cell *matCellDef="let element">{{ element.stationShortCode }}</td>
       </ng-container>
 
       <ng-container matColumnDef="commercialTrack">
         <th mat-header-cell *matHeaderCellDef>Raide</th>
-        <td mat-cell *matCellDef="let element"> {{element.commercialTrack}} </td>
+        <td mat-cell *matCellDef="let element">{{ element.commercialTrack }}</td>
       </ng-container>
 
       <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef>Tyyppi</th>
-        <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+        <td mat-cell *matCellDef="let element">{{ element.type }}</td>
       </ng-container>
 
       <ng-container matColumnDef="scheduledTime">
         <th mat-header-cell *matHeaderCellDef>Aikatauluaika</th>
-        <td mat-cell *matCellDef="let element"> {{element.scheduledTime | date: 'HH:mm:ss'}} </td>
+        <td mat-cell *matCellDef="let element">{{ element.scheduledTime | date : "HH:mm:ss" }}</td>
       </ng-container>
 
       <ng-container matColumnDef="actualTime">
         <th mat-header-cell *matHeaderCellDef>Toteutunut aika</th>
-        <td mat-cell *matCellDef="let element"> {{element.actualTime | date: 'HH:mm:ss'}} </td>
+        <td mat-cell *matCellDef="let element">{{ element.actualTime | date : "HH:mm:ss" }}</td>
       </ng-container>
 
       <ng-container matColumnDef="liveEstimateTime">
         <th mat-header-cell *matHeaderCellDef>Ennuste</th>
-        <td mat-cell  *matCellDef="let element"><span *ngIf="element.liveEstimateTime != null">{{ element.liveEstimateTime | date: 'HH:mm:ss' }} ({{ element.differenceInMinutes }})</span></td>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.liveEstimateTime != null"
+            >{{ element.liveEstimateTime | date : "HH:mm:ss" }} ({{ element.differenceInMinutes }})</span
+          >
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="estimateSource">
         <th mat-header-cell *matHeaderCellDef>Ennusteen lähde</th>
-        <td mat-cell  *matCellDef="let element">{{ element.estimateSource }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.estimateSource }}</td>
       </ng-container>
 
       <ng-container matColumnDef="unknownDelay">
         <th mat-header-cell *matHeaderCellDef>Ennuste epävarma</th>
-        <td mat-cell  *matCellDef="let element">{{ element.unknownDelay }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.unknownDelay }}</td>
       </ng-container>
 
       <ng-container matColumnDef="cancelled">
         <th mat-header-cell *matHeaderCellDef>Peruttu</th>
-        <td mat-cell  *matCellDef="let element">{{ element.cancelled }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.cancelled }}</td>
       </ng-container>
 
       <ng-container matColumnDef="trainReady">
         <th mat-header-cell *matHeaderCellDef>Lähtövalmius</th>
-        <td mat-cell  *matCellDef="let element"><span *ngIf="element.trainReady != null">{{ element.trainReady.accepted }} ({{ element.trainReady.source }})</span></td>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.trainReady != null"
+            >{{ element.trainReady.accepted }} ({{ element.trainReady.source }})</span
+          >
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="causes">
         <th mat-header-cell *matHeaderCellDef>Syykoodit</th>
         <td mat-cell *matCellDef="let element">
-          <span *ngFor="let c of element.causes ">
-           {{ c.categoryCode }} {{ c.detailedCategoryCode }} {{c.thirdCategoryCode}}
+          <span *ngFor="let c of element.causes">
+            {{ c.categoryCode }} {{ c.detailedCategoryCode }} {{ c.thirdCategoryCode }}
           </span>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </ng-container>
 </div>
