@@ -41,6 +41,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -57,11 +61,17 @@ jobs:
           tar -czvf train-history-web.tar dist nginx.conf
           cp train-history-web.tar ../config/aws
           cd ../config/aws
-          docker build --no-cache \
+          
+          docker buildx build \
+            --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
             --build-arg APP_FILE=train-history-web.tar \
-            -t ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA} \
-            --pull=true --file=Dockerfile-rail-train-history-web .
+            --platform linux/arm64 \
+            --output type=docker \
+            --tag ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA} \
+            --pull=true \
+            --file=Dockerfile-rail-train-history-web .
+          
           docker push ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA}
       - name: Build backend
         run: |
@@ -69,12 +79,18 @@ jobs:
           mvn install -DskipTests=true -Ddependency-check.skip=true
           cp target/train-history-backend-0.0.1-SNAPSHOT.jar ../config/aws/train-history-backend.jar
           cd ../config/aws
-          docker build --no-cache \
+          
+          docker buildx build \
+            --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
             --build-arg APP_FILE=train-history-backend.jar \
             --build-arg PROPERTY_FILE=conf/train-history-backend-${{ github.event.inputs.env }}.properties \
-            -t ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA} \
-            --pull=true --file=Dockerfile-rail-train-history-backend .
+            --platform linux/arm64 \
+            --output type=docker \
+            --tag ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA} \
+            --pull=true \
+            --file=Dockerfile-rail-train-history-backend .
+          
           docker push ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA}
       - name: Build updater
         run: |
@@ -82,12 +98,17 @@ jobs:
           mvn install -DskipTests=true -Ddependency-check.skip=true
           cp target/train-history-updater-0.0.1-SNAPSHOT.jar ../config/aws/train-history-updater.jar
           cd ../config/aws
-          docker build --no-cache \
+          docker buildx build \
+            --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
             --build-arg APP_FILE=train-history-updater.jar \
             --build-arg PROPERTY_FILE=conf/train-history-updater-${{ github.event.inputs.env }}.properties \
-            -t ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA} \
-            --pull=true --file=Dockerfile-rail-train-history-updater .
+            --platform linux/arm64 \
+            --output type=docker \
+            --tag ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA} \
+            --pull=true \
+            --file=Dockerfile-rail-train-history-updater .
+          
           docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
       - name: Notify Slack
         if: failure()
