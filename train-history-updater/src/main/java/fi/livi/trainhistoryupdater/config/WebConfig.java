@@ -7,15 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import fi.livi.trainhistoryupdater.deserializers.DeserializerObjectMapper;
 
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private DeserializerObjectMapper httpOutputJsonObjectMapper;
-
 
     @Bean
     public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter() {
@@ -25,8 +24,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
+    public void extendMessageConverters(final List<HttpMessageConverter<?>> converters) {
         converters.add(customJackson2HttpMessageConverter());
-        super.configureMessageConverters(converters);
     }
 }

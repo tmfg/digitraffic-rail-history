@@ -1,6 +1,6 @@
 package fi.livi.trainhistoryupdater.entities;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.io.Serializable;
 
 @Entity

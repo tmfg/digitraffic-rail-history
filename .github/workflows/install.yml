@@ -37,6 +37,12 @@ jobs:
           ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
           ref: ${{ inputs.config-repo-branch }}
           path: config
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: corretto
+          cache: maven
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -70,7 +76,7 @@ jobs:
             --output type=docker \
             --tag ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA} \
             --pull=true \
-            --file=Dockerfile-rail-train-history-web .
+            --file=docker/Dockerfile-rail-train-history-web .
           
           docker push ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA}
       - name: Build backend
@@ -89,7 +95,7 @@ jobs:
             --output type=docker \
             --tag ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA} \
             --pull=true \
-            --file=Dockerfile-rail-train-history-backend .
+            --file=docker/Dockerfile-rail-train-history-backend .
           
           docker push ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA}
       - name: Build updater
@@ -107,7 +113,7 @@ jobs:
             --output type=docker \
             --tag ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA} \
             --pull=true \
-            --file=Dockerfile-rail-train-history-updater .
+            --file=docker/Dockerfile-rail-train-history-updater .
           
           docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
       - name: Notify Slack

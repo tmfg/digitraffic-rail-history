@@ -20,7 +20,7 @@ Sisältää lähdekoodin palvelulle [rata.digitraffic.fi/history/](https://rata.
 6. Käynnistä `TrainHistoryBackendApplication` `localhost`-profiililla
 7. Asenna `ng` tarvittaessa: `npm install -g @angular/cli`
 8. Mene train-history-web hakemistoon ja aja `npm install`
-9. Käynnistä web-käyttöliittymä `npm run start`
+9. Käynnistä web-käyttöliittymä `npm run dev` tai `npm run dev:local`. Erona on, että mitä proxy filua käytetään.
 
 # Arkkitehtuuri
 

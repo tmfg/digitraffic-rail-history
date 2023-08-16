@@ -2,9 +2,9 @@ package fi.livi.trainhistorybackend.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.persistence.Convert;
-import javax.persistence.EmbeddedId;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Convert;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class JsonEntity {

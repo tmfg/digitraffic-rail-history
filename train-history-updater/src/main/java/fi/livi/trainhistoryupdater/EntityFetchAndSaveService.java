@@ -32,16 +32,19 @@ public class EntityFetchAndSaveService {
     @Value("${digitraffic-url:https://rata.digitraffic.fi}")
     private String DIGITRAFFIC_URL;
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private RestTemplate getRestTemplate() {
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
-                HttpClientBuilder.create().build());
+        final HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         return new RestTemplate(clientHttpRequestFactory);
     }
 
     @Transactional
-    public <EntityType extends JsonEntity> Iterable<EntityType> pollForNewEntities(Supplier<Long> versionSupplier, String url, String name, Supplier<EntityType> entityFactory, CrudRepository<EntityType, TrainId> repository) throws IOException {
+    public <EntityType extends JsonEntity> Iterable<EntityType> pollForNewEntities(final Supplier<Long> versionSupplier,
+                                                                                   final String url,
+                                                                                   final String name,
+                                                                                   final Supplier<EntityType> entityFactory,
+                                                                                   final CrudRepository<EntityType, TrainId> repository) throws IOException {
         final long maxVersion = versionSupplier.get();
         final String urlString;
         if (url.startsWith("http")) {
@@ -50,14 +53,14 @@ public class EntityFetchAndSaveService {
             urlString = String.format(url, DIGITRAFFIC_URL, maxVersion);
         }
 
-        byte[] responesBytes = getRestTemplate().getForObject(urlString, byte[].class);
-        final JsonNode jsonNode = objectMapper.readTree(responesBytes);
+        final byte[] responseBytes = getRestTemplate().getForObject(urlString, byte[].class);
+        final JsonNode jsonNode = objectMapper.readTree(responseBytes);
 
-        ZonedDateTime fetchDate = ZonedDateTime.now();
-        List<EntityType> entities = new ArrayList<>();
+        final ZonedDateTime fetchDate = ZonedDateTime.now();
+        final List<EntityType> entities = new ArrayList<>();
         long newMaxVersion = Long.MIN_VALUE;
         for (final JsonNode node : jsonNode) {
-            EntityType entityBase = entityFactory.get();
+            final EntityType entityBase = entityFactory.get();
             final EntityType entity = setEntityFields(fetchDate, node, entityBase);
 
             entities.add(entity);
@@ -69,13 +72,11 @@ public class EntityFetchAndSaveService {
 
         log.info("{} -> {}: {} new {}. {}", maxVersion, newMaxVersion, entities.size(), name, entities);
 
-        Iterable<EntityType> savedEntities = repository.saveAll(entities);
-
-        return savedEntities;
+        return repository.saveAll(entities);
     }
 
-    private <T extends JsonEntity> T setEntityFields(ZonedDateTime fetchDate, JsonNode node, T entity) {
-        TrainId id = new TrainId();
+    private <T extends JsonEntity> T setEntityFields(final ZonedDateTime fetchDate, final JsonNode node, final T entity) {
+        final TrainId id = new TrainId();
         id.trainNumber = getLong(node.get("trainNumber"));
         id.departureDate = getLocalDate(node.get("departureDate"));
         id.fetchDate = fetchDate;
