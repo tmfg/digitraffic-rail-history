@@ -1,8 +1,6 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component } from "@angular/core";
 import { CompositionService } from "../../services/composition.service";
 import { FormControl } from "@angular/forms";
-import { TrainService } from "../../services/train.service";
 
 @Component({
   selector: "app-composition-table",
