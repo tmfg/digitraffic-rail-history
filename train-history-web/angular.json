@@ -108,20 +108,6 @@
           }
         }
       }
-    },
-    "train-history-web-e2e": {
-      "root": "e2e",
-      "sourceRoot": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "train-history-web:serve"
-          }
-        }
-      }
     }
   },
   "schematics": {
