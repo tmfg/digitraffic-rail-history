@@ -32,7 +32,9 @@ export class CompositionTableComponent {
   }
 
   public selectVersion = (version: any) => {
-    this.selectedVersionFormControl.setValue(version.json);
+    if (version) {
+      this.selectedVersionFormControl.setValue(version.json);
+    }
   };
 
   public fetchTrain() {

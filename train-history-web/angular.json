@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "train-history-web:build"
+            "buildTarget": "train-history-web:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "train-history-web:build:production"
+              "buildTarget": "train-history-web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "train-history-web:build"
+            "buildTarget": "train-history-web:build"
           }
         },
         "test": {
