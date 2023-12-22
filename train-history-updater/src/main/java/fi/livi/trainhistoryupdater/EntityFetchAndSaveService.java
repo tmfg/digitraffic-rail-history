@@ -35,7 +35,14 @@ public class EntityFetchAndSaveService {
 
     private RestTemplate getRestTemplate() {
         final HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        return new RestTemplate(clientHttpRequestFactory);
+        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+
+        restTemplate.getInterceptors().add((request, body, execution) -> {
+            request.getHeaders().add("Accept-Encoding", "gzip");
+            return execution.execute(request, body);
+        });
+
+        return restTemplate;
     }
 
     @Transactional
