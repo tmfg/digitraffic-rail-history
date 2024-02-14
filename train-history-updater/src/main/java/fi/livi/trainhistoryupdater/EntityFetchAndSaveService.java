@@ -39,6 +39,7 @@ public class EntityFetchAndSaveService {
 
         restTemplate.getInterceptors().add((request, body, execution) -> {
             request.getHeaders().add("Accept-Encoding", "gzip");
+            request.getHeaders().add("Digitraffic-User", "internal-digitraffic-thu");
             return execution.execute(request, body);
         });
 
