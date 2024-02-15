@@ -12,13 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
 import fi.livi.trainhistoryupdater.deserializers.DeserializerObjectMapper;
 import fi.livi.trainhistoryupdater.entities.JsonEntity;
 import fi.livi.trainhistoryupdater.entities.TrainId;
@@ -28,23 +26,13 @@ public class EntityFetchAndSaveService {
     @Autowired
     private DeserializerObjectMapper objectMapper;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Value("${digitraffic-url:https://rata.digitraffic.fi}")
     private String DIGITRAFFIC_URL;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    private RestTemplate getRestTemplate() {
-        final HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-
-        restTemplate.getInterceptors().add((request, body, execution) -> {
-            request.getHeaders().add("Accept-Encoding", "gzip");
-            request.getHeaders().add("Digitraffic-User", "internal-digitraffic-thu");
-            return execution.execute(request, body);
-        });
-
-        return restTemplate;
-    }
 
     @Transactional
     public <EntityType extends JsonEntity> Iterable<EntityType> pollForNewEntities(final Supplier<Long> versionSupplier,
@@ -60,7 +48,7 @@ public class EntityFetchAndSaveService {
             urlString = String.format(url, DIGITRAFFIC_URL, maxVersion);
         }
 
-        final byte[] responseBytes = getRestTemplate().getForObject(urlString, byte[].class);
+        final byte[] responseBytes = this.restTemplate.getForObject(urlString, byte[].class);
         final JsonNode jsonNode = objectMapper.readTree(responseBytes);
 
         final ZonedDateTime fetchDate = ZonedDateTime.now();
