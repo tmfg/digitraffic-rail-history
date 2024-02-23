@@ -3,8 +3,6 @@ package fi.livi.trainhistoryupdater;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import jakarta.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import fi.livi.trainhistoryupdater.entities.Composition;
 import fi.livi.trainhistoryupdater.entities.Train;
 import fi.livi.trainhistoryupdater.repositories.CompositionRepository;
 import fi.livi.trainhistoryupdater.repositories.TrainRepository;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class ScheduleService {
@@ -62,8 +61,8 @@ public class ScheduleService {
         synchronized (Train.class) {
             try {
                 entityFetchService.pollForNewEntities(trainRepository::getMaxVersion, "%s/api/v1/trains?version=%s", "trains", Train::new, trainRepository);
-            } catch (HttpClientErrorException.TooManyRequests tooManyRequests) {
-                handle429();
+            } catch (HttpClientErrorException httpClientErrorException) {
+                handleHttpException(httpClientErrorException);
             }
         }
     }
@@ -73,13 +72,13 @@ public class ScheduleService {
         synchronized (Composition.class) {
             try {
                 entityFetchService.pollForNewEntities(compositionRepository::getMaxVersion, "%s/api/v1/compositions?version=%s", "compositions", Composition::new, compositionRepository);
-            } catch (HttpClientErrorException.TooManyRequests tooManyRequests) {
-                handle429();
+            } catch (HttpClientErrorException httpClientErrorException) {
+                handleHttpException(httpClientErrorException);
             }
         }
     }
 
-    private void handle429() {
-        log.warn("429 for trains");
+    private void handleHttpException(HttpClientErrorException httpClientErrorException) {
+        log.warn("Encountered http error {}", httpClientErrorException);
     }
 }
