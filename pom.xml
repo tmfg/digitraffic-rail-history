@@ -27,7 +27,7 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>8.4.2</version>
+                        <version>9.0.9</version>
                         <configuration>
                             <scanSet>
                                 <fileSet>
@@ -40,6 +40,7 @@
                             </scanSet>
                             <nodePackageSkipDevDependencies>true</nodePackageSkipDevDependencies>
                             <nodeAuditSkipDevDependencies>true</nodeAuditSkipDevDependencies>
+                            <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
                             <failBuildOnCVSS>7</failBuildOnCVSS>
                             <suppressionFile>owasp-suppressions.xml</suppressionFile>
                             <formats>html,xml</formats>
