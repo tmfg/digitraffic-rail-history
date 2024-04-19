@@ -40,11 +40,13 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build backend
+      if: ${{ matrix.language=='java' }}
       run: |
         cd train-history-backend
         mvn clean package -e -U -B
 
     - name: Build updater
+      if: ${{ matrix.language=='java' }}
       run: |
         cd train-history-updater
         mvn clean package -e -U -B
