@@ -39,6 +39,16 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
+    - name: Build backend
+      run: |
+        cd train-history-backend
+        mvn clean package -e -U -B
+
+    - name: Build updater
+      run: |
+        cd train-history-updater
+        mvn clean package -e -U -B
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
