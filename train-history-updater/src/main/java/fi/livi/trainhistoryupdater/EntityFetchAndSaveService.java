@@ -1,12 +1,9 @@
 package fi.livi.trainhistoryupdater;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import fi.livi.trainhistoryupdater.deserializers.DeserializerObjectMapper;
+import fi.livi.trainhistoryupdater.entities.JsonEntity;
+import fi.livi.trainhistoryupdater.entities.TrainId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +11,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import fi.livi.trainhistoryupdater.deserializers.DeserializerObjectMapper;
-import fi.livi.trainhistoryupdater.entities.JsonEntity;
-import fi.livi.trainhistoryupdater.entities.TrainId;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 public class EntityFetchAndSaveService {
@@ -27,7 +26,7 @@ public class EntityFetchAndSaveService {
     private DeserializerObjectMapper objectMapper;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private WebClient webClient;
 
     @Value("${digitraffic-url:https://rata.digitraffic.fi}")
     private String DIGITRAFFIC_URL;
@@ -48,8 +47,7 @@ public class EntityFetchAndSaveService {
             urlString = String.format(url, DIGITRAFFIC_URL, maxVersion);
         }
 
-        final byte[] responseBytes = this.restTemplate.getForObject(urlString, byte[].class);
-        final JsonNode jsonNode = objectMapper.readTree(responseBytes);
+        final JsonNode jsonNode = webClient.get().uri(urlString).retrieve().bodyToMono(JsonNode.class).block();
 
         final ZonedDateTime fetchDate = ZonedDateTime.now();
         final List<EntityType> entities = new ArrayList<>();
