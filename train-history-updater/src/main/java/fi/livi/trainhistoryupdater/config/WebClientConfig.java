@@ -15,7 +15,7 @@ public class WebClientConfig {
     private static final String DIGITRAFFIC_USER = "internal-digitraffic-thu";
 
     @Bean
-    public WebClient webClient(final DeserializerObjectMapper objectMapper) {
+    public WebClient webClient() {
         // more memory for default web-client
         return WebClient.builder()
                 // add digitraffic-user header
@@ -23,8 +23,6 @@ public class WebClientConfig {
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(codecs -> codecs
                                 .defaultCodecs().maxInMemorySize(30 * 1024 * 1024))
-                        .codecs(codecs -> codecs
-                                .defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper)))
                         .build())
                 .build();
     }

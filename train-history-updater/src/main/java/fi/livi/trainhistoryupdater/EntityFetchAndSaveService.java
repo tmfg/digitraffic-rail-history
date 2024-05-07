@@ -6,7 +6,6 @@ import fi.livi.trainhistoryupdater.entities.JsonEntity;
 import fi.livi.trainhistoryupdater.entities.TrainId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
@@ -22,16 +21,19 @@ import java.util.function.Supplier;
 
 @Service
 public class EntityFetchAndSaveService {
-    @Autowired
-    private DeserializerObjectMapper objectMapper;
+    private final WebClient webClient;
 
-    @Autowired
-    private WebClient webClient;
+    private final DeserializerObjectMapper objectMapper;
 
-    @Value("${digitraffic-url:https://rata.digitraffic.fi}")
-    private String DIGITRAFFIC_URL;
+    private final String DIGITRAFFIC_URL;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    public EntityFetchAndSaveService(final WebClient webClient, final DeserializerObjectMapper objectMapper, final @Value("${digitraffic-url:https://rata.digitraffic.fi}") String digitrafficUrl) {
+        this.webClient = webClient;
+        this.objectMapper = objectMapper;
+        this.DIGITRAFFIC_URL = digitrafficUrl;
+    }
 
     @Transactional
     public <EntityType extends JsonEntity> Iterable<EntityType> pollForNewEntities(final Supplier<Long> versionSupplier,
@@ -47,7 +49,8 @@ public class EntityFetchAndSaveService {
             urlString = String.format(url, DIGITRAFFIC_URL, maxVersion);
         }
 
-        final JsonNode jsonNode = webClient.get().uri(urlString).retrieve().bodyToMono(JsonNode.class).block();
+        final byte[] responseBytes = webClient.get().uri(urlString).retrieve().bodyToMono(byte[].class).block();
+        final JsonNode jsonNode = objectMapper.readTree(responseBytes);
 
         final ZonedDateTime fetchDate = ZonedDateTime.now();
         final List<EntityType> entities = new ArrayList<>();

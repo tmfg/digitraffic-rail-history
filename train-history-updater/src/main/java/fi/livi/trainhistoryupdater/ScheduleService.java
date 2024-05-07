@@ -61,7 +61,7 @@ public class ScheduleService {
         synchronized (Train.class) {
             try {
                 entityFetchService.pollForNewEntities(trainRepository::getMaxVersion, "%s/api/v1/trains?version=%s", "trains", Train::new, trainRepository);
-            } catch (HttpClientErrorException httpClientErrorException) {
+            } catch (final HttpClientErrorException httpClientErrorException) {
                 handleHttpException(httpClientErrorException);
             }
         }
@@ -72,13 +72,13 @@ public class ScheduleService {
         synchronized (Composition.class) {
             try {
                 entityFetchService.pollForNewEntities(compositionRepository::getMaxVersion, "%s/api/v1/compositions?version=%s", "compositions", Composition::new, compositionRepository);
-            } catch (HttpClientErrorException httpClientErrorException) {
+            } catch (final HttpClientErrorException httpClientErrorException) {
                 handleHttpException(httpClientErrorException);
             }
         }
     }
 
-    private void handleHttpException(HttpClientErrorException httpClientErrorException) {
+    private void handleHttpException(final HttpClientErrorException httpClientErrorException) {
         log.warn("Encountered http error {}", httpClientErrorException);
     }
 }
