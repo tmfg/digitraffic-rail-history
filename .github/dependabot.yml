@@ -4,27 +4,28 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    versioning-strategy: increase
+    open-pull-requests-limit: 0
 
   - package-ecosystem: "maven"
     directory: "/train-history-backend"
     schedule:
       interval: "daily"
-    versioning-strategy: increase
+    open-pull-requests-limit: 0
 
   - package-ecosystem: "maven"
     directory: "/train-history-updater"
     schedule:
       interval: "daily"
-    versioning-strategy: increase
+    open-pull-requests-limit: 0
 
   - package-ecosystem: "npm"
     directory: "/train-history-web"
     schedule:
       interval: "daily"
-    versioning-strategy: increase
+    open-pull-requests-limit: 0
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 0
