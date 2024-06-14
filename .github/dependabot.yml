@@ -1,29 +1,5 @@
 version: 2
 updates:
-  - package-ecosystem: "maven"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 0
-
-  - package-ecosystem: "maven"
-    directory: "/train-history-backend"
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 0
-
-  - package-ecosystem: "maven"
-    directory: "/train-history-updater"
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 0
-
-  - package-ecosystem: "npm"
-    directory: "/train-history-web"
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 0
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
