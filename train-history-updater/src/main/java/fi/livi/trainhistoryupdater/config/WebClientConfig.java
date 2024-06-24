@@ -1,12 +1,7 @@
 package fi.livi.trainhistoryupdater.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.livi.trainhistoryupdater.deserializers.DeserializerObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -22,7 +17,7 @@ public class WebClientConfig {
                 .defaultHeader("Digitraffic-User", DIGITRAFFIC_USER)
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(codecs -> codecs
-                                .defaultCodecs().maxInMemorySize(30 * 1024 * 1024))
+                                .defaultCodecs().maxInMemorySize(50 * 1024 * 1024))
                         .build())
                 .build();
     }
