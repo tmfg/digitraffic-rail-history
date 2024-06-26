@@ -66,7 +66,7 @@ public class EntityFetchAndSaveService {
             }
         }
 
-        log.info("{} -> {}: {} new {}. {}", maxVersion, newMaxVersion, entities.size(), name, entities);
+        log.info("{} -> {}: {} new {}", maxVersion, newMaxVersion, entities.size(), name);
 
         return repository.saveAll(entities);
     }
