@@ -6,7 +6,7 @@ Sisältää lähdekoodin palvelulle [rata.digitraffic.fi/history/](https://rata.
 2. Luo tietokanta ja aja migrat
    ```bash
    cd db
-   docker-compose up -d 
+   docker compose up -d 
    ```
 3. Luo `train-history-updater/src/main/resources/application-localhost.properties`, jonne yhteysasetukset.
    Kannan username ja password löytyy `db/docker-compose.yml`-tiedostosta (MYSQL_USER ja MYSQL_PASSWORD)
@@ -16,8 +16,8 @@ Sisältää lähdekoodin palvelulle [rata.digitraffic.fi/history/](https://rata.
    spring.datasource.url=jdbc:mysql://localhost/trainhistoryjson?autoReconnect=true&rewriteBatchedStatements=true&cachePrepStmts=true&useTimezone=true&serverTimezone=UTC&useSSL=false
    ```
 4. Tee sama temppu `train-history-backend/src/main/resources/application-localhost.properties`:lle 
-5. Käynnistä `TrainHistoryUpdaterApplication` `localhost`-profiililla ja tietokantaan pitäisi alkaa virrata dataa
-6. Käynnistä `TrainHistoryBackendApplication` `localhost`-profiililla
+5. Käynnistä `TrainHistoryUpdaterApplication` `localhost`-profiililla `mvn spring-boot:run -Dspring-boot.run.profiles=localhost` ja tietokantaan pitäisi alkaa virrata dataa
+6. Käynnistä `TrainHistoryBackendApplication` `localhost`-profiililla `mvn spring-boot:run -Dspring-boot.run.profiles=localhost`
 7. Asenna `ng` tarvittaessa: `npm install -g @angular/cli`
 8. Mene train-history-web hakemistoon ja aja `npm install`
 9. Käynnistä web-käyttöliittymä `npm run dev` tai `npm run dev:local`. Erona on, että mitä proxy filua käytetään.
