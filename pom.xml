@@ -10,6 +10,17 @@
 
     <name>train-history</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring.boot.version>3.3.3</spring.boot.version>
+        <com.google.guava.version>33.3.0-jre</com.google.guava.version>
+        <aws.msql.driver.version>1.1.15</aws.msql.driver.version>
+        <net.logstash.logback.version>8.0</net.logstash.logback.version>
+        <org.flywaydb.version>10.18.0</org.flywaydb.version>
+    </properties>
+
     <modules>
         <module>/train-history-backend/</module>
         <module>/train-history-updater/</module>
@@ -27,7 +38,7 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>9.0.9</version>
+                        <version>10.0.3</version>
                         <configuration>
                             <scanSet>
                                 <fileSet>
@@ -40,6 +51,7 @@
                             </scanSet>
                             <nodePackageSkipDevDependencies>true</nodePackageSkipDevDependencies>
                             <nodeAuditSkipDevDependencies>true</nodeAuditSkipDevDependencies>
+                            <!--suppress UnresolvedMavenProperty -->
                             <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
                             <failBuildOnCVSS>7</failBuildOnCVSS>
                             <suppressionFile>owasp-suppressions.xml</suppressionFile>
