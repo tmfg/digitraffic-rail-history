@@ -25,6 +25,7 @@
         <com.google.guava.version>33.3.0-jre</com.google.guava.version>
         <net.logstash.logback.version>8.0</net.logstash.logback.version>
         <org.flywaydb.version>10.18.0</org.flywaydb.version>
+        <java.version>21</java.version>
     </properties>
 
     <profiles>
