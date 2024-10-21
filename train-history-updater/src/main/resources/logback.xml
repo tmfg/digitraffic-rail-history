@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" debug="true">
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- Log message format -->
+        <encoder>
+            <!-- If needed to exclude stacktrace put %xEx{0} at the end of the pattern -->
+            <pattern>%d{ISO8601} %p&#9;[%t] - %c: %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- JSON logger for Cloudwatch -->
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app":"rail-train-history-updater"}</customFields>
+            <provider class="fi.livi.digitraffic.common.logging.LoggerMessageKeyValuePairJsonProvider"/>
+        </encoder>
     </appender>
 
     <springProperty scope="context" name="activeProfiles" source="spring.profiles.active" defaultValue="-"/>
-    <springProperty scope="context" name="hostname" source="myHostname" defaultValue="-"/>
 
     <logger name="fi.livi.rata.avoindata" level="DEBUG"/>
     <logger name="org.flywaydb" level="DEBUG"/>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="CONSOLE_JSON" />
     </root>
-
 </configuration>
