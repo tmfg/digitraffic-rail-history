@@ -10,11 +10,9 @@ public class TrainId implements Serializable {
     public ZonedDateTime fetchDate;
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof TrainId)) return false;
-
-        TrainId trainId = (TrainId) o;
+        if (!(o instanceof final TrainId trainId)) return false;
 
         if (!departureDate.equals(trainId.departureDate)) return false;
         if (!trainNumber.equals(trainId.trainNumber)) return false;

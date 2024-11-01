@@ -21,7 +21,7 @@ import com.google.common.base.Joiner;
 
 @Configuration
 public class PropertyLogger {
-    private Logger log = LoggerFactory.getLogger(PropertyLogger.class);
+    private final Logger log = LoggerFactory.getLogger(PropertyLogger.class);
 
     @Autowired
     private Environment environment;
@@ -29,7 +29,7 @@ public class PropertyLogger {
     @EventListener(ContextRefreshedEvent.class)
     private void printPropertyValues() {
         final MutablePropertySources sources = ((AbstractEnvironment) environment).getPropertySources();
-        List<String> propertyKeys = StreamSupport.stream(sources.spliterator(), false)
+        final List<String> propertyKeys = StreamSupport.stream(sources.spliterator(), false)
                 .filter(ps -> ps instanceof EnumerablePropertySource)
                 .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
                 .flatMap(Arrays::stream)

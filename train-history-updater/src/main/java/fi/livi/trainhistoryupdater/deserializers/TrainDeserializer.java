@@ -14,12 +14,12 @@ import fi.livi.trainhistoryupdater.entities.TrainId;
 @Component
 public class TrainDeserializer extends AJsonDeserializer<Train> {
     @Override
-    public Train deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        JsonNode node = jp.getCodec().readTree(jp);
+    public Train deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
+        final JsonNode node = jp.getCodec().readTree(jp);
 
         final Train train = new Train();
 
-        TrainId id = new TrainId();
+        final TrainId id = new TrainId();
         id.trainNumber = getLong(node.get("trainNumber"));
         id.departureDate = getLocalDate(node.get("departureDate"));
         train.version = getLong(node.get("version"));
