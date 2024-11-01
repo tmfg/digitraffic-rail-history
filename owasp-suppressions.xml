@@ -5,12 +5,6 @@
         Temporary suppressions, check and update these periodically
     -->
 
-    <suppress until="2024-11-01">
-        <notes><![CDATA[file name: spring-webflux-6.1.12.jar]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-webflux@.*$</packageUrl>
-        <!-- we don't use webflux -->
-        <cve>CVE-2024-38816</cve>
-    </suppress>
     <!--
     Permanent suppressions
     -->
