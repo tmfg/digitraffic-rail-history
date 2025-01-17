@@ -1,4 +1,4 @@
-FROM flyway/flyway:10.15-alpine
+FROM flyway/flyway:11.2.0-alpine
 
 ENV MYSQL_DIRVER_VERSION=8.3.0
 
