@@ -32,8 +32,9 @@ Sisältää lähdekoodin palvelulle
    `mvn spring-boot:run -Dspring-boot.run.profiles=localhost`
 7. Asenna `ng` tarvittaessa: `npm install -g @angular/cli`
 8. Mene train-history-web hakemistoon ja aja `npm install`
-9. Käynnistä web-käyttöliittymä `npm run dev` tai `npm run dev:local`. Erona on,
-   että mitä proxy filua käytetään. `dev` käytää 
+9. Käynnistä web-käyttöliittymä `npm run dev` -> otaa yhteyden rata.digitraffic.fi tai `npm run dev:local`. Erona on,
+   että mitä proxy filua käytetään. `dev` käytää rata.digitraffic.fi rajapintoja ja local lokaalisti pyörivää sovellusta.
+10. Avaa selaimella  http://localhost:4200/
 
 # Arkkitehtuuri
 
