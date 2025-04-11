@@ -14,11 +14,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring.boot.version>3.4.2</spring.boot.version>
-        <com.google.guava.version>33.3.0-jre</com.google.guava.version>
+        <spring.boot.version>3.4.4</spring.boot.version>
+        <com.google.guava.version>33.4.7-jre</com.google.guava.version>
         <aws.msql.driver.version>1.1.15</aws.msql.driver.version>
-        <net.logstash.logback.version>8.0</net.logstash.logback.version>
-        <org.flywaydb.version>11.1.1</org.flywaydb.version>
+        <net.logstash.logback.version>8.1</net.logstash.logback.version>
+        <org.flywaydb.version>11.7.0</org.flywaydb.version>
     </properties>
 
     <modules>
@@ -38,7 +38,7 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>12.1.0</version>
+                        <version>12.1.1</version>
                         <configuration>
                             <scanSet>
                                 <fileSet>
