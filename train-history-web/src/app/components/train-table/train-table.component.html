@@ -101,6 +101,12 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="stopSector">
+        <th mat-header-cell *matHeaderCellDef>Pysähdyssektori</th>
+        <td mat-cell *matCellDef="let element">{{ element.stopSector }}</td>
+      </ng-container>
+
+
       <ng-container matColumnDef="causes">
         <th mat-header-cell *matHeaderCellDef>Syykoodit</th>
         <td mat-cell *matCellDef="let element">

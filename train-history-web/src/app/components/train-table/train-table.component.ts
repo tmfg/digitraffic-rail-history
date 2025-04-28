@@ -18,6 +18,7 @@ export class TrainTableComponent {
     "estimateSource",
     "unknownDelay",
     "cancelled",
+    "stopSector",
     "trainReady",
     "causes"
   ];
