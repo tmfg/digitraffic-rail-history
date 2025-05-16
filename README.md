@@ -36,6 +36,17 @@ Sisältää lähdekoodin palvelulle
    että mitä proxy filua käytetään. `dev` käytää rata.digitraffic.fi rajapintoja ja local lokaalisti pyörivää sovellusta.
 10. Avaa selaimella  http://localhost:4200/
 
+# Testit
+
+### train-history-backend
+
+Oletuksena että kehitysympäristö on pystytetty ml. tietokanta ja sovellusprofiili.
+
+```
+cd train-history-backend
+mvn test -Dspring.profiles.active=localhost
+```
+
 # Arkkitehtuuri
 
 Historiapalvelu koostuu kolmesta komponentista:

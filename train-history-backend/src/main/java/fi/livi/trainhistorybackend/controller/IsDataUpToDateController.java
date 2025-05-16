@@ -2,14 +2,13 @@ package fi.livi.trainhistorybackend.controller;
 
 import java.time.ZonedDateTime;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fi.livi.trainhistorybackend.repositories.TrainRepository;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -19,8 +18,8 @@ public class IsDataUpToDateController {
 
     @RequestMapping("trains/history/is-up-to-date")
     @ResponseBody
-    public ZonedDateTime getTrain(HttpServletResponse response) {
-        ZonedDateTime latestFetchDate = trainRepository.findLatestFetchDate();
+    public ZonedDateTime getTrain(final HttpServletResponse response) {
+        final ZonedDateTime latestFetchDate = trainRepository.findLatestFetchDate();
         if (latestFetchDate.isBefore(ZonedDateTime.now().minusMinutes(15))) {
             response.setStatus(500);
         } else {
