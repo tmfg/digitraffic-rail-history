@@ -30,11 +30,21 @@ jobs:
       - name: Build backend
         run: |
           cd train-history-backend
-          mvn install
+          mvn install -DskipTests=true
       - name: Build updater
         run: |
           cd train-history-updater
           mvn install
+      - name: Setup database
+        run: |
+          cd db
+          docker compose up -d
+      - name: Get database IP
+        run: echo "db_addr=$(docker inspect db-rail_history_mysql-1 -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}')" >> $GITHUB_ENV
+      - name: Run backend tests
+        run: |
+          cd train-history-backend
+          mvn -f pom.xml test -Dspring.datasource.url=jdbc:mysql://${{ env.db_addr }}/trainhistoryjson -Dspring.datasource.username=rail_history -Dspring.datasource.password=rail_pass123
       - name: Notify Slack
         if: failure()
         uses: 8398a7/action-slack@v3
