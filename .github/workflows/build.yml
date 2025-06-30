@@ -1,5 +1,5 @@
 name: Build
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   build:
     if: github.repository != 'tmfg/digitraffic-rail-history'
@@ -39,6 +39,16 @@ jobs:
         run: |
           cd db
           docker compose up -d
+      - name: Wait for database readiness
+        run: |
+          until docker exec db-rail_history_mysql-1 mysqladmin ping -h localhost --silent; do
+            echo "Waiting for database to be ready..."
+            sleep 5
+          done
+      - name: Run database migrations
+        run: |
+          cd db
+          docker compose up rail_history_flyway
       - name: Get database IP
         run: echo "db_addr=$(docker inspect db-rail_history_mysql-1 -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}')" >> $GITHUB_ENV
       - name: Run backend tests
