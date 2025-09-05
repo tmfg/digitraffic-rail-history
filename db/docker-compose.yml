@@ -1,6 +1,6 @@
 services:
   rail_history_mysql:
-    image: mysql:8.0.39-debian
+    image: mysql:8.0.42-debian
     restart: unless-stopped
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
