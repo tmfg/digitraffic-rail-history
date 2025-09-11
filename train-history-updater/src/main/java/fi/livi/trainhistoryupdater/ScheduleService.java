@@ -57,23 +57,27 @@ public class ScheduleService {
     }
 
     @Scheduled(fixedDelay = 10 * 1000)
-    public void getTrains() throws IOException {
+    public void getTrains() {
         synchronized (Train.class) {
             try {
                 entityFetchService.pollForNewEntities(trainRepository::getMaxVersion, "%s/api/v1/trains?version=%s", "trains", Train::new, trainRepository);
             } catch (final HttpClientErrorException httpClientErrorException) {
                 handleHttpException(httpClientErrorException);
+            } catch (final Throwable t) {
+                log.error("Error", t);
             }
         }
     }
 
     @Scheduled(fixedDelay = 30 * 1000)
-    public void getCompositions() throws IOException {
+    public void getCompositions() {
         synchronized (Composition.class) {
             try {
                 entityFetchService.pollForNewEntities(compositionRepository::getMaxVersion, "%s/api/v1/compositions?version=%s", "compositions", Composition::new, compositionRepository);
             } catch (final HttpClientErrorException httpClientErrorException) {
                 handleHttpException(httpClientErrorException);
+            } catch (final Throwable t) {
+                log.error("Error", t);
             }
         }
     }

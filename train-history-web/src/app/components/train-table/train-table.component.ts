@@ -17,6 +17,7 @@ export class TrainTableComponent {
     "liveEstimateTime",
     "estimateSource",
     "unknownDelay",
+    "unknownTrack",
     "cancelled",
     "stopSector",
     "trainReady",
