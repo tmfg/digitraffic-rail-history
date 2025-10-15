@@ -1,0 +1,7 @@
+{% extends "base" %}
+
+{% block title %}Historiatyökalu{% endblock %}
+
+{% block content %}
+{% endblock %}
+

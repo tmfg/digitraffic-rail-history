@@ -1,0 +1,34 @@
+{% if trains is not empty %}
+<h2>2. Valitse versio</h2>
+<div class="mb-3">
+    <label for="versionSelect" class="form-label">Versio</label>
+    <select class="form-select" id="versionSelect" aria-label="Versio"
+            hx-post="/trains/version"
+            hx-target="#version-details"
+            hx-trigger="change"
+            hx-include="[name='trainNumber'],[name='departureDate']"
+            name="selectedVersion">
+        <option value="">Valitse versio...</option>
+        {% for train in trains %}
+        <option value="{{ train.id.fetchDate.toString() }}_{{ train.version }}"{% if loop.first and trains.size() == 1 %} selected{% endif %}>
+            {{ train.id.fetchDate | date("dd.MM.yyyy HH:mm:ss") }} ({{ train.version }})
+        </option>
+        {% endfor %}
+    </select>
+    <div class="form-text">Tippi: voit käyttää nuolinäppäimiä</div>
+</div>
+
+<!-- Hidden inputs to maintain form state -->
+<input type="hidden" name="trainNumber" value="{{ trainNumber }}">
+<input type="hidden" name="departureDate" value="{{ departureDate }}">
+
+<div id="version-details">
+    {% if selectedTrain is not empty %}
+        {% include "train-details" %}
+    {% endif %}
+</div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    Ei löytynyt aikataulutietoja annetuilla parametreilla.
+</div>
+{% endif %}

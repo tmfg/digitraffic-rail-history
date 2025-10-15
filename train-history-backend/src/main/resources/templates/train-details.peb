@@ -1,0 +1,68 @@
+{% if selectedTrain is not empty %}
+<div class="mb-3">
+    <small class="text-muted">
+        Operaattori: {{ selectedTrain.json.get("operatorShortCode").asText() }},
+        Tyyppi: {{ selectedTrain.json.get("trainType").asText() }}/{{ selectedTrain.json.get("trainCategory").asText() }},
+        Hyväksytty: {{ selectedTrain.json.get("timetableAcceptanceDate").asText() }},
+        Kulussa: {{ selectedTrain.json.get("runningCurrently").asText() }},
+        Peruttu: {{ selectedTrain.json.get("cancelled").asText() }},
+        Lähilinjatunnus: {{ selectedTrain.json.get("commuterLineID").asText() }}
+    </small>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover" role="table">
+        <thead class="table-dark" role="rowgroup">
+            <tr role="row">
+                <th role="columnheader">Liikennepaikka</th>
+                <th role="columnheader">Raide</th>
+                <th role="columnheader">Tyyppi</th>
+                <th role="columnheader">Aikatauluaika</th>
+                <th role="columnheader">Toteutunut aika</th>
+                <th role="columnheader">Ennuste</th>
+                <th role="columnheader">Ennusteen lähde</th>
+                <th role="columnheader">Ennuste epävarma</th>
+                <th role="columnheader">Raide epävarma</th>
+                <th role="columnheader">Peruttu</th>
+                <th role="columnheader">Pysähdyssektori</th>
+                <th role="columnheader">Lähtövalmius</th>
+                <th role="columnheader">Syykoodit</th>
+            </tr>
+        </thead>
+        <tbody role="rowgroup">
+            {% for row in selectedTrain.json.get("timeTableRows") %}
+            <tr role="row">
+                <td role="cell">{{ row.get("stationShortCode").asText() }}</td>
+                <td role="cell">{% if row.has("commercialTrack") %}{{ row.get("commercialTrack").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">{{ row.get("type").asText() }}</td>
+                <td role="cell">{{ row.get("scheduledTime").asText() }}</td>
+                <td role="cell">{% if row.has("actualTime") %}{{ row.get("actualTime").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">
+                    {% if row.has("liveEstimateTime") %}
+                        {{ row.get("liveEstimateTime").asText() }}
+                        {% if row.has("differenceInMinutes") %}({{ row.get("differenceInMinutes").asText() }}){% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td role="cell">{% if row.has("estimateSource") %}{{ row.get("estimateSource").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">{% if row.has("unknownDelay") %}{{ row.get("unknownDelay").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">{% if row.has("unknownTrack") %}{{ row.get("unknownTrack").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">{% if row.has("cancelled") %}{{ row.get("cancelled").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">{% if row.has("trainStopping") %}{{ row.get("trainStopping").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">{% if row.has("trainReady") %}{{ row.get("trainReady").asText() }}{% else %}-{% endif %}</td>
+                <td role="cell">
+                    {% if row.has("causes") %}
+                        {% for cause in row.get("causes") %}
+                            {{ cause.get("categoryCodeId").asText() }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
