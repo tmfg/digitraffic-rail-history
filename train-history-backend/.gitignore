@@ -1,0 +1,6 @@
+node_modules/
+src/main/resources/static/js/*.d.ts
+src/main/resources/static/js/*.d.ts.map
+src/main/resources/static/js/*.js.map
+
+.idea/

@@ -1,7 +1,10 @@
-<div class="container">
-    <h1>1. Etsi kokoonpano</h1>
+<div class="container" hx-ext="path-params">
+    <h1>1. Etsi aikataulu</h1>
 
-    <form hx-post="/compositions/search" hx-target="#search-results" hx-indicator="#loading">
+    <form hx-get="/api/v1/trains/history/{departureDate}/{trainNumber}"
+          hx-target="#search-results"
+          hx-headers='{"Accept": "text/html"}'
+          hx-indicator="#loading">
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
@@ -20,7 +23,7 @@
         </div>
 
         <div class="mb-3">
-            <button type="submit" class="btn btn-success">Etsi kokoonpano</button>
+            <button type="submit" class="btn btn-success">Etsi aikataulu</button>
             <div id="loading" class="loading spinner-border spinner-border-sm" role="status">
                 <span class="visually-hidden">Ladataan...</span>
             </div>

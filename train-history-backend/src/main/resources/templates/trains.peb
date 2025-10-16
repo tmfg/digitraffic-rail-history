@@ -3,35 +3,5 @@
 {% block title %}Aikataulut - Historiatyökalu{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>1. Etsi aikataulu</h1>
-
-    <form hx-post="/trains/search" hx-target="#search-results" hx-indicator="#loading">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="trainNumber" class="form-label">Junanumero</label>
-                    <input type="number" class="form-control" id="trainNumber" name="trainNumber" placeholder="46" required>
-                    <div class="form-text">Esim. IC 46:n junanumero on "46"</div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="departureDate" class="form-label">Lähtöpäivämäärä</label>
-                    <input type="date" class="form-control" id="departureDate" name="departureDate" value="{{ currentDate }}" required>
-                    <div class="form-text">Ensimmäisen lähdön päivämäärä</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <button type="submit" class="btn btn-success">Etsi aikataulu</button>
-            <div id="loading" class="loading spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Ladataan...</span>
-            </div>
-        </div>
-    </form>
-
-    <div id="search-results"></div>
-</div>
+{% include "trains-content" %}
 {% endblock %}

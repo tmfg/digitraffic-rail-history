@@ -5,6 +5,7 @@ import fi.livi.trainhistorybackend.repositories.CompositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,47 +28,33 @@ public class CompositionController {
         model.addAttribute("active_section", "compositions");
         model.addAttribute("currentDate", LocalDate.now().toString());
 
-        // Return fragment for HTMX requests, full page otherwise
-        return fragment ? "compositions-fragment" : "compositions";
+        // Return content template for HTMX fragment requests, full page otherwise
+        return fragment ? "compositions-content" : "compositions";
     }
 
-    // JSON API endpoint at /api/v1/ for backward compatibility
-    @RequestMapping(value = "/api/v1/compositions/history/{departure_date}/{train_number}",
-                   produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Composition> getCompositionJsonApiV1(@PathVariable final long train_number,
-                                                     @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departure_date,
-                                                     HttpServletResponse response) {
-        response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
-        return compositionRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
-    }
-
-    // Original JSON API endpoint (preserved for backward compatibility)
-    @RequestMapping(value = "compositions/history/{departure_date}/{train_number}",
-                   produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Composition> getCompositionJson(@PathVariable final long train_number,
-                                               @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departure_date,
-                                               HttpServletResponse response) {
-        response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
-        return compositionRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
-    }
-
-    // HTMX search endpoint
-    @PostMapping(value = "/compositions/search", produces = MediaType.TEXT_HTML_VALUE)
-    public String searchCompositions(@RequestParam long trainNumber,
-                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
-                                    Model model,
-                                    HttpServletResponse response) {
+    @GetMapping(value = "/api/v1/compositions/history/{departure_date}/{train_number}",
+                produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
+    public Object getCompositionHistory(@PathVariable final long train_number,
+                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departure_date,
+                                       @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) String accept,
+                                       Model model,
+                                       HttpServletResponse response) {
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
-        List<Composition> compositions = compositionRepository.findByTrainNumberAndDepartureDate(trainNumber, departureDate);
+        final List<Composition> compositions = compositionRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
+
+        if (accept.equals(MediaType.APPLICATION_JSON_VALUE)) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(compositions);
+        }
+
         model.addAttribute("compositions", compositions);
-        model.addAttribute("trainNumber", trainNumber);
-        model.addAttribute("departureDate", departureDate);
+        model.addAttribute("trainNumber", train_number);
+        model.addAttribute("departureDate", departure_date);
 
-        // Auto-select first version if only one exists
-        if (compositions.size() == 1) {
+        // Auto-select first version if results exist
+        if (!compositions.isEmpty()) {
             model.addAttribute("selectedComposition", compositions.get(0));
         }
 
@@ -98,4 +85,3 @@ public class CompositionController {
         return "composition-details";
     }
 }
-
