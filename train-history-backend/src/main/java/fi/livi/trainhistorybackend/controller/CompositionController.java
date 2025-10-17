@@ -55,14 +55,14 @@ public class CompositionController {
 
         // Auto-select first version if results exist
         if (!compositions.isEmpty()) {
-            model.addAttribute("selectedComposition", compositions.get(0));
+            model.addAttribute("selectedComposition", compositions.getFirst());
         }
 
         return "composition-results";
     }
 
     // HTMX version selection endpoint
-    @PostMapping(value = "/compositions/version", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/compositions/version", produces = MediaType.TEXT_HTML_VALUE)
     public String selectCompositionVersion(@RequestParam String selectedVersion,
                                           @RequestParam long trainNumber,
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,

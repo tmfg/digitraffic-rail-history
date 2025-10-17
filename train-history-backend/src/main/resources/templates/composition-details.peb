@@ -25,27 +25,14 @@
                 <td role="cell">{{ journeySection.get("maximumSpeed").asText() }} km/h</td>
                 <td role="cell">
                     {% if journeySection.has("beginTimeTableRow") %}
-                        {{ journeySection.get("beginTimeTableRow").get("scheduledTime").asText() }}
+                        {{ journeySection.get("beginTimeTableRow").get("scheduledTime").asText() | dateString("HH:mm:ss", "Europe/Helsinki") }}
                         ({{ journeySection.get("beginTimeTableRow").get("stationShortCode").asText() }})
-                    {% else %}
-                        -
                     {% endif %}
                 </td>
                 <td role="cell">
                     {% if journeySection.has("endTimeTableRow") %}
-                        {{ journeySection.get("endTimeTableRow").get("scheduledTime").asText() }}
+                        {{ journeySection.get("endTimeTableRow").get("scheduledTime").asText() | dateString("HH:mm:ss", "Europe/Helsinki") }}
                         ({{ journeySection.get("endTimeTableRow").get("stationShortCode").asText() }})
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-                <td role="cell">
-                    {% if journeySection.has("locomotives") %}
-                        {% for locomotive in journeySection.get("locomotives") %}
-                            {{ locomotive.get("powerType").asText() }}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        -
                     {% endif %}
                 </td>
                 <td role="cell">
@@ -53,8 +40,13 @@
                         {% for locomotive in journeySection.get("locomotives") %}
                             {{ locomotive.get("locomotiveType").asText() }}{% if not loop.last %}, {% endif %}
                         {% endfor %}
-                    {% else %}
-                        -
+                    {% endif %}
+                </td>
+                <td role="cell">
+                    {% if journeySection.has("locomotives") %}
+                        {% for locomotive in journeySection.get("locomotives") %}
+                            {{ locomotive.get("wagonType").asText() }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </td>
             </tr>

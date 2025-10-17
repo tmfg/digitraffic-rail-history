@@ -40,28 +40,28 @@ public class TrainController {
                                   HttpServletResponse response) {
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
-        final List<Train> trains = trainRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
+        final List<Train> trainVersions = trainRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
 
         if (accept.equals(MediaType.APPLICATION_JSON_VALUE)) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(trains);
+                    .body(trainVersions);
         }
 
-        model.addAttribute("trains", trains);
+        model.addAttribute("trainVersions", trainVersions);
         model.addAttribute("trainNumber", train_number);
         model.addAttribute("departureDate", departure_date);
 
         // Auto-select first version if results exist
-        if (!trains.isEmpty()) {
-            model.addAttribute("selectedTrain", trains.get(0));
+        if (!trainVersions.isEmpty()) {
+            model.addAttribute("selectedTrainVersion", trainVersions.getFirst());
         }
 
         return "train-results";
     }
 
     // HTMX version selection endpoint
-    @PostMapping(value = "/trains/version", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/trains/version", produces = MediaType.TEXT_HTML_VALUE)
     public String selectTrainVersion(@RequestParam String selectedVersion,
                                     @RequestParam long trainNumber,
                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,

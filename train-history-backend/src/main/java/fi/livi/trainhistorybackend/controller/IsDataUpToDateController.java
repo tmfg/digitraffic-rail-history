@@ -16,7 +16,7 @@ public class IsDataUpToDateController {
     @Autowired
     private TrainRepository trainRepository;
 
-    @RequestMapping("trains/history/is-up-to-date")
+    @RequestMapping("/api/v1/trains/history/is-up-to-date")
     @ResponseBody
     public ZonedDateTime getTrain(final HttpServletResponse response) {
         final ZonedDateTime latestFetchDate = trainRepository.findLatestFetchDate();

@@ -3,7 +3,7 @@
 <div class="mb-3">
     <label for="versionSelect" class="form-label">Versio</label>
     <select class="form-select" id="versionSelect" aria-label="Versio"
-            hx-post="/compositions/version"
+            hx-get="/compositions/version"
             hx-target="#version-details"
             hx-trigger="change"
             hx-include="[name='trainNumber'],[name='departureDate']"
@@ -17,10 +17,6 @@
     </select>
     <div class="form-text">Tippi: voit käyttää nuolinäppäimiä</div>
 </div>
-
-<!-- Hidden inputs to maintain form state -->
-<input type="hidden" name="trainNumber" value="{{ trainNumber }}">
-<input type="hidden" name="departureDate" value="{{ departureDate }}">
 
 <div id="version-details">
     {% if selectedComposition is not empty %}
