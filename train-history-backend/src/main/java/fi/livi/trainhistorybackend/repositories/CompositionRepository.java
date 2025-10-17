@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 @Transactional
 public interface CompositionRepository extends CrudRepository<Composition, TrainId> {
+    @Transactional(readOnly = true)
     @Query("select distinct t from Composition t " +
             "where t.id.trainNumber = ?1 and t.id.departureDate = ?2 " +
             "order by t.id.fetchDate asc")

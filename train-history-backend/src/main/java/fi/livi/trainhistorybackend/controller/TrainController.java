@@ -22,8 +22,9 @@ public class TrainController {
     @RequestMapping("trains/history/{departure_date}/{train_number}")
     @ResponseBody
     public List<Train> getTrain(@PathVariable final long train_number,
-                                @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departure_date,
-                                HttpServletResponse response) {
+                                @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                final LocalDate departure_date,
+                                final HttpServletResponse response) {
 
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
