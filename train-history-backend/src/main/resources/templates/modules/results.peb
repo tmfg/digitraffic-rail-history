@@ -1,0 +1,14 @@
+{% if versions is not empty %}
+{% include "modules/version-selection" %}
+
+<div id="version-details">
+    {% if selectedVersion is not empty %}
+        {% include "modules/version-details" %}
+        {% include "modules/table" %}
+    {% endif %}
+</div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    Ei löytynyt aikataulutietoja annetuilla parametreilla.
+</div>
+{% endif %}

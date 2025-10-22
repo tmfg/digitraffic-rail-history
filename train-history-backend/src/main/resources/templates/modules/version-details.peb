@@ -1,0 +1,7 @@
+<div class="mb-3">
+    <small class="text-muted">
+        {% for detail in selectedVersion.getDetails() %}
+            <span>{{ detail.getLabel() }}: {{ detail.getValue() }}</span>
+        {% endfor %}
+    </small>
+</div>

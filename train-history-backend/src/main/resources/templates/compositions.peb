@@ -1,7 +1,5 @@
 {% extends "base" %}
 
-{% block title %}Kokoonpanot - Historiatyökalu{% endblock %}
-
 {% block content %}
 {% include "compositions-content" %}
 {% endblock %}

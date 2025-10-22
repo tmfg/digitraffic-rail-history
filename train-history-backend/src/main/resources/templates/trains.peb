@@ -1,7 +1,5 @@
 {% extends "base" %}
 
-{% block title %}Aikataulut - Historiatyökalu{% endblock %}
-
 {% block content %}
 {% include "trains-content" %}
 {% endblock %}

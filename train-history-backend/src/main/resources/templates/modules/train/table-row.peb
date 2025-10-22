@@ -1,0 +1,40 @@
+<tr role="row">
+{% for column in columns %}
+    <td role="cell">
+    {% if column.key == "stationShortCode" %}
+        {{ data.get("stationShortCode").asText() }}
+    {% elseif column.key == "commercialTrack" %}
+        {% if data.has("commercialTrack") %}{{ data.get("commercialTrack").asText() }}{% endif %}
+    {% elseif column.key == "type" %}
+        {{ data.get("type").asText() }}
+    {% elseif column.key == "scheduledTime" %}
+        {{ data.get("scheduledTime").asText() | dateString("HH:mm:ss", "Europe/Helsinki") }}
+    {% elseif column.key == "actualTime" %}
+        {% if data.has("actualTime") %}{{ data.get("actualTime").asText() | dateString("HH:mm:ss", "Europe/Helsinki") }}{% endif %}
+    {% elseif column.key == "liveEstimateTime" %}
+        {% if data.has("liveEstimateTime") %}
+            {{ data.get("liveEstimateTime").asText() | dateString("HH:mm:ss", "Europe/Helsinki") }}
+            {% if data.has("differenceInMinutes") %}({{ data.get("differenceInMinutes").asText() }}){% endif %}
+        {% endif %}
+    {% elseif column.key == "estimateSource" %}
+        {% if data.has("estimateSource") %}{{ data.get("estimateSource").asText() }}{% endif %}
+    {% elseif column.key == "unknownDelay" %}
+        {% if data.has("unknownDelay") %}{{ data.get("unknownDelay").asText() }}{% endif %}
+    {% elseif column.key == "unknownTrack" %}
+        {% if data.has("unknownTrack") %}{{ data.get("unknownTrack").asText() }}{% endif %}
+    {% elseif column.key == "cancelled" %}
+        {% if data.has("cancelled") %}{{ data.get("cancelled").asText() }}{% endif %}
+    {% elseif column.key == "stopSector" %}
+        {% if data.has("stopSector") %}{{ data.get("stopSector").asText() }}{% endif %}
+    {% elseif column.key == "trainReady" %}
+        {% if data.has("trainReady") %}{{ data.get("trainReady").get("accepted").asText() }} {{ data.get("trainReady").get("source").asText() }}{% endif %}
+    {% elseif column.key == "causes" %}
+        {% if data.has("causes") %}
+            {% for cause in data.get("causes") %}
+                {{ cause.categoryCode }} {{ cause.detailedCategoryCode }} {{ cause.thirdCategoryCode }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+    </td>
+{% endfor %}
+</tr>

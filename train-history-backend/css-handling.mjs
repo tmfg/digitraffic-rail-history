@@ -1,15 +1,10 @@
 import { fileURLToPath } from 'url';
 import { readFile, copyFile } from 'fs/promises';
 
-async function copyBootstrap() {
-    const bootstrapPackageJson = await readFile(
-        fileURLToPath(import.meta.resolve('bootstrap/package.json')),
-        'utf-8'
-    );
-    const bootstrapStylePath = JSON.parse(bootstrapPackageJson).style;
-    const bootstrapStyleFullPath = fileURLToPath(import.meta.resolve(`bootstrap/${bootstrapStylePath}`));
+async function copyFintrafficCSS() {
+    const fintrafficCSS = fileURLToPath(import.meta.resolve('@fintraffic/fds-coreui-css/dist/coreui.min.css'));
 
-    await copyFile(bootstrapStyleFullPath, 'src/main/resources/static/css/bootstrap.css');
+    await copyFile(fintrafficCSS, 'src/main/resources/static/css/fintraffic.min.css');
 }
 
-await copyBootstrap()
+await copyFintrafficCSS()

@@ -1,0 +1,19 @@
+{% include "modules/results" with {
+        "versionUrl": "/trains/version",
+        "dataRow": "modules/train/table-row",
+        "columns": [
+            {"header": "Liikennepaikka", "key": "stationShortCode"},
+            {"header": "Raide", "key": "commercialTrack"},
+            {"header": "Tyyppi", "key": "type"},
+            {"header": "Aikatauluaika", "key": "scheduledTime"},
+            {"header": "Toteutunut aika", "key": "actualTime"},
+            {"header": "Ennuste", "key": "liveEstimateTime"},
+            {"header": "Ennusteen lähde", "key": "estimateSource"},
+            {"header": "Ennuste epävarma", "key": "unknownDelay"},
+            {"header": "Raide epävarma", "key": "unknownTrack"},
+            {"header": "Peruttu", "key": "cancelled"},
+            {"header": "Pysähdyssektori", "key": "stopSector"},
+            {"header": "Lähtövalmius", "key": "trainReady"},
+            {"header": "Syykoodit", "key": "causes"}
+        ]
+    } %}

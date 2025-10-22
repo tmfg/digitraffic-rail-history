@@ -1,8 +1,8 @@
 package fi.livi.trainhistorybackend.controller;
 
+import fi.livi.trainhistorybackend.domain.TrainVersion;
 import fi.livi.trainhistorybackend.entities.Train;
-import fi.livi.trainhistorybackend.repositories.TrainRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import fi.livi.trainhistorybackend.service.TrainService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Controller
 public class TrainController {
-    @Autowired
-    private TrainRepository trainRepository;
+    private final TrainService trainService;
+
+    public TrainController(TrainService trainService) {
+        this.trainService = trainService;
+    }
 
     // Main trains page (HTML) - supports both full page and fragment
     @GetMapping(value = "/trains", produces = MediaType.TEXT_HTML_VALUE)
@@ -40,48 +43,38 @@ public class TrainController {
                                   HttpServletResponse response) {
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
-        final List<Train> trainVersions = trainRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
+        final List<TrainVersion> trainVersions = trainService.findByNumberAndDate(train_number, departure_date);
 
         if (accept.equals(MediaType.APPLICATION_JSON_VALUE)) {
+            List<Train> entities = trainVersions.stream()
+                .map(TrainVersion::getEntity)
+                .collect(Collectors.toList());
+
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(trainVersions);
+                    .body(entities);
         }
 
-        model.addAttribute("trainVersions", trainVersions);
+        model.addAttribute("versions", trainVersions);
         model.addAttribute("trainNumber", train_number);
         model.addAttribute("departureDate", departure_date);
 
-        // Auto-select first version if results exist
         if (!trainVersions.isEmpty()) {
-            model.addAttribute("selectedTrainVersion", trainVersions.getFirst());
+            model.addAttribute("selectedVersion", trainVersions.getFirst());
         }
 
-        return "train-results";
+        return "modules/train/results";
     }
 
-    // HTMX version selection endpoint
     @GetMapping(value = "/trains/version", produces = MediaType.TEXT_HTML_VALUE)
-    public String selectTrainVersion(@RequestParam String selectedVersion,
+    public String selectTrainVersion(@RequestParam Long version,
                                     @RequestParam long trainNumber,
                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
                                     Model model) {
-        if (selectedVersion != null && !selectedVersion.isEmpty()) {
-            String[] parts = selectedVersion.split("_");
-            if (parts.length == 2) {
-                ZonedDateTime fetchDate = ZonedDateTime.parse(parts[0]);
-                String version = parts[1];
+        trainService.findByVersion(trainNumber, departureDate, version)
+            .ifPresent(trainVersion -> model.addAttribute("selectedVersion", trainVersion));
 
-                List<Train> trains = trainRepository.findByTrainNumberAndDepartureDate(trainNumber, departureDate);
-                Optional<Train> selectedTrain = trains.stream()
-                    .filter(t -> t.id.fetchDate.equals(fetchDate) && t.version.toString().equals(version))
-                    .findFirst();
-
-                selectedTrain.ifPresent(train -> model.addAttribute("selectedTrain", train));
-            }
-        }
-
-        return "train-details";
+        return "modules/table";
     }
 }
 

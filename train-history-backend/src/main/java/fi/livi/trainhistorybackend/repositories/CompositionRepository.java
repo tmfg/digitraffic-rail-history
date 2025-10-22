@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -18,4 +19,8 @@ public interface CompositionRepository extends CrudRepository<Composition, Train
             "where t.id.trainNumber = ?1 and t.id.departureDate = ?2 " +
             "order by t.id.fetchDate asc")
     List<Composition> findByTrainNumberAndDepartureDate(Long trainNumber, LocalDate departureDate);
+
+    @Query("select c from Composition c where c.id.trainNumber = ?1 and c.id.departureDate = ?2 and c.version = ?3")
+    Optional<Composition> findByTrainNumberAndDepartureDateAndVersion(Long trainNumber, LocalDate departureDate, Long version);
 }
+

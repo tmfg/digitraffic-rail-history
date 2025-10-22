@@ -1,8 +1,8 @@
 package fi.livi.trainhistorybackend.controller;
 
+import fi.livi.trainhistorybackend.domain.CompositionVersion;
 import fi.livi.trainhistorybackend.entities.Composition;
-import fi.livi.trainhistorybackend.repositories.CompositionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import fi.livi.trainhistorybackend.service.CompositionService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class CompositionController {
-    @Autowired
-    private CompositionRepository compositionRepository;
+    private final CompositionService compositionService;
+
+    public CompositionController(CompositionService compositionService) {
+        this.compositionService = compositionService;
+    }
 
     // Main compositions page (HTML) - supports both full page and fragment
     @GetMapping(value = "/compositions", produces = MediaType.TEXT_HTML_VALUE)
@@ -28,7 +30,6 @@ public class CompositionController {
         model.addAttribute("active_section", "compositions");
         model.addAttribute("currentDate", LocalDate.now().toString());
 
-        // Return content template for HTMX fragment requests, full page otherwise
         return fragment ? "compositions-content" : "compositions";
     }
 
@@ -41,47 +42,40 @@ public class CompositionController {
                                        HttpServletResponse response) {
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
-        final List<Composition> compositions = compositionRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
+        final List<CompositionVersion> compositionVersions = compositionService.findByNumberAndDate(train_number, departure_date);
 
         if (accept.equals(MediaType.APPLICATION_JSON_VALUE)) {
+            List<Composition> entities = compositionVersions.stream()
+                .map(CompositionVersion::getEntity)
+                .collect(Collectors.toList());
+
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(compositions);
+                    .body(entities);
         }
 
-        model.addAttribute("compositions", compositions);
+        model.addAttribute("versions", compositionVersions);
         model.addAttribute("trainNumber", train_number);
         model.addAttribute("departureDate", departure_date);
 
-        // Auto-select first version if results exist
-        if (!compositions.isEmpty()) {
-            model.addAttribute("selectedComposition", compositions.getFirst());
+        if (!compositionVersions.isEmpty()) {
+            model.addAttribute("selectedVersion", compositionVersions.getFirst());
         }
 
-        return "composition-results";
+        return "modules/composition/results";
     }
 
-    // HTMX version selection endpoint
     @GetMapping(value = "/compositions/version", produces = MediaType.TEXT_HTML_VALUE)
-    public String selectCompositionVersion(@RequestParam String selectedVersion,
+    public String selectCompositionVersion(@RequestParam Long version,
                                           @RequestParam long trainNumber,
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
                                           Model model) {
-        if (selectedVersion != null && !selectedVersion.isEmpty()) {
-            String[] parts = selectedVersion.split("_");
-            if (parts.length == 2) {
-                ZonedDateTime fetchDate = ZonedDateTime.parse(parts[0]);
-                String version = parts[1];
+        compositionService.findByVersion(trainNumber, departureDate, version)
+            .ifPresent(compositionVersion -> {
+                model.addAttribute("selectedVersion", compositionVersion);
+            });
 
-                List<Composition> compositions = compositionRepository.findByTrainNumberAndDepartureDate(trainNumber, departureDate);
-                Optional<Composition> selectedComposition = compositions.stream()
-                    .filter(c -> c.id.fetchDate.equals(fetchDate) && c.version.toString().equals(version))
-                    .findFirst();
-
-                selectedComposition.ifPresent(composition -> model.addAttribute("selectedComposition", composition));
-            }
-        }
-
-        return "composition-details";
+        return "modules/table";
     }
 }
+
