@@ -22,7 +22,7 @@ jobs:
     environment: ${{ github.event.inputs.env }}
     strategy:
       matrix:
-        app: [ web, backend, updater ]
+        app: [ backend, updater ]
     runs-on: ubuntu-24.04
     permissions:
       id-token: write

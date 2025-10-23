@@ -61,26 +61,6 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Run initialize
         run: mvn initialize
-      - name: Build frontend
-        run: |
-          cd train-history-web
-          npm ci
-          npx ng build --base-href /history/
-          tar -czvf train-history-web.tar dist nginx.conf
-          cp train-history-web.tar ../config/aws
-          cd ../config/aws
-          
-          docker buildx build \
-            --no-cache \
-            --build-arg ENV=${{ github.event.inputs.env }} \
-            --build-arg APP_FILE=train-history-web.tar \
-            --platform linux/arm64 \
-            --output type=docker \
-            --tag ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA} \
-            --pull=true \
-            --file=docker/Dockerfile-rail-train-history-web .
-          
-          docker push ${{ secrets.ECR_URL }}/train-history-web:${GITHUB_SHA}
       - name: Build backend
         run: |
           cd train-history-backend

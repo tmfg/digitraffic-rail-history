@@ -22,11 +22,6 @@ jobs:
           node-version: '22'
       - name: Run initialize
         run: mvn initialize
-      - name: Build frontend
-        run: |
-          cd train-history-web
-          npm ci
-          npx ng build --base-href /history/
       - name: Build backend
         run: |
           cd train-history-backend
