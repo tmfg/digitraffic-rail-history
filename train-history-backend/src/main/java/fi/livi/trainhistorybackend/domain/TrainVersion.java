@@ -4,6 +4,9 @@ import fi.livi.trainhistorybackend.entities.Train;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 
 public class TrainVersion extends Version {
@@ -36,7 +39,9 @@ public class TrainVersion extends Version {
                 details.add(new Detail("Tyyppi", json.get("trainType").asText()));
             }
             if (json.has("timetableAcceptanceDate")) {
-                details.add(new Detail("Hyväksytty", json.get("timetableAcceptanceDate").asText()));
+                String isoDate = json.get("timetableAcceptanceDate").asText();
+                String formattedDate = formatDateTime(isoDate);
+                details.add(new Detail("Hyväksytty", formattedDate));
             }
             if (json.has("runningCurrently")) {
                 details.add(new Detail("Kulussa", json.get("runningCurrently").asText()));
@@ -49,6 +54,16 @@ public class TrainVersion extends Version {
             }
         }
         return details;
+    }
+
+    private String formatDateTime(String isoDateTime) {
+        try {
+            ZonedDateTime dateTime = ZonedDateTime.parse(isoDateTime);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+            return dateTime.format(formatter);
+        } catch (Exception e) {
+            return isoDateTime;
+        }
     }
 
     @Override

@@ -1,0 +1,17 @@
+[data-lucide="loader"] {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    animation: loader-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes loader-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    color: var(--fds-color-neutral-200);
+  }
+  50% {
+    opacity: 1;
+    color: var(--fds-color-neutral-900);
+  }
+}

@@ -1,0 +1,28 @@
+.btn {
+  cursor: pointer;
+  display: flex;
+  border: 2px solid var(--fds-color-brand-black);
+  border-radius: var(--fds-radius-large);
+  padding: 13px 16px;
+  height: var(--fds-size-6);
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: 2px solid var(--fds-color-interactive-100);
+    outline-offset: 2px;
+  }
+
+  &--primary {
+    border-color: var(--fds-color-brand-black);
+    background: var(--fds-color-brand-black);
+    color: var(--fds-color-brand-white);
+
+    &:hover {
+      background: var(--fds-color-interactive-200);
+      border-color: transparent;
+      color: var(--fds-color-brand-white);
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.version-details {
+  background-color: var(--fds-color-brand-white);
+  padding: var(--fds-size-3, 24px);
+  border-radius: var(--fds-radius-normal);
+  box-shadow: var(--fds-style-elevation-100);
+  margin-bottom: var(--fds-size-3, 24px);
+
+  &__item {
+    display: flex;
+    gap: var(--fds-size-1);
+  }
+
+  &__label {
+    font-weight: var(--fds-typography-emphasis-small-font-weight);
+  }
+}

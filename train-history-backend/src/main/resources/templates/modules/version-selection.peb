@@ -1,18 +1,20 @@
-<h2>2. Valitse versio</h2>
-<div class="mb-3">
-    <label for="versionSelect" class="form-label">Versio</label>
-    <select class="form-select" id="versionSelect" aria-label="Versio"
-            hx-get={{ versionUrl }}
-            hx-target="#version-details"
-            hx-trigger="change"
-            hx-include="[name='trainNumber'],[name='departureDate']"
-            name="version">
-        <option value="">Valitse versio...</option>
-        {% for version in versions %}
-        <option value="{{ version.getVersion() }}"{% if selectedVersion is not empty and version.getVersion() == selectedVersion.getVersion() %} selected{% endif %}>
-            {{ version.getFetchDateTime() | date("dd.MM.yyyy HH:mm:ss") }} (v{{ version.getVersion() }})
-        </option>
-        {% endfor %}
-    </select>
-    <div class="form-text">Tippi: voit käyttää nuolinäppäimiä</div>
+<div class="version-selection">
+    <h2 class="version-selection__title">2. Valitse versio</h2>
+    <div class="version-selection__field">
+        <label for="versionSelect" class="version-selection__label">Versio</label>
+        <select class="version-selection__select" id="versionSelect" aria-label="Versio"
+                hx-get={{ versionUrl }}
+                hx-target="#version-details"
+                hx-trigger="change"
+                hx-include="[name='trainNumber'],[name='departureDate']"
+                name="version">
+            <option value="">Valitse versio...</option>
+            {% for version in versions %}
+            <option value="{{ version.getVersion() }}"{% if selectedVersion is not empty and version.getVersion() == selectedVersion.getVersion() %} selected{% endif %}>
+                {{ version.getFetchDateTime() | date("dd.MM.yyyy HH:mm:ss") }} (v{{ version.getVersion() }})
+            </option>
+            {% endfor %}
+        </select>
+        <div class="version-selection__help">Tippi: voit käyttää nuolinäppäimiä</div>
+    </div>
 </div>

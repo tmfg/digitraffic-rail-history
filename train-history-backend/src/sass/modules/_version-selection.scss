@@ -1,0 +1,49 @@
+.version-selection {
+  background-color: var(--fds-color-brand-white);
+  padding: var(--fds-size-3, 24px);
+  border-radius: var(--fds-radius-normal);
+  box-shadow: var(--fds-style-elevation-100);
+  margin-bottom: var(--fds-size-3, 24px);
+
+  &__title {
+    font-size: var(--fds-typography-heading-small-heading-4-font-size);
+    font-weight: var(--fds-typography-heading-small-heading-4-font-weight);
+    line-height: var(--fds-typography-heading-small-heading-4-line-height);
+    margin-bottom: var(--fds-size-3, 24px);
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__label {
+    font-weight: var(--fds-typography-ui-label-font-weight);
+    line-height: var(--fds-typography-ui-label-line-height);
+  }
+
+  &__select {
+    height: 46px;
+    padding: 0 16px;
+    background-color: var(--fds-color-brand-white);
+    border: 1px solid var(--fds-color-neutral-200);
+    border-radius: var(--fds-radius-normal);
+    font-weight: var(--fds-typography-ui-label-font-weight);
+    transition: border-color 0.2s;
+    cursor: pointer;
+
+    &:focus {
+      border-color: var(--fds-color-interactive-100);
+      outline: 2px solid var(--fds-color-interactive-100);
+      outline-offset: 2px;
+    }
+  }
+
+  &__help {
+    font-size: var(--fds-typography-ui-helper-font-size);
+    line-height: var(--fds-typography-ui-helper-line-height);
+    color: var(--fds-color-text-600);
+    padding-top: 8px;
+  }
+}

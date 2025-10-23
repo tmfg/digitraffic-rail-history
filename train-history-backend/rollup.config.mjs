@@ -13,7 +13,6 @@ export default [{
     resolve({
       browser: true
     }),
-    //commonjs(),
     typescript({
       tsconfig: './tsconfig.json',
       sourceMap: true,

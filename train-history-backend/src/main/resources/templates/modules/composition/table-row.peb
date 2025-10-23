@@ -1,6 +1,6 @@
-<tr role="row">
+<tr class="table__row" role="row">
 {% for column in columns %}
-    <td role="cell">
+    <td class="table__cell" role="cell">
     {% if column.key == "totalLength" %}
         {{ data.get("totalLength").asText() }} m
     {% elseif column.key == "maximumSpeed" %}

@@ -11,9 +11,9 @@
     <script src="/js/main.js" defer></script>
 </head>
 <body>
-    <div class="container">
+    <div class="l-container">
         {% include "navigation" %}
-        <main id="main-content">
+        <main id="main-content" class="l-main">
             {% block content %}{% endblock %}
         </main>
     </div>

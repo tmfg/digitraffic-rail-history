@@ -1,0 +1,15 @@
+@use '@fintraffic/fds-coreui-css/dist/tokens';
+@use '@fintraffic/fds-coreui-css/dist/fonts-public-sans';
+@use '@fintraffic/fds-coreui-css/dist/coreui.min';
+
+@use 'base';
+@use 'layout';
+
+@use 'modules/button';
+@use 'modules/navigation';
+@use 'modules/loader';
+@use 'modules/alert';
+@use 'modules/search';
+@use 'modules/table';
+@use 'modules/version-details';
+@use 'modules/version-selection';
