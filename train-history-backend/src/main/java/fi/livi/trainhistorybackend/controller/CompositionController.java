@@ -44,7 +44,9 @@ public class CompositionController {
 
         final List<CompositionVersion> compositionVersions = compositionService.findByNumberAndDate(train_number, departure_date);
 
-        if (accept.equals(MediaType.APPLICATION_JSON_VALUE)) {
+        if (accept.contains(MediaType.APPLICATION_JSON_VALUE) ||
+            accept.contains(MediaType.ALL_VALUE) ||
+            accept.contains("application/*")) {
             List<Composition> entities = compositionVersions.stream()
                 .map(CompositionVersion::getEntity)
                 .collect(Collectors.toList());
@@ -54,15 +56,20 @@ public class CompositionController {
                     .body(entities);
         }
 
-        model.addAttribute("versions", compositionVersions);
-        model.addAttribute("trainNumber", train_number);
-        model.addAttribute("departureDate", departure_date);
+        if (accept.contains(MediaType.TEXT_HTML_VALUE) ||
+            accept.contains("text/*")) {
+            model.addAttribute("versions", compositionVersions);
+            model.addAttribute("trainNumber", train_number);
+            model.addAttribute("departureDate", departure_date);
 
-        if (!compositionVersions.isEmpty()) {
-            model.addAttribute("selectedVersion", compositionVersions.getFirst());
+            if (!compositionVersions.isEmpty()) {
+                model.addAttribute("selectedVersion", compositionVersions.getFirst());
+            }
+
+            return "modules/composition/results";
         }
 
-        return "modules/composition/results";
+        return ResponseEntity.status(406).build();
     }
 
     @GetMapping(value = "/compositions/version", produces = MediaType.TEXT_HTML_VALUE)

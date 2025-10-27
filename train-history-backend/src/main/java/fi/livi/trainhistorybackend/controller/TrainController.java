@@ -45,7 +45,9 @@ public class TrainController {
 
         final List<TrainVersion> trainVersions = trainService.findByNumberAndDate(train_number, departure_date);
 
-        if (accept.equals(MediaType.APPLICATION_JSON_VALUE)) {
+        if (accept.contains(MediaType.APPLICATION_JSON_VALUE) ||
+            accept.contains(MediaType.ALL_VALUE) ||
+            accept.contains("application/*")) {
             List<Train> entities = trainVersions.stream()
                 .map(TrainVersion::getEntity)
                 .collect(Collectors.toList());
@@ -55,15 +57,20 @@ public class TrainController {
                     .body(entities);
         }
 
-        model.addAttribute("versions", trainVersions);
-        model.addAttribute("trainNumber", train_number);
-        model.addAttribute("departureDate", departure_date);
+        if (accept.contains(MediaType.TEXT_HTML_VALUE) ||
+            accept.contains("text/*")) {
+            model.addAttribute("versions", trainVersions);
+            model.addAttribute("trainNumber", train_number);
+            model.addAttribute("departureDate", departure_date);
 
-        if (!trainVersions.isEmpty()) {
-            model.addAttribute("selectedVersion", trainVersions.getFirst());
+            if (!trainVersions.isEmpty()) {
+                model.addAttribute("selectedVersion", trainVersions.getFirst());
+            }
+
+            return "modules/train/results";
         }
 
-        return "modules/train/results";
+        return ResponseEntity.status(406).build();
     }
 
     @GetMapping(value = "/trains/version", produces = MediaType.TEXT_HTML_VALUE)

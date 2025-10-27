@@ -18,7 +18,7 @@ public class IsDataUpToDateControllerTest extends BaseTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private String PATH = "/trains/history/is-up-to-date";
+    private String PATH = "/api/v1/trains/history/is-up-to-date";
 
     @Sql({"/trains/insert_test_data.sql"})
     @Test
