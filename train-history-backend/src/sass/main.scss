@@ -2,6 +2,7 @@
 @use '@fintraffic/fds-coreui-css/dist/fonts-public-sans';
 @use '@fintraffic/fds-coreui-css/dist/coreui.min';
 
+@use 'variables';
 @use 'base';
 @use 'layout';
 
@@ -11,5 +12,6 @@
 @use 'modules/alert';
 @use 'modules/search';
 @use 'modules/table';
+@use 'modules/version-info';
 @use 'modules/version-details';
 @use 'modules/version-selection';

@@ -25,4 +25,12 @@
       color: var(--fds-color-brand-white);
     }
   }
+
+  &--anchor {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }

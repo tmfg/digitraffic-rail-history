@@ -16,7 +16,7 @@ public class TrainVersion extends Version {
         super(
             entity.id.trainNumber,
             entity.id.departureDate,
-            entity.id.fetchDate,  // Pass full ZonedDateTime instead of converting to LocalDate
+            entity.id.fetchDate,
             entity.version.intValue()
         );
         this.trainEntity = entity;

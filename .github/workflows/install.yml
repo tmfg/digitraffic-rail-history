@@ -65,6 +65,7 @@ jobs:
         run: |
           cd train-history-backend
           mvn install -DskipTests=true -Ddependency-check.skip=true
+          pnpm build
           cp target/train-history-backend-0.0.1-SNAPSHOT.jar ../config/aws/train-history-backend.jar
           cd ../config/aws
           

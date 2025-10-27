@@ -28,5 +28,5 @@
             <i id="loading" class="htmx-indicator" data-lucide="loader"></i>
         </div>
     </form>
-    <div id="search-results" class="l-results"></div>
 </div>
+<div id="search-results" class="l-results"></div>

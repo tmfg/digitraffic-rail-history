@@ -1,7 +1,7 @@
 {% if versions is not empty %}
 {% include "modules/version-selection" %}
 
-<div id="version-details">
+<div id="version-details" class="version-info">
     {% if selectedVersion is not empty %}
         {% include "modules/version-details" %}
         {% include "modules/table" %}

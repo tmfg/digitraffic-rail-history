@@ -1,4 +1,5 @@
 .search {
+  min-width: var(--filter-box-min-width);
   background-color: var(--fds-color-brand-white);
   padding: var(--fds-size-3, 24px);
   border-radius: var(--fds-radius-normal);

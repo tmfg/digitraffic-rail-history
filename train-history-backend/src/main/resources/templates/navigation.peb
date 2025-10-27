@@ -1,17 +1,17 @@
 <nav class="l-nav nav">
     <span class="nav__label">Haluan tarkastella: </span>
-    <button
-        hx-get="/trains?fragment=true"
-        hx-target="#main-content"
-        hx-push-url="/trains"
-        class="btn btn--primary">
+    <a href="/trains"
+       hx-get="/trains?fragment=true"
+       hx-target="#main-content"
+       hx-push-url="/trains"
+       class="btn btn--primary btn--anchor">
         Aikatauluja
-    </button>
-    <button
-        hx-get="/compositions?fragment=true"
-        hx-target="#main-content"
-        hx-push-url="/compositions"
-        class="btn btn--primary">
+    </a>
+    <a href="/compositions"
+       hx-get="/compositions?fragment=true"
+       hx-target="#main-content"
+       hx-push-url="/compositions"
+       class="btn btn--primary btn--anchor">
         Kokoonpanoja
-    </button>
+    </a>
 </nav>

@@ -33,13 +33,11 @@ public class DateStringFilter implements Filter {
         try {
             ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateString);
 
-            // Get format pattern from arguments (default to HH:mm:ss)
             String pattern = "HH:mm:ss";
             if (args.containsKey("format")) {
                 pattern = args.get("format").toString();
             }
 
-            // Get timezone from arguments (optional)
             if (args.containsKey("timezone")) {
                 String timezone = args.get("timezone").toString();
                 ZoneId zoneId = ZoneId.of(timezone);
@@ -49,7 +47,6 @@ public class DateStringFilter implements Filter {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
             return zonedDateTime.format(formatter);
         } catch (Exception e) {
-            // If parsing fails, return original string
             return dateString;
         }
     }
