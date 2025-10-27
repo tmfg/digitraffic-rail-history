@@ -11,11 +11,16 @@
     "build": "npm run build-js && npm run build-css && npm run sass-task",
     "watch": "rollup -c -w",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf src/main/resources/static/js/*.js src/main/resources/static/js/*.map"
+    "clean": "rm -rf src/main/resources/static/js/*.js src/main/resources/static/js/*.map",
+    "e2e": "playwright test",
+    "e2e-ui": "playwright test --ui"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.1.4",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.9.1",
+    "dotenv": "^17.2.3",
     "rollup": "^4.52.4",
     "sass": "^1.93.2",
     "tslib": "^2.8.1",

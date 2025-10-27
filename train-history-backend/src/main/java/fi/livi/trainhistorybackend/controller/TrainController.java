@@ -25,7 +25,7 @@ public class TrainController {
     }
 
     // Main trains page (HTML) - supports both full page and fragment
-    @GetMapping(value = "/trains", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/history/trains", produces = MediaType.TEXT_HTML_VALUE)
     public String trainsPage(@RequestParam(required = false, defaultValue = "false") boolean fragment,
                             final Model model) {
         model.addAttribute("active_section", "trains");
@@ -73,7 +73,7 @@ public class TrainController {
         return ResponseEntity.status(406).build();
     }
 
-    @GetMapping(value = "/trains/version", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/history/trains/version", produces = MediaType.TEXT_HTML_VALUE)
     public String selectTrainVersion(@RequestParam final Long version,
                                     @RequestParam long trainNumber,
                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departureDate,

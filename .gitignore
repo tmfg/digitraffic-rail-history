@@ -26,8 +26,14 @@
 # Train History Backend
 
 !train-history-backend/
+!train-history-backend/playwright.config.ts
+!train-history-backend/.env.playwright.example
+!train-history-backend/e2e/
+!train-history-backend/e2e/**/
+!train-history-backend/e2e/**/*.ts
 !train-history-backend/src
 !train-history-backend/src/main
+!train-history-backend/src/main/java/
 !train-history-backend/src/main/java/**/
 !train-history-backend/src/main/java/**/*.java
 !train-history-backend/src/main/resources

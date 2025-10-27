@@ -1,5 +1,5 @@
 {% include "modules/results" with {
-        "versionUrl": "/trains/version",
+        "versionUrl": "/history/trains/version",
         "dataRow": "modules/train/table-row",
         "columns": [
             {"header": "Liikennepaikka", "key": "stationShortCode"},

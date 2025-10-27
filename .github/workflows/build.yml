@@ -20,11 +20,16 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '22'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Run initialize
         run: mvn initialize
       - name: Build backend
         run: |
           cd train-history-backend
+          pnpm install
           pnpm build
           mvn install -DskipTests=true
       - name: Build updater

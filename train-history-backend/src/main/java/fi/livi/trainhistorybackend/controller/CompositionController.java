@@ -24,7 +24,7 @@ public class CompositionController {
     }
 
     // Main compositions page (HTML) - supports both full page and fragment
-    @GetMapping(value = "/compositions", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/history/compositions", produces = MediaType.TEXT_HTML_VALUE)
     public String compositionsPage(@RequestParam(required = false, defaultValue = "false") boolean fragment,
                                   final Model model) {
         model.addAttribute("active_section", "compositions");
@@ -72,7 +72,7 @@ public class CompositionController {
         return ResponseEntity.status(406).build();
     }
 
-    @GetMapping(value = "/compositions/version", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/history/compositions/version", produces = MediaType.TEXT_HTML_VALUE)
     public String selectCompositionVersion(@RequestParam final Long version,
                                           @RequestParam long trainNumber,
                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departureDate,

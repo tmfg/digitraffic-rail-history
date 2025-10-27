@@ -1,5 +1,5 @@
 {% include "modules/results" with {
-        "versionUrl": "/compositions/version",
+        "versionUrl": "/history/compositions/version",
         "dataRow": "modules/composition/table-row",
         "columns": [
             {"header": "Pituus", "key": "totalLength"},
