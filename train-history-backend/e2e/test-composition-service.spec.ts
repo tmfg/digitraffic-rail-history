@@ -15,8 +15,8 @@ test('Train page finds results', async ({ browser }) => {
     const kokoonpanojaButton = page.getByRole('link', {name: 'Kokoonpanoja'});
     await kokoonpanojaButton.click();
 
-    //await submitTrainInfoForm(page, 1, new Date(), "Etsi kokoonpano");
-    await submitTrainInfoForm(page, 7, new Date(2015, 11, 29, 12), "Etsi kokoonpano");
+    await submitTrainInfoForm(page, 1, new Date(), "Etsi kokoonpano");
+    //await submitTrainInfoForm(page, 7, new Date(2015, 11, 29, 12), "Etsi kokoonpano");
   })
   await test.step('Check search results', async () => {
     const versioDropdown = page.getByRole('combobox', {name: 'Versio'});
