@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 public class CompositionController {
     private final CompositionService compositionService;
 
-    public CompositionController(CompositionService compositionService) {
+    public CompositionController(final CompositionService compositionService) {
         this.compositionService = compositionService;
     }
 
     // Main compositions page (HTML) - supports both full page and fragment
     @GetMapping(value = "/compositions", produces = MediaType.TEXT_HTML_VALUE)
     public String compositionsPage(@RequestParam(required = false, defaultValue = "false") boolean fragment,
-                                  Model model) {
+                                  final Model model) {
         model.addAttribute("active_section", "compositions");
         model.addAttribute("currentDate", LocalDate.now().toString());
 
@@ -36,10 +36,10 @@ public class CompositionController {
     @GetMapping(value = "/api/v1/compositions/history/{departure_date}/{train_number}",
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
     public Object getCompositionHistory(@PathVariable final long train_number,
-                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departure_date,
-                                       @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) String accept,
-                                       Model model,
-                                       HttpServletResponse response) {
+                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departure_date,
+                                       @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) final String accept,
+                                       final Model model,
+                                       final HttpServletResponse response) {
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
         final List<CompositionVersion> compositionVersions = compositionService.findByNumberAndDate(train_number, departure_date);
@@ -73,10 +73,10 @@ public class CompositionController {
     }
 
     @GetMapping(value = "/compositions/version", produces = MediaType.TEXT_HTML_VALUE)
-    public String selectCompositionVersion(@RequestParam Long version,
+    public String selectCompositionVersion(@RequestParam final Long version,
                                           @RequestParam long trainNumber,
-                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
-                                          Model model) {
+                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departureDate,
+                                          final Model model) {
         compositionService.findByVersion(trainNumber, departureDate, version)
             .ifPresent(compositionVersion -> {
                 model.addAttribute("selectedVersion", compositionVersion);

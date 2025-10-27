@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 public class TrainController {
     private final TrainService trainService;
 
-    public TrainController(TrainService trainService) {
+    public TrainController(final TrainService trainService) {
         this.trainService = trainService;
     }
 
     // Main trains page (HTML) - supports both full page and fragment
     @GetMapping(value = "/trains", produces = MediaType.TEXT_HTML_VALUE)
     public String trainsPage(@RequestParam(required = false, defaultValue = "false") boolean fragment,
-                            Model model) {
+                            final Model model) {
         model.addAttribute("active_section", "trains");
         model.addAttribute("currentDate", LocalDate.now().toString());
 
@@ -37,10 +37,10 @@ public class TrainController {
     @GetMapping(value = "/api/v1/trains/history/{departure_date}/{train_number}",
                 produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
     public Object getTrainHistory(@PathVariable final long train_number,
-                                  @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departure_date,
-                                  @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) String accept,
-                                  Model model,
-                                  HttpServletResponse response) {
+                                  @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departure_date,
+                                  @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) final String accept,
+                                  final Model model,
+                                  final HttpServletResponse response) {
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
         final List<TrainVersion> trainVersions = trainService.findByNumberAndDate(train_number, departure_date);
@@ -74,10 +74,10 @@ public class TrainController {
     }
 
     @GetMapping(value = "/trains/version", produces = MediaType.TEXT_HTML_VALUE)
-    public String selectTrainVersion(@RequestParam Long version,
+    public String selectTrainVersion(@RequestParam final Long version,
                                     @RequestParam long trainNumber,
-                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
-                                    Model model) {
+                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departureDate,
+                                    final Model model) {
         trainService.findByVersion(trainNumber, departureDate, version)
             .ifPresent(trainVersion -> model.addAttribute("selectedVersion", trainVersion));
 
