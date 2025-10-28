@@ -82,7 +82,7 @@ public class CompositionController {
                 model.addAttribute("selectedVersion", compositionVersion);
             });
 
-        return "modules/table";
+        return "modules/composition/table";
     }
 }
 

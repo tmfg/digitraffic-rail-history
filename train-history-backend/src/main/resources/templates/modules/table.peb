@@ -1,5 +1,5 @@
 {% if selectedVersion is not empty %}
-<div class="table-responsive">
+<div id="data-table" class="table-responsive">
     <table class="table table--striped" role="table">
         <thead class="table__header" role="rowgroup">
             <tr class="table__row" role="row">

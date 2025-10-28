@@ -4,7 +4,7 @@
 <div id="version-details" class="version-info">
     {% if selectedVersion is not empty %}
         {% include "modules/version-details" %}
-        {% include "modules/table" %}
+        {% include dataTable %}
     {% endif %}
 </div>
 {% else %}

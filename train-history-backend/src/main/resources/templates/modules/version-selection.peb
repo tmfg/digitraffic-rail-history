@@ -4,7 +4,7 @@
         <label for="versionSelect" class="version-selection__label">Versio</label>
         <select class="version-selection__select" id="versionSelect" aria-label="Versio"
                 hx-get={{ versionUrl }}
-                hx-target="#version-details"
+                hx-target="#data-table"
                 hx-trigger="change"
                 hx-include="[name='trainNumber'],[name='departureDate']"
                 name="version">

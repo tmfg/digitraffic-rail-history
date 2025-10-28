@@ -81,7 +81,7 @@ public class TrainController {
         trainService.findByVersion(trainNumber, departureDate, version)
             .ifPresent(trainVersion -> model.addAttribute("selectedVersion", trainVersion));
 
-        return "modules/table";
+        return "modules/train/table";
     }
 }
 
