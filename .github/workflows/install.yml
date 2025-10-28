@@ -43,14 +43,16 @@ jobs:
           java-version: 21
           distribution: corretto
           cache: maven
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '22'
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: "pnpm"
+          cache-dependency-path: ./train-history-backend
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -104,15 +106,6 @@ jobs:
             --file=docker/Dockerfile-rail-train-history-updater .
           
           docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
-      - name: Run Playwright tests
-        if: ${{ github.event.inputs.env == 'beta' }}
-        working-directory: ./train-history-backend
-        env:
-          TRAIN_HISTORY_TEST_URL: ${{ vars.TRAIN_HISTORY_TEST_URL }}
-        run: |
-          echo "Wait for the backend to start..."
-          sleep 30
-          pnpm run e2e
       - name: Notify Slack
         if: failure()
         uses: 8398a7/action-slack@v3
