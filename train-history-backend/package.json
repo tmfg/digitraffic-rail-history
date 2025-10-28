@@ -7,11 +7,11 @@
   "scripts": {
     "build-js": "rollup -c",
     "build-css": "node css-handling.mjs",
-    "sass-task": "sass --no-source-map --load-path=node_modules src/sass/main.scss src/main/resources/static/css/main.css",
+    "sass-task": "sass --no-source-map --load-path=node_modules src/sass/main.scss src/main/resources/static/history/css/main.css",
     "build": "npm run build-js && npm run build-css && npm run sass-task",
     "watch": "rollup -c -w",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf src/main/resources/static/js/*.js src/main/resources/static/js/*.map",
+    "clean": "rm -rf src/main/resources/static/history/js/*.js src/main/resources/static/history/js/*.map",
     "e2e": "playwright test",
     "e2e-ui": "playwright test --ui"
   },

@@ -40,7 +40,7 @@
 !train-history-backend/src/main/resources/**/
 !train-history-backend/src/main/resources/static/**/*.css
 !train-history-backend/src/main/resources/static/**/*.js
-!train-history-backend/src/main/resources/static/favicon.ico
+!train-history-backend/src/main/resources/static/**/favicon.ico
 !train-history-backend/src/main/resources/templates/**/*.peb
 !train-history-backend/src/main/resources/application.properties
 !train-history-backend/src/main/resources/logback.xml

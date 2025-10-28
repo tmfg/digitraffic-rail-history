@@ -4,7 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 export default [{
   input: 'src/typescript/main.ts',
   output: {
-    file: 'src/main/resources/static/js/main.js',
+    file: 'src/main/resources/static/history/js/main.js',
     format: 'iife',
     sourcemap: true,
     name: 'TrainHistory'

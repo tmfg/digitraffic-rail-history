@@ -9,7 +9,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "./src/main/resources/static/js/",
+    "outDir": "./src/main/resources/static/history/js/",
     "rootDir": "./src/typescript",
     "baseUrl": "./src/typescript",
     "paths": {

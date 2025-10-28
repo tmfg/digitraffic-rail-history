@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historiatyökalu</title>
-    <link href="/css/fintraffic.min.css" rel="stylesheet">
-    <link href="/css/main.css" rel="stylesheet">
+    <link href="/history/css/fintraffic.min.css" rel="stylesheet">
+    <link href="/history/css/main.css" rel="stylesheet">
+    <link rel="icon" href="/history/favicon.ico" />
     <meta name="htmx-config" content='{"allowScriptTags": false, "allowEval": false}'>
     {% include "cookie-header" %}
-    <script src="/js/main.js" defer></script>
+    <script src="/history/js/main.js" defer></script>
 </head>
 <body>
     <div class="l-container">
