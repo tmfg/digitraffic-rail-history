@@ -6,6 +6,6 @@
             {"header": "Lähtö", "key": "beginTimeTableRow"},
             {"header": "Saapuminen", "key": "endTimeTableRow"},
             {"header": "Veturit", "key": "locomotives"},
-            {"header": "Vaunut", "key": "wagonType"}
+            {"header": "Vaunut", "key": "wagons"}
         ]
     } %}

@@ -21,10 +21,10 @@
                 {{ locomotive.get("locomotiveType").asText() }}{% if not loop.last %}, {% endif %}
             {% endfor %}
         {% endif %}
-    {% elseif column.key == "wagonType" %}
-        {% if data.has("locomotives") %}
-            {% for locomotive in data.get("locomotives") %}
-                {{ locomotive.get("wagonType").asText() }}{% if not loop.last %}, {% endif %}
+    {% elseif column.key == "wagons" %}
+        {% if data.has("wagons") %}
+            {% for wagon in data.get("wagons") %}
+                {{ wagon.get("wagonType").asText() }}{% if not loop.last %}, {% endif %}
             {% endfor %}
         {% endif %}
     {% endif %}
