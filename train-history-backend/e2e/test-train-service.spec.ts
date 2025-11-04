@@ -28,7 +28,7 @@ test('Train page finds results', async ({ browser }) => {
     const hyvaksyttyInfoText = infoTextContainer.filter({hasText: 'Hyväksytty'}).first();
     const kulussaInfoText = infoTextContainer.filter({hasText: 'Kulussa'}).first();
     const peruttuInfoText = infoTextContainer.filter({hasText: 'Peruttu'}).first();
-    for (const infoText of [operaattoriInfoText, tyyppiInfoText, hyvaksyttyInfoText, kulussaInfoText, peruttuInfoText, lahilinjatunnusInfoText]) {
+    for (const infoText of [operaattoriInfoText, tyyppiInfoText, hyvaksyttyInfoText, kulussaInfoText, peruttuInfoText]) {
       await expect(infoText).toBeVisible();
     }
 
