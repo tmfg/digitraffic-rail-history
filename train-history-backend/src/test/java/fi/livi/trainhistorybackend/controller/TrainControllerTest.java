@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -19,7 +20,7 @@ public class TrainControllerTest extends BaseTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private String PATH = "/trains/history/";
+    private String PATH = "/api/v1/trains/history";
 
     @Test
     public void validRequestReturnsTrains() throws Exception {
@@ -40,5 +41,12 @@ public class TrainControllerTest extends BaseTest {
     public void invalidDateReturnsBadRequest() throws Exception {
         mockMvc.perform(get(PATH + "/invalid-date/12345"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void unsupportedAcceptHeaderReturns406() throws Exception {
+        mockMvc.perform(get(PATH + "/2023-11-01/12345")
+                        .accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isNotAcceptable());
     }
 }

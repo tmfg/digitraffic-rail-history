@@ -1,32 +1,88 @@
 package fi.livi.trainhistorybackend.controller;
 
+import fi.livi.trainhistorybackend.domain.CompositionVersion;
 import fi.livi.trainhistorybackend.entities.Composition;
-import fi.livi.trainhistorybackend.repositories.CompositionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import fi.livi.trainhistorybackend.service.CompositionService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CompositionController {
-    @Autowired
-    private CompositionRepository compositionRepository;
+    private final CompositionService compositionService;
 
-    @RequestMapping("compositions/history/{departure_date}/{train_number}")
-    @ResponseBody
-    public List<Composition> getTrain(@PathVariable final long train_number,
-                                      @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                      final LocalDate departure_date,
-                                      final HttpServletResponse response) {
+    public CompositionController(final CompositionService compositionService) {
+        this.compositionService = compositionService;
+    }
 
+    // Main compositions page (HTML) - supports both full page and fragment
+    @GetMapping(value = "/history/compositions", produces = MediaType.TEXT_HTML_VALUE)
+    public String compositionsPage(@RequestParam(required = false, defaultValue = "false") boolean fragment,
+                                  final Model model) {
+        model.addAttribute("active_section", "compositions");
+        model.addAttribute("currentDate", LocalDate.now().toString());
+
+        return fragment ? "compositions-content" : "compositions";
+    }
+
+    @GetMapping(value = "/api/v1/compositions/history/{departure_date}/{train_number}",
+                produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
+    public Object getCompositionHistory(@PathVariable final long train_number,
+                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departure_date,
+                                       @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) final String accept,
+                                       final Model model,
+                                       final HttpServletResponse response) {
         response.setHeader("Cache-Control", String.format("max-age=%d, public", 10));
 
-        return compositionRepository.findByTrainNumberAndDepartureDate(train_number, departure_date);
+        final List<CompositionVersion> compositionVersions = compositionService.findByNumberAndDate(train_number, departure_date);
+
+        if (accept.contains(MediaType.APPLICATION_JSON_VALUE) ||
+            accept.contains(MediaType.ALL_VALUE) ||
+            accept.contains("application/*")) {
+            List<Composition> entities = compositionVersions.stream()
+                .map(CompositionVersion::getEntity)
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(entities);
+        }
+
+        if (accept.contains(MediaType.TEXT_HTML_VALUE) ||
+            accept.contains("text/*")) {
+            model.addAttribute("versions", compositionVersions);
+            model.addAttribute("trainNumber", train_number);
+            model.addAttribute("departureDate", departure_date);
+
+            if (!compositionVersions.isEmpty()) {
+                model.addAttribute("selectedVersion", compositionVersions.getFirst());
+            }
+
+            return "modules/composition/results";
+        }
+
+        return ResponseEntity.status(406).build();
+    }
+
+    @GetMapping(value = "/history/compositions/version", produces = MediaType.TEXT_HTML_VALUE)
+    public String selectCompositionVersion(@RequestParam final Long version,
+                                          @RequestParam long trainNumber,
+                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departureDate,
+                                          final Model model) {
+        compositionService.findByVersion(trainNumber, departureDate, version)
+            .ifPresent(compositionVersion -> {
+                model.addAttribute("selectedVersion", compositionVersion);
+            });
+
+        return "modules/composition/table";
     }
 }
+

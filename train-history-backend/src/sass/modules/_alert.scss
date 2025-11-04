@@ -1,0 +1,11 @@
+.alert {
+  padding: 16px;
+  border-radius: var(--fds-radius-normal);
+  border: 2px solid;
+
+  &--warning {
+    background-color: var(--fds-color-warning-50);
+    border-color: var(--fds-color-warning-200);
+    color: var(--fds-color-warning-300);
+  }
+}

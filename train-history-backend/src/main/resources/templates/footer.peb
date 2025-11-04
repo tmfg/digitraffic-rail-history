@@ -1,0 +1,6 @@
+<footer class="l-footer">
+    <div class="l-footer__content">
+        <span class="text-muted">Historiatietoja säilytetään 14 päivää.</span><br>
+        <span class="text-muted">Liikennetietojen lähde <a href="{{ fintrafficUrl }}">Fintraffic</a> / <a href="{{ digitrafficUrl }}">rata.digitraffic.fi</a>, lisenssi CC 4.0 BY</span>
+    </div>
+</footer>

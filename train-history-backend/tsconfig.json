@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM"],
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./src/main/resources/static/history/js/",
+    "rootDir": "./src/typescript",
+    "baseUrl": "./src/typescript",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "src/typescript/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/main",
+    "src/test"
+  ]
+}

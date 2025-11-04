@@ -1,0 +1,32 @@
+<div class="search" hx-ext="path-params">
+    <h1 class="search__title">1. Etsi aikataulu</h1>
+
+    <form class="search__form"
+          hx-get={{ searchUrl }}
+          hx-target="#search-results"
+          hx-headers='{"Accept": "text/html"}'
+          hx-indicator="#loading">
+        <div class="l-form-row">
+            <div class="l-form-col">
+                <div class="search__field">
+                    <label for="trainNumber" class="search__label">Junanumero</label>
+                    <input type="number" class="search__input" id="trainNumber" name="trainNumber" placeholder="46" required>
+                    <div class="search__help">Esim. IC 46:n junanumero on "46"</div>
+                </div>
+            </div>
+            <div class="l-form-col">
+                <div class="search__field">
+                    <label for="departureDate" class="search__label">Lähtöpäivämäärä</label>
+                    <input type="date" class="search__input" id="departureDate" name="departureDate" value="{{ currentDate }}" required>
+                    <div class="search__help">Ensimmäisen lähdön päivämäärä</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search__actions">
+            <button type="submit" class="btn btn--primary">{{ searchLabel }}</button>
+            <i id="loading" class="htmx-indicator" data-lucide="loader"></i>
+        </div>
+    </form>
+</div>
+<div id="search-results" class="l-results"></div>

@@ -1,0 +1,12 @@
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--fds-size-2, 16px);
+  flex-wrap: wrap;
+
+  &__label {
+    font-weight: var(--fds-typography-emphasis-default-font-weight);
+    color: var(--fds-color-text-1000);
+    font-size: var(--fds-typography-body-default-font-size);
+  }
+}

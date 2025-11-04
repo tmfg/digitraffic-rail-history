@@ -1,0 +1,12 @@
+.version-details {
+  margin-bottom: var(--fds-size-3, 24px);
+
+  &__item {
+    display: flex;
+    gap: var(--fds-size-1);
+  }
+
+  &__label {
+    font-weight: var(--fds-typography-emphasis-small-font-weight);
+  }
+}

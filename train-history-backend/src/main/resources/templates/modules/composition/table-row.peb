@@ -1,0 +1,33 @@
+<tr class="table__row" role="row">
+{% for column in columns %}
+    <td class="table__cell" role="cell">
+    {% if column.key == "totalLength" %}
+        {{ data.get("totalLength").asText() }} m
+    {% elseif column.key == "maximumSpeed" %}
+        {{ data.get("maximumSpeed").asText() }} km/h
+    {% elseif column.key == "beginTimeTableRow" %}
+        {% if data.has("beginTimeTableRow") %}
+            {{ data.get("beginTimeTableRow").get("scheduledTime").asText() | dateString("HH:mm:ss", "Europe/Helsinki") }}
+            ({{ data.get("beginTimeTableRow").get("stationShortCode").asText() }})
+        {% endif %}
+    {% elseif column.key == "endTimeTableRow" %}
+        {% if data.has("endTimeTableRow") %}
+            {{ data.get("endTimeTableRow").get("scheduledTime").asText() | dateString("HH:mm:ss", "Europe/Helsinki") }}
+            ({{ data.get("endTimeTableRow").get("stationShortCode").asText() }})
+        {% endif %}
+    {% elseif column.key == "locomotives" %}
+        {% if data.has("locomotives") %}
+            {% for locomotive in data.get("locomotives") %}
+                {{ locomotive.get("locomotiveType").asText() }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% elseif column.key == "wagons" %}
+        {% if data.has("wagons") %}
+            {% for wagon in data.get("wagons") %}
+                {{ wagon.get("wagonType").asText() }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+    </td>
+{% endfor %}
+</tr>

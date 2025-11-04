@@ -1,0 +1,11 @@
+{% include "modules/table" with {
+        "dataRow": "modules/composition/table-row",
+        "columns": [
+            {"header": "Pituus", "key": "totalLength"},
+            {"header": "Maksiminopeus", "key": "maximumSpeed"},
+            {"header": "Lähtö", "key": "beginTimeTableRow"},
+            {"header": "Saapuminen", "key": "endTimeTableRow"},
+            {"header": "Veturit", "key": "locomotives"},
+            {"header": "Vaunut", "key": "wagons"}
+        ]
+    } %}

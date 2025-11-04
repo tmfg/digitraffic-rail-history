@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historiatyökalu</title>
+    <link href="/history/css/fintraffic.min.css" rel="stylesheet">
+    <link href="/history/css/main.css" rel="stylesheet">
+    <link rel="icon" href="/history/favicon.ico" />
+    <meta name="htmx-config" content='{"allowScriptTags": false, "allowEval": false}'>
+    {% include "cookie-header" %}
+    <script src="/history/js/main.js" defer></script>
+</head>
+<body>
+    <div class="l-container">
+        {% include "navigation" %}
+        <main id="main-content" class="l-main">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% include "footer" %}
+</body>
+</html>

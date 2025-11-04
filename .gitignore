@@ -1,70 +1,82 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+*
 
-# compiled output
-/dist
-/tmp
-/out-tsc
+!.gitignore
+!LICENSE.txt
+!owasp-suppressions.xml
+!pom.xml
+!**/pom.xml
+!README.md
+!versions-maven-plugin-rules.xml
 
-# dependencies
-/node_modules
+!.github/
+!.github/**/
+!.github/**/*.yml
 
-# IDEs and editors
-**/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-*.iws
-*.iml
-*.ipr
-pom.xml.versionsBackup
+!common/
+!common/**/
+!common/**/*
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+!db/
+!db/**/
+!db/**/*
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-testem.log
-/typings
+!lib/
+!lib/*
 
-# e2e
-/e2e/*.js
-/e2e/*.map
+# Train History Backend
 
-# System Files
-.DS_Store
-Thumbs.db
-.gitmodules
+!train-history-backend/
+!train-history-backend/playwright.config.ts
+!train-history-backend/.env.playwright.example
+!train-history-backend/e2e/
+!train-history-backend/e2e/**/
+!train-history-backend/e2e/**/*.ts
+!train-history-backend/src
+!train-history-backend/src/main
+!train-history-backend/src/main/java/
+!train-history-backend/src/main/java/**/
+!train-history-backend/src/main/java/**/*.java
+!train-history-backend/src/main/resources
+!train-history-backend/src/main/resources/**/
+!train-history-backend/src/main/resources/static/**/*.css
+!train-history-backend/src/main/resources/static/**/*.js
+!train-history-backend/src/main/resources/static/**/favicon.ico
+!train-history-backend/src/main/resources/templates/**/*.peb
+!train-history-backend/src/main/resources/application.properties
+!train-history-backend/src/main/resources/logback.xml
+!train-history-backend/src/main/resources/secretsmanager.properties
+!train-history-backend/src/test
+!train-history-backend/src/test/**/
+!train-history-backend/src/test/resources/**/*.sql
+!train-history-backend/src/sass
+!train-history-backend/src/sass/**/
+!train-history-backend/src/sass/**/*.scss
+!train-history-backend/src/typescript
+!train-history-backend/src/typescript/**/
+!train-history-backend/src/typescript/**/*.ts
+!train-history-backend/css-handling.mjs
+!train-history-backend/package.json
+!train-history-backend/pnpm-lock.yaml
+!train-history-backend/rollup.config.mjs
+!train-history-backend/tsconfig.json
+train-history-backend/target/
+train-history-backend/node_modules/
 
+# Train History Updater
 
-# Java
-target/
-!.mvn/wrapper/maven-wrapper.jar
+!train-history-updater/
+!train-history-updater/.mvn
+!train-history-updater/.mvn/**/
+!train-history-updater/.mvn/**/*
+!train-history-updater/src/**/
+!train-history-updater/src/**/*.java
+!train-history-updater/src/main/resources/db/migration/*.sql
+!train-history-updater/src/main/resources/static/**/*.css
+!train-history-updater/src/main/resources/static/**/*.html
+!train-history-updater/src/main/resources/application.properties
+!train-history-updater/src/main/resources/logback.xml
+!train-history-updater/src/main/resources/secretsmanager.properties
+!train-history-updater/mvnw
+!train-history-updater/mvnw.cmd
 
-### STS ###
-.apt_generated
-.factorypath
-.settings
-.springBeans
-
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
-/train-history-web/node_modules/
-train-history-web/.angular/cache
-application-localhost.properties
+train-history-updater/target/

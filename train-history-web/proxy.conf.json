@@ -1,7 +1,0 @@
-{
-  "/api": {
-    "target": "https://rata.digitraffic.fi",
-    "changeOrigin": true,
-    "secure": true
-  }
-}

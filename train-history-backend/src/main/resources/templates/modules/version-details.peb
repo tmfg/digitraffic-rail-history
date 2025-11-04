@@ -1,0 +1,8 @@
+<div class="version-details">
+    {% for detail in selectedVersion.getDetails() %}
+        <div class="version-details__item">
+            <span class="version-details__label">{{ detail.getLabel() }}:</span>
+            <span>{{ detail.getValue() }}</span>
+        </div>
+    {% endfor %}
+</div>
