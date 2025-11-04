@@ -1,4 +1,4 @@
-{% include "modules/search" with {
+{% include "../search" with {
         "searchUrl": "/api/v1/compositions/history/{departureDate}/{trainNumber}",
         "searchLabel": "Etsi kokoonpano"
     } %}

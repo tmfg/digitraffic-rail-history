@@ -9,6 +9,6 @@ public class IndexController {
 
     @GetMapping(value = "/history", produces = MediaType.TEXT_HTML_VALUE)
     public String index() {
-        return "index";
+        return "pages/index";
     }
 }

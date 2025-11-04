@@ -13,11 +13,11 @@
 </head>
 <body>
     <div class="l-container">
-        {% include "navigation" %}
+        {% include "modules/navigation" %}
         <main id="main-content" class="l-main">
             {% block content %}{% endblock %}
         </main>
     </div>
-    {% include "footer" %}
+    {% include "modules/footer" %}
 </body>
 </html>

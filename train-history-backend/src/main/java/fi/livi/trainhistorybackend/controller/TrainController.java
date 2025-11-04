@@ -31,7 +31,7 @@ public class TrainController {
         model.addAttribute("active_section", "trains");
         model.addAttribute("currentDate", LocalDate.now().toString());
 
-        return fragment ? "trains-content" : "trains";
+        return fragment ? "modules/train/trains-content" : "pages/trains";
     }
 
     @GetMapping(value = "/api/v1/trains/history/{departure_date}/{train_number}",
@@ -81,7 +81,7 @@ public class TrainController {
         trainService.findByVersion(trainNumber, departureDate, version)
             .ifPresent(trainVersion -> model.addAttribute("selectedVersion", trainVersion));
 
-        return "modules/train/table";
+        return "modules/train/results";
     }
 }
 

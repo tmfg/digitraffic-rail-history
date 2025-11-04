@@ -4,14 +4,14 @@
         <label for="versionSelect" class="version-selection__label">Versio</label>
         <select class="version-selection__select" id="versionSelect" aria-label="Versio"
                 hx-get={{ versionUrl }}
-                hx-target="#data-table"
+                hx-target="#version-info"
                 hx-trigger="change"
                 hx-include="[name='trainNumber'],[name='departureDate']"
                 name="version">
             <option value="">Valitse versio...</option>
             {% for version in versions %}
             <option value="{{ version.getVersion() }}"{% if selectedVersion is not empty and version.getVersion() == selectedVersion.getVersion() %} selected{% endif %}>
-                {{ version.getFetchDateTime() | date("dd.MM.yyyy HH:mm:ss") }} (v{{ version.getVersion() }})
+                {{ version.getFetchDateTime() | date("dd.MM.yyyy HH:mm:ss", timeZone="Europe/Helsinki") }} (v{{ version.getVersion() }})
             </option>
             {% endfor %}
         </select>
