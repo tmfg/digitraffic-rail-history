@@ -6,9 +6,11 @@ export async function getPage(browser: Browser): Promise<Page> {
 
 export async function openTrainHistoryPage(page: Page): Promise<void> {
   await test.step('Open train history page', async () => {
-    await page.goto('/');
-    // Decline cookies
-    //await page.getByRole('alert', {name: 'Decline all'}).click()
+    await page.goto('/history');
+    if (process.env.IS_LOCAL_TEST_RUN !== 'true') {
+      // Decline cookies
+      await page.getByRole('alert', {name: 'Decline all'}).click()
+    }
   })
 }
 

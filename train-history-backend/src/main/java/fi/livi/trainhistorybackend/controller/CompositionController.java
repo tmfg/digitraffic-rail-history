@@ -30,7 +30,7 @@ public class CompositionController {
         model.addAttribute("active_section", "compositions");
         model.addAttribute("currentDate", LocalDate.now().toString());
 
-        return fragment ? "compositions-content" : "compositions";
+        return fragment ? "modules/composition/compositions-content" : "pages/compositions";
     }
 
     @GetMapping(value = "/api/v1/compositions/history/{departure_date}/{train_number}",
@@ -82,7 +82,7 @@ public class CompositionController {
                 model.addAttribute("selectedVersion", compositionVersion);
             });
 
-        return "modules/composition/table";
+        return "modules/composition/results";
     }
 }
 
