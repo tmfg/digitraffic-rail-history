@@ -1,4 +1,0 @@
-{% include "modules/results" with {
-        "versionUrl": "/history/compositions/version",
-        "dataTable": "modules/composition/table"
-    } %}

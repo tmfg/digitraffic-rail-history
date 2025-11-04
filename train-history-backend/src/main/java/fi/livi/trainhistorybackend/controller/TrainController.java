@@ -59,15 +59,17 @@ public class TrainController {
 
         if (accept.contains(MediaType.TEXT_HTML_VALUE) ||
             accept.contains("text/*")) {
-            model.addAttribute("versions", trainVersions);
-            model.addAttribute("trainNumber", train_number);
-            model.addAttribute("departureDate", departure_date);
+            model.addAttribute("versions", trainVersions)
+                    .addAttribute("trainNumber", train_number)
+                    .addAttribute("departureDate", departure_date)
+                    .addAttribute("versionUrl", "/history/trains/version")
+                    .addAttribute("dataTable", "modules/train/table");
 
             if (!trainVersions.isEmpty()) {
                 model.addAttribute("selectedVersion", trainVersions.getFirst());
             }
 
-            return "modules/train/results";
+            return "modules/results";
         }
 
         return ResponseEntity.status(406).build();
@@ -79,9 +81,12 @@ public class TrainController {
                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate departureDate,
                                     final Model model) {
         trainService.findByVersion(trainNumber, departureDate, version)
-            .ifPresent(trainVersion -> model.addAttribute("selectedVersion", trainVersion));
+            .ifPresent(trainVersion -> model
+                    .addAttribute("selectedVersion", trainVersion)
+                    .addAttribute("versionUrl", "/history/trains/version")
+                    .addAttribute("dataTable", "modules/train/table"));
 
-        return "modules/train/results";
+        return "modules/version-info";
     }
 }
 

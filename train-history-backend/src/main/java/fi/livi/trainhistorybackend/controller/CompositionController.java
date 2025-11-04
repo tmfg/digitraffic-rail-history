@@ -58,15 +58,17 @@ public class CompositionController {
 
         if (accept.contains(MediaType.TEXT_HTML_VALUE) ||
             accept.contains("text/*")) {
-            model.addAttribute("versions", compositionVersions);
-            model.addAttribute("trainNumber", train_number);
-            model.addAttribute("departureDate", departure_date);
+            model.addAttribute("versions", compositionVersions)
+                    .addAttribute("trainNumber", train_number)
+                    .addAttribute("departureDate", departure_date)
+                    .addAttribute("versionUrl", "/history/compositions/version")
+                    .addAttribute("dataTable", "modules/composition/table");
 
             if (!compositionVersions.isEmpty()) {
                 model.addAttribute("selectedVersion", compositionVersions.getFirst());
             }
 
-            return "modules/composition/results";
+            return "modules/results";
         }
 
         return ResponseEntity.status(406).build();
@@ -79,10 +81,12 @@ public class CompositionController {
                                           final Model model) {
         compositionService.findByVersion(trainNumber, departureDate, version)
             .ifPresent(compositionVersion -> {
-                model.addAttribute("selectedVersion", compositionVersion);
+                model.addAttribute("selectedVersion", compositionVersion)
+                        .addAttribute("versionUrl", "/history/compositions/version")
+                        .addAttribute("dataTable", "modules/composition/table");
             });
 
-        return "modules/composition/results";
+        return "modules/version-info";
     }
 }
 
