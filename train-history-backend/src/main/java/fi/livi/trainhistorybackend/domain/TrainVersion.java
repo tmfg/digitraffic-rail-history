@@ -36,7 +36,10 @@ public class TrainVersion extends Version {
                 details.add(new Detail("Operaattori", json.get("operatorShortCode").asText()));
             }
             if (json.has("trainType")) {
-                details.add(new Detail("Tyyppi", json.get("trainType").asText() + json.get("trainCategory").asText()));
+                details.add(new Detail(
+                        "Tyyppi",
+                        String.format("%s/%s", json.get("trainType").asText(), json.get("trainCategory").asText())
+                ));
             }
             if (json.has("timetableAcceptanceDate")) {
                 String isoDate = json.get("timetableAcceptanceDate").asText();
