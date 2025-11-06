@@ -27,14 +27,11 @@ Contains the source code for the service
    `mvn spring-boot:run -Dspring-boot.run.profiles=localhost` and you should start getting data into the database.
 6. Start `TrainHistoryBackendApplication` using the profile `localhost`
    `mvn spring-boot:run -Dspring-boot.run.profiles=localhost`
-7. Install `ng` if necessary: `npm install -g @angular/cli`
-8. Go the the directory `train-history-web` and run `npm install`
-9. Start the web UI with `npm run dev` -> connects to rata.digitraffic.fi, or use `npm run dev:local`. The difference is which proxy file is used. `dev` uses rata.digitraffic.fi APIs while local connects to the locally running application.
-10. Open a browser at  http://localhost:4200/
+7. Open a browser at  http://localhost:26087/history (port is the `server.port`)
 
 # Tests
 
-### train-history-backend
+## train-history-backend
 
 When the development environment is set up, including the database and application profile, run:
 
@@ -43,13 +40,27 @@ cd train-history-backend
 mvn test -Dspring.profiles.active=localhost
 ```
 
+## E2E tests
+
+You need to have both `train-history-updater` and `train-history-backend` running with the `localhost` profile and
+the database up and running.
+
+Before running the tests, you probably need to make slight modifications to the test files themselves.
+This is because they are using the current date in searches for train data and most likely
+your local database does not have that data. At the time of writing, this means that you need to change
+the arguments given to `submitTrainInfoForm` function with something that exists in your local database.
+
+To run the E2E tests:
+```
+cd train-history-backend
+pnpm run e2e-ui
+```
+
 # Architecture
 
-The history service consists of three components:
+The history service consists of two components:
 
-- train-history-web
-  - Web application
 - train-history-backend
-  - Backend system for the web application
+  - Backend system
 - train-history-updater
   - Fetches and stores historical data for the backend application to read
