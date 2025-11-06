@@ -53,6 +53,7 @@ the arguments given to `submitTrainInfoForm` function with something that exists
 To run the E2E tests:
 ```
 cd train-history-backend
+cp .env.playwright.example .env.playwright
 pnpm run e2e-ui
 ```
 
