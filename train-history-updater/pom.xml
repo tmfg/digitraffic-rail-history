@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.6</version>
+        <version>3.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -23,7 +23,7 @@
         <aws.msql.driver.version>1.1.15</aws.msql.driver.version>
         <com.google.guava.version>33.5.0-jre</com.google.guava.version>
         <net.logstash.logback.version>8.1</net.logstash.logback.version>
-        <org.flywaydb.version>11.15.0</org.flywaydb.version>
+        <org.flywaydb.version>11.16.0</org.flywaydb.version>
         <java.version>21</java.version>
     </properties>
 
