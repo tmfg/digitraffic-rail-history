@@ -9,7 +9,7 @@
          Also, Spring Boot TemplateViewResolver adds prefix and suffix to the template path
          so the included file has to have those in the name:
          All versions of the package io.pebbletemplates:pebble are vulnerable to External Control of File Name or Path via the include tag.-->
-    <suppress until="2025-12-14">
+    <suppress until="2026-02-14">
         <notes><![CDATA[file name: pebble-spring6-3.2.4.jar]]></notes>
         <packageUrl regex="true">^pkg:maven/io\.pebbletemplates/pebble-spring6@.*$</packageUrl>
         <cve>CVE-2025-1686</cve>
