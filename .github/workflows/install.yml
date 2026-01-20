@@ -106,6 +106,27 @@ jobs:
             --file=docker/Dockerfile-rail-train-history-updater .
           
           docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
+      - name: Generate backend SBOM
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: image
+          image-ref: ${{ secrets.ECR_URL }}/train-history-updater:${{ github.sha }}
+          format: cyclonedx
+          output: backend-sbom.json
+      - name: Generate updater SBOM
+        run: |
+          cd train-history-updater
+          mvn -DoutputName=updater-sbom cyclonedx:makeBom
+      - name: Upload backend SBOM
+        uses: actions/upload-artifact@v6
+        with:
+          name: backend-sbom.json
+          path: backend-sbom.json
+      - name: Upload updater SBOM
+        uses: actions/upload-artifact@v6
+        with:
+          name: updater-sbom.json
+          path: train-history-updater/target/updater-sbom.json
       - name: Notify Slack
         if: failure()
         uses: 8398a7/action-slack@v3
@@ -115,3 +136,106 @@ jobs:
           fields: repo, job, took
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy:
+    if: github.repository != 'tmfg/digitraffic-rail-history' && ${{ always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
+    environment: ${{ github.event.inputs.env }}
+    needs: install
+    strategy:
+      matrix:
+        app: [ backend, updater ]
+    runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - name: Update ${{ matrix.app }} task definition
+        uses: tmfg/digitraffic-actions@update-task-def/v2
+        with:
+          task-def-file-name: rail-${{ github.event.inputs.env }}-train-history-${{ matrix.app }}
+          family-name: train-history-${{ matrix.app }}
+          image-arn: ${{ secrets.ECR_URL }}/train-history-${{ matrix.app }}:${{ github.sha }}
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          ci-repo-url: ${{ secrets.CONFIG_REPO_NAME }}
+          ci-repo-branch: ${{ github.event.inputs.config-repo-branch }}
+          ci-ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
+      - name: Update ${{ matrix.app }} ECS service
+        uses: tmfg/digitraffic-actions@ecs-service-update/v1
+        with:
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          service-name: train-history-${{ matrix.app }}
+          task-definition: train-history-${{ matrix.app }}
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
+          desired-count: 1
+      - name: Download ${{ matrix.app }} SBOM
+        uses: actions/download-artifact@v6
+        with:
+          name: ${{ matrix.app}}-sbom.json
+      - name: Configure AWS credentials for SBOM install
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ secrets.SBOM_AWS_ROLE }}
+          role-session-name: gh-actions-upload-sbom-rail-${{ matrix.app }}-${{ github.event.inputs.env }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Upload ${{ matrix.app }} SBOM
+        run: |
+          aws s3 cp ${{ matrix.app }}-sbom.json s3://${{ secrets.SBOM_BUCKET }}/${{ fromJson(secrets.SBOM_PROJECT_KEYS)[github.event.inputs.env][matrix.app] }}/${{ github.run_id }}-${{ github.sha }}.json
+      - name: Notify Slack
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: FAILED Rail-history Deploy ${{ matrix.app }}
+          fields: repo, job, took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+  E2E:
+    if: ${{github.repository != 'tmfg/digitraffic-rail-history' && github.event.inputs.env == 'beta' && always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
+    needs: deploy
+    environment: ${{ github.event.inputs.env }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.commit-hash }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: "pnpm"
+          cache-dependency-path: ./train-history-backend
+
+      - name: Install dependencies for E2E-tests
+        working-directory: ./train-history-backend
+        run: pnpm install
+
+      - name: Install Playwright Browsers
+        working-directory: ./train-history-backend
+        run: pnpm dlx playwright install --with-deps
+
+      - name: Update Playwright
+        working-directory: ./train-history-backend
+        run: pnpm exec playwright install
+
+      - name: Run E2E-tests
+        env:
+          TRAIN_HISTORY_TEST_URL: ${{ vars.TRAIN_HISTORY_TEST_URL }}
+        working-directory: ./train-history-backend
+        run: pnpm run e2e
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: ./train-history-backend/playwright-report/
+          retention-days: 30
