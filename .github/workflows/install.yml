@@ -171,7 +171,7 @@ jobs:
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           desired-count: 1
       - name: Download ${{ matrix.app }} SBOM
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.app}}-sbom.json
       - name: Configure AWS credentials for SBOM install
