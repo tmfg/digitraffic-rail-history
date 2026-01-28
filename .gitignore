@@ -11,6 +11,7 @@
 !.github/
 !.github/**/
 !.github/**/*.yml
+!.github/trufflehog-exclude.txt
 
 !common/
 !common/**/
