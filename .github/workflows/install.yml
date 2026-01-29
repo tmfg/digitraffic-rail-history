@@ -143,7 +143,7 @@ jobs:
     needs: install
     strategy:
       matrix:
-        app: [ backend, updater ]
+        app: [ history-backend, history-updater ]
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
@@ -153,9 +153,9 @@ jobs:
       - name: Update ${{ matrix.app }} task definition
         uses: tmfg/digitraffic-actions@update-task-def/v2
         with:
-          task-def-file-name: rail-${{ github.event.inputs.env }}-train-history-${{ matrix.app }}
-          family-name: train-history-${{ matrix.app }}
-          image-arn: ${{ secrets.ECR_URL }}/train-history-${{ matrix.app }}:${{ github.sha }}
+          task-def-file-name: rail-${{ github.event.inputs.env }}-train-${{ matrix.app }}
+          family-name: train-${{ matrix.app }}
+          image-arn: ${{ secrets.ECR_URL }}/train-${{ matrix.app }}:${{ github.sha }}
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           ci-repo-url: ${{ secrets.CONFIG_REPO_NAME }}
@@ -167,8 +167,8 @@ jobs:
         with:
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
-          service-name: train-history-${{ matrix.app }}
-          task-definition: train-history-${{ matrix.app }}
+          service-name: train-${{ matrix.app }}
+          task-definition: train-${{ matrix.app }}
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           desired-count: 1
 
