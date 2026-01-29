@@ -112,21 +112,21 @@ jobs:
           scan-type: image
           image-ref: ${{ secrets.ECR_URL }}/train-history-updater:${{ github.sha }}
           format: cyclonedx
-          output: backend-sbom.json
+          output: history-backend-sbom.json
       - name: Generate updater SBOM
         run: |
           cd train-history-updater
-          mvn -DoutputName=updater-sbom cyclonedx:makeBom
+          mvn -DoutputName=history-updater-sbom cyclonedx:makeBom
       - name: Upload backend SBOM
         uses: actions/upload-artifact@v6
         with:
-          name: backend-sbom.json
-          path: backend-sbom.json
+          name: history-backend-sbom.json
+          path: history-backend-sbom.json
       - name: Upload updater SBOM
         uses: actions/upload-artifact@v6
         with:
-          name: updater-sbom.json
-          path: train-history-updater/target/updater-sbom.json
+          name: history-updater-sbom.json
+          path: train-history-updater/target/history-updater-sbom.json
       - name: Notify Slack
         if: failure()
         uses: 8398a7/action-slack@v3
