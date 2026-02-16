@@ -7,6 +7,7 @@
 !**/pom.xml
 !README.md
 !versions-maven-plugin-rules.xml
+!/biome.jsonc
 
 !.github/
 !.github/**/
@@ -39,16 +40,15 @@
 !train-history-backend/src/main/java/**/*.java
 !train-history-backend/src/main/resources
 !train-history-backend/src/main/resources/**/
-!train-history-backend/src/main/resources/static/**/*.css
-!train-history-backend/src/main/resources/static/**/*.js
-!train-history-backend/src/main/resources/static/**/favicon.ico
+!train-history-backend/src/main/resources/static/**/*
 !train-history-backend/src/main/resources/templates/**/*.peb
 !train-history-backend/src/main/resources/application.properties
 !train-history-backend/src/main/resources/logback.xml
 !train-history-backend/src/main/resources/secretsmanager.properties
 !train-history-backend/src/test
 !train-history-backend/src/test/**/
-!train-history-backend/src/test/resources/**/*.sql
+!train-history-backend/src/test/resources/compositions/*.sql
+!train-history-backend/src/test/resources/trains/*.sql
 !train-history-backend/src/sass
 !train-history-backend/src/sass/**/
 !train-history-backend/src/sass/**/*.scss
@@ -72,8 +72,7 @@ train-history-backend/node_modules/
 !train-history-updater/src/**/
 !train-history-updater/src/**/*.java
 !train-history-updater/src/main/resources/db/migration/*.sql
-!train-history-updater/src/main/resources/static/**/*.css
-!train-history-updater/src/main/resources/static/**/*.html
+!train-history-updater/src/main/resources/static/**/*
 !train-history-updater/src/main/resources/application.properties
 !train-history-updater/src/main/resources/logback.xml
 !train-history-updater/src/main/resources/secretsmanager.properties
