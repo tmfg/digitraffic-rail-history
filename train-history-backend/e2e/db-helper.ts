@@ -11,6 +11,7 @@ export async function getLatestCompositionInfo(): Promise<TrainInfo> {
     user: 'rail_history',
     password: 'rail_pass123',
     database: 'trainhistoryjson',
+    dateStrings: true, // Ensure DATE fields are returned as strings
   });
   const [rows] = await connection.execute<RowDataPacket[]>(
     `select train_number, departure_date
@@ -30,6 +31,7 @@ export async function getLatestTrainInfo(): Promise<TrainInfo> {
     user: 'rail_history',
     password: 'rail_pass123',
     database: 'trainhistoryjson',
+    dateStrings: true, // Ensure DATE fields are returned as strings
   });
   const [rows] = await connection.execute<RowDataPacket[]>(
     `select train_number, departure_date
