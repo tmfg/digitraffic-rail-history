@@ -250,6 +250,10 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: ./train-history-backend
 
+      - name: Remove .env.playwright (CI uses env vars)
+        run: rm -f .env.playwright
+        working-directory: ./train-history-backend
+
       - name: Install dependencies for E2E-tests
         working-directory: ./train-history-backend
         run: pnpm install
