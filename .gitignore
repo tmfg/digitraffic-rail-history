@@ -28,7 +28,7 @@
 
 !train-history-backend/
 !train-history-backend/playwright.config.ts
-!train-history-backend/.env.playwright.example
+!train-history-backend/.env.playwright
 !train-history-backend/e2e/
 !train-history-backend/e2e/**/
 !train-history-backend/e2e/**/*.ts

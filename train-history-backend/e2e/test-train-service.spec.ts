@@ -7,15 +7,23 @@ import {
   checkTableExists,
   checkTableHasData
 } from './common-steps';
+import { getLatestTrainInfo } from "./db-helper";
 
-test('Train page finds results', async ({ browser }) => {
+test('Train timetable page finds results', async ({ browser }) => {
   const page = await getPage(browser)
   await openTrainHistoryPage(page)
   await test.step('Search for train schedules', async () => {
     const aikataulujaButton = page.getByRole('link', {name: 'Aikatauluja'});
     await aikataulujaButton.click();
 
-    await submitTrainInfoForm(page, 1, new Date(), "Etsi aikataulu");
+    const latestTrain = await getLatestTrainInfo();
+    console.log(`Latest train ${JSON.stringify(latestTrain)}`)
+    await submitTrainInfoForm(
+      page,
+      latestTrain.train_number,
+      new Date(latestTrain.departure_date),
+      "Etsi aikataulu"
+    );
     //await submitTrainInfoForm(page, 9154, new Date(2015, 11, 19, 12), "Etsi aikataulu");
   })
   await test.step('Check search results', async () => {

@@ -7,15 +7,24 @@ import {
   openTrainHistoryPage,
   submitTrainInfoForm
 } from './common-steps';
+import { getLatestCompositionInfo } from './db-helper';
 
-test('Train page finds results', async ({ browser }) => {
+test('Train compositions page finds results', async ({ browser }) => {
   const page = await getPage(browser)
   await openTrainHistoryPage(page)
   await test.step('Search for train compositions', async () => {
     const kokoonpanojaButton = page.getByRole('link', {name: 'Kokoonpanoja'});
     await kokoonpanojaButton.click();
 
-    await submitTrainInfoForm(page, 1, new Date(), "Etsi kokoonpano");
+    const latestComposition = await getLatestCompositionInfo();
+    console.log(`Latest composition ${JSON.stringify(latestComposition)}`)
+
+    await submitTrainInfoForm(
+      page,
+      latestComposition.train_number,
+      new Date(latestComposition.departure_date),
+      "Etsi kokoonpano"
+    );
     //await submitTrainInfoForm(page, 7, new Date(2015, 11, 29, 12), "Etsi kokoonpano");
   })
   await test.step('Check search results', async () => {

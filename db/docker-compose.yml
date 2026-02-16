@@ -2,7 +2,7 @@ services:
   rail_history_mysql:
     image: mysql:8.0.44-debian
     restart: unless-stopped
-    #platform: linux/amd64
+    platform: linux/amd64
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_USER=rail_history
