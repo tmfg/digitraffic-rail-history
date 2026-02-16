@@ -21,7 +21,7 @@ test("Train compositions page finds results", async ({ browser }) => {
 
     const latestComposition = isLocalTest
       ? await getLatestCompositionInfo()
-      : { train_number: 46, departure_date: new Date().toISOString() };
+      : { train_number: 46, departure_date: new Date().toISOString().slice(0, 10) };
     console.log(`Latest composition (isLocalTest: ${isLocalTest}): ${JSON.stringify(latestComposition)}`);
 
     await submitTrainInfoForm(
