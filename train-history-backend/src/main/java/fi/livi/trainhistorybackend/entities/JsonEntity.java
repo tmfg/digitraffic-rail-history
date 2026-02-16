@@ -1,6 +1,6 @@
 package fi.livi.trainhistorybackend.entities;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 import jakarta.persistence.Convert;
 import jakarta.persistence.EmbeddedId;

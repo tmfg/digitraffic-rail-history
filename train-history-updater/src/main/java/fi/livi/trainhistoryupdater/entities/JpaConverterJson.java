@@ -1,20 +1,20 @@
 package fi.livi.trainhistoryupdater.entities;
 
-import java.io.IOException;
 import jakarta.persistence.AttributeConverter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class JpaConverterJson implements AttributeConverter<Object, String> {
 
-  private final static ObjectMapper objectMapper = new ObjectMapper();
+  private final static ObjectMapper objectMapper = JsonMapper.builder().build();
 
   @Override
   public String convertToDatabaseColumn(Object meta) {
     try {
       return objectMapper.writeValueAsString(meta);
-    } catch (JsonProcessingException ex) {
+    } catch (JacksonException ex) {
       return null;
       // or throw an error
     }
@@ -24,7 +24,7 @@ public class JpaConverterJson implements AttributeConverter<Object, String> {
   public Object convertToEntityAttribute(String dbData) {
     try {
       return objectMapper.readTree(dbData);
-    } catch (IOException ex) {
+    } catch (JacksonException ex) {
       // logger.error("Unexpected IOEx decoding json from database: " + dbData);
       return null;
     }

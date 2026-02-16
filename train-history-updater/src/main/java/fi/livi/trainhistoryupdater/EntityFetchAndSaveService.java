@@ -1,6 +1,6 @@
 package fi.livi.trainhistoryupdater;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import fi.livi.trainhistoryupdater.deserializers.DeserializerObjectMapper;
 import fi.livi.trainhistoryupdater.entities.JsonEntity;
 import fi.livi.trainhistoryupdater.entities.TrainId;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class EntityFetchAndSaveService {
                                                                                    final String url,
                                                                                    final String name,
                                                                                    final Supplier<EntityType> entityFactory,
-                                                                                   final CrudRepository<EntityType, TrainId> repository) throws IOException {
+                                                                                   final CrudRepository<EntityType, TrainId> repository) {
         final long maxVersion = versionSupplier.get();
         final String urlString;
         if (url.startsWith("http")) {
@@ -50,7 +49,7 @@ public class EntityFetchAndSaveService {
         }
 
         final byte[] responseBytes = webClient.get().uri(urlString).retrieve().bodyToMono(byte[].class).block();
-        final JsonNode jsonNode = objectMapper.readTree(responseBytes);
+        final JsonNode jsonNode = objectMapper.getObjectMapper().readTree(responseBytes);
 
         final ZonedDateTime fetchDate = ZonedDateTime.now();
         final List<EntityType> entities = new ArrayList<>();
