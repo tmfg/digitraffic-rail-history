@@ -19,7 +19,7 @@ Contains the source code for the service
    ```properties
    spring.datasource.username=JOTAIN
    spring.datasource.password=JOTAIN
-   spring.datasource.url=jdbc:mysql://localhost/trainhistoryjson?autoReconnect=true&rewriteBatchedStatements=true&cachePrepStmts=true&useTimezone=true&serverTimezone=UTC&useSSL=false
+   spring.datasource.url=jdbc:aws-wrapper:mysql://localhost/trainhistoryjson?autoReconnect=true&rewriteBatchedStatements=true&cachePrepStmts=true&useTimezone=true&serverTimezone=UTC&useSSL=false
    ```
 4. Do the same for
    `train-history-backend/src/main/resources/application-localhost.properties`

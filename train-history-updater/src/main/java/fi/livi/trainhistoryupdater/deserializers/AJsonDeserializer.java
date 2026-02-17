@@ -14,11 +14,7 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.deser.std.StdDeserializer;
 
 public abstract class AJsonDeserializer<A> extends StdDeserializer<A> {
-    public AJsonDeserializer() {
-        this(null);
-    }
-
-    public AJsonDeserializer(Class<?> vc) {
+    protected AJsonDeserializer(Class<A> vc) {
         super(vc);
     }
 

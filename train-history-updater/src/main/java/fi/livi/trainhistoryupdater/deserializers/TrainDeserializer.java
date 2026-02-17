@@ -11,6 +11,10 @@ import fi.livi.trainhistoryupdater.entities.TrainId;
 
 @Component
 public class TrainDeserializer extends AJsonDeserializer<Train> {
+    public TrainDeserializer() {
+        super(Train.class);
+    }
+
     @Override
     public Train deserialize(final JsonParser jp, final DeserializationContext ctxt) throws JacksonException {
         final JsonNode node = jp.readValueAsTree();
