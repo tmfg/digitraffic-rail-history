@@ -130,12 +130,12 @@ jobs:
           cd train-history-updater
           mvn -DoutputName=history-updater-sbom cyclonedx:makeBom
       - name: Upload backend SBOM
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: history-backend-sbom.json
           path: history-backend-sbom.json
       - name: Upload updater SBOM
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: history-updater-sbom.json
           path: train-history-updater/target/history-updater-sbom.json
@@ -273,7 +273,7 @@ jobs:
         run: pnpm run e2e
 
       - name: Upload Playwright report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
