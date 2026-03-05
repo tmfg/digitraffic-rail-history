@@ -185,7 +185,7 @@ jobs:
           desired-count: 1
 
       - name: Download ${{ matrix.app }} SBOM
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ${{ matrix.app}}-sbom.json
 
