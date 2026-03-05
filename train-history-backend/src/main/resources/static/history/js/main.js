@@ -282,7 +282,7 @@
          */
         historyRestoreAsHxRequest: true,
         /**
-         * Weather to report input validation errors to the end user and update focus to the first input that fails validation.
+         * Whether to report input validation errors to the end user and update focus to the first input that fails validation.
          * This should always be enabled as this matches default browser form submit behaviour
          * @type boolean
          * @default false
@@ -298,7 +298,7 @@
       location,
       /** @type {typeof internalEval} */
       _: null,
-      version: '2.0.7'
+      version: '2.0.8'
     };
     // Tsc madness part 2
     htmx.onLoad = onLoadHelper;
@@ -527,6 +527,9 @@
      * @returns {Document}
      */
     function parseHTML(resp) {
+      if ('parseHTMLUnsafe' in Document) {
+        return Document.parseHTMLUnsafe(resp)
+      }
       const parser = new DOMParser();
       return parser.parseFromString(resp, 'text/html')
     }
@@ -3124,7 +3127,7 @@
     //= ===================================================================
     // History Support
     //= ===================================================================
-    let currentPathForHistory = location.pathname + location.search;
+    let currentPathForHistory;
 
     /**
      * @param {string} path
@@ -3135,6 +3138,8 @@
         sessionStorage.setItem('htmx-current-path-for-history', path);
       }
     }
+
+    setCurrentPathForHistory(location.pathname + location.search);
 
     /**
      * @returns {Element}
@@ -4071,7 +4076,10 @@
               targetOverride: resolvedTarget,
               swapOverride: context.swap,
               select: context.select,
-              returnPromise: true
+              returnPromise: true,
+              push: context.push,
+              replace: context.replace,
+              selectOOB: context.selectOOB
             })
         }
       } else {
@@ -4684,8 +4692,8 @@
       const requestPath = responseInfo.pathInfo.finalRequestPath;
       const responsePath = responseInfo.pathInfo.responsePath;
 
-      const pushUrl = getClosestAttributeValue(elt, 'hx-push-url');
-      const replaceUrl = getClosestAttributeValue(elt, 'hx-replace-url');
+      const pushUrl = responseInfo.etc.push || getClosestAttributeValue(elt, 'hx-push-url');
+      const replaceUrl = responseInfo.etc.replace || getClosestAttributeValue(elt, 'hx-replace-url');
       const elementIsBoosted = getInternalData(elt).boosted;
 
       let saveType = null;
@@ -4804,19 +4812,17 @@
       }
 
       if (hasHeader(xhr, /HX-Location:/i)) {
-        saveCurrentPageToHistory();
         let redirectPath = xhr.getResponseHeader('HX-Location');
-        /** @type {HtmxAjaxHelperContext&{path:string}} */
-        var redirectSwapSpec;
+        /** @type {HtmxAjaxHelperContext&{path?:string}} */
+        var redirectSwapSpec = {};
         if (redirectPath.indexOf('{') === 0) {
           redirectSwapSpec = parseJSON(redirectPath);
           // what's the best way to throw an error if the user didn't include this
           redirectPath = redirectSwapSpec.path;
           delete redirectSwapSpec.path;
         }
-        ajaxHelper('get', redirectPath, redirectSwapSpec).then(function() {
-          pushUrlIntoHistory(redirectPath);
-        });
+        redirectSwapSpec.push = redirectSwapSpec.push || 'true';
+        ajaxHelper('get', redirectPath, redirectSwapSpec);
         return
       }
 
@@ -4915,7 +4921,7 @@
           selectOverride = xhr.getResponseHeader('HX-Reselect');
         }
 
-        const selectOOB = getClosestAttributeValue(elt, 'hx-select-oob');
+        const selectOOB = etc.selectOOB || getClosestAttributeValue(elt, 'hx-select-oob');
         const select = getClosestAttributeValue(elt, 'hx-select');
 
         swap(target, serverResponse, swapSpec, {
@@ -5114,7 +5120,7 @@
         "[hx-trigger='restored'],[data-hx-trigger='restored']"
       );
       body.addEventListener('htmx:abort', function(evt) {
-        const target = evt.target;
+        const target = (/** @type {CustomEvent} */(evt)).detail.elt || evt.target;
         const internalData = getInternalData(target);
         if (internalData && internalData.xhr) {
           internalData.xhr.abort();
@@ -5162,7 +5168,7 @@
   })();
 
   /**
-   * @license lucide v0.546.0 - ISC
+   * @license lucide v0.575.0 - ISC
    *
    * This source code is licensed under the ISC license.
    * See the LICENSE file in the root directory of this source tree.
@@ -5181,7 +5187,7 @@
   };
 
   /**
-   * @license lucide v0.546.0 - ISC
+   * @license lucide v0.575.0 - ISC
    *
    * This source code is licensed under the ISC license.
    * See the LICENSE file in the root directory of this source tree.
@@ -5211,7 +5217,59 @@
   };
 
   /**
-   * @license lucide v0.546.0 - ISC
+   * @license lucide v0.575.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   */
+
+  const hasA11yProp = (props) => {
+    for (const prop in props) {
+      if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  /**
+   * @license lucide v0.575.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   */
+
+  const mergeClasses = (...classes) => classes.filter((className, index, array) => {
+    return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
+  }).join(" ").trim();
+
+  /**
+   * @license lucide v0.575.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   */
+
+  const toCamelCase = (string) => string.replace(
+    /^([A-Z])|[\s-_]+(\w)/g,
+    (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+  );
+
+  /**
+   * @license lucide v0.575.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   */
+
+
+  const toPascalCase = (string) => {
+    const camelCase = toCamelCase(string);
+    return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+  };
+
+  /**
+   * @license lucide v0.575.0 - ISC
    *
    * This source code is licensed under the ISC license.
    * See the LICENSE file in the root directory of this source tree.
@@ -5233,11 +5291,6 @@
     }
     return "";
   };
-  const combineClassNames = (arrayOfClassnames) => {
-    const classNameArray = arrayOfClassnames.flatMap(getClassNames);
-    return classNameArray.map((classItem) => classItem.trim()).filter(Boolean).filter((value, index, self) => self.indexOf(value) === index).join(" ");
-  };
-  const toPascalCase = (string) => string.replace(/(\w)(\w*)(_|-|\s*)/g, (g0, g1, g2) => g1.toUpperCase() + g2.toLowerCase());
   const replaceElement = (element, { nameAttr, icons, attrs }) => {
     const iconName = element.getAttribute(nameAttr);
     if (iconName == null) return;
@@ -5249,13 +5302,22 @@
       );
     }
     const elementAttrs = getAttrs(element);
+    const ariaProps = hasA11yProp(elementAttrs) ? {} : { "aria-hidden": "true" };
     const iconAttrs = {
       ...defaultAttributes,
       "data-lucide": iconName,
+      ...ariaProps,
       ...attrs,
       ...elementAttrs
     };
-    const classNames = combineClassNames(["lucide", `lucide-${iconName}`, elementAttrs, attrs]);
+    const elementClassNames = getClassNames(elementAttrs);
+    const className = getClassNames(attrs);
+    const classNames = mergeClasses(
+      "lucide",
+      `lucide-${iconName}`,
+      ...elementClassNames,
+      ...className
+    );
     if (classNames) {
       Object.assign(iconAttrs, {
         class: classNames
@@ -5266,7 +5328,7 @@
   };
 
   /**
-   * @license lucide v0.546.0 - ISC
+   * @license lucide v0.575.0 - ISC
    *
    * This source code is licensed under the ISC license.
    * See the LICENSE file in the root directory of this source tree.
@@ -5284,7 +5346,7 @@
   ];
 
   /**
-   * @license lucide v0.546.0 - ISC
+   * @license lucide v0.575.0 - ISC
    *
    * This source code is licensed under the ISC license.
    * See the LICENSE file in the root directory of this source tree.
@@ -5295,7 +5357,8 @@
     icons = {},
     nameAttr = "data-lucide",
     attrs = {},
-    root = document
+    root = document,
+    inTemplates
   } = {}) => {
     if (!Object.values(icons).length) {
       throw new Error(
@@ -5305,10 +5368,20 @@
     if (typeof root === "undefined") {
       throw new Error("`createIcons()` only works in a browser environment.");
     }
-    const elementsToReplace = root.querySelectorAll(`[${nameAttr}]`);
-    Array.from(elementsToReplace).forEach(
-      (element) => replaceElement(element, { nameAttr, icons, attrs })
-    );
+    const elementsToReplace = Array.from(root.querySelectorAll(`[${nameAttr}]`));
+    elementsToReplace.forEach((element) => replaceElement(element, { nameAttr, icons, attrs }));
+    if (inTemplates) {
+      const templates = Array.from(root.querySelectorAll("template"));
+      templates.forEach(
+        (template) => createIcons({
+          icons,
+          nameAttr,
+          attrs,
+          root: template.content,
+          inTemplates
+        })
+      );
+    }
     if (nameAttr === "data-lucide") {
       const deprecatedElements = root.querySelectorAll("[icon-name]");
       if (deprecatedElements.length > 0) {

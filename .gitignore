@@ -80,3 +80,9 @@ train-history-backend/node_modules/
 !train-history-updater/mvnw.cmd
 
 train-history-updater/target/
+
+# Ignore build artifacts in static history js
+train-history-backend/src/main/resources/static/history/js/*.js
+train-history-backend/src/main/resources/static/history/js/*.js.map
+train-history-backend/src/main/resources/static/history/js/*.d.ts
+train-history-backend/src/main/resources/static/history/js/*.d.ts.map

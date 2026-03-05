@@ -61,6 +61,9 @@ cd train-history-backend
 pnpm install
 pnpm run install-playwright
 pnpm run e2e-ui
+
+# Tai ilman UI:ta:
+pnpm run e2e
 ```
 
 # Architecture
