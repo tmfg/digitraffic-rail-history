@@ -26,6 +26,18 @@ jobs:
       actions: read
     environment: ${{ github.event.inputs.env }}
     steps:
+      - name: Log workflow inputs and environment
+        run: |
+          echo "## Workflow Inputs" >> $GITHUB_STEP_SUMMARY
+          echo "| Name | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| actor | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| env | ${{ github.event.inputs.env }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ref | ${{ github.event.inputs.ref }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| config-repo-branch | ${{ github.event.inputs.config-repo-branch }} |" >> $GITHUB_STEP_SUMMARY
+          # echo "| db-install | ${{ github.event.inputs.db-install }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        shell: bash
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -107,7 +119,7 @@ jobs:
           
           docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
       - name: Generate backend SBOM
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.34.1
         with:
           scan-type: image
           image-ref: ${{ secrets.ECR_URL }}/train-history-updater:${{ github.sha }}
@@ -118,12 +130,12 @@ jobs:
           cd train-history-updater
           mvn -DoutputName=history-updater-sbom cyclonedx:makeBom
       - name: Upload backend SBOM
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: history-backend-sbom.json
           path: history-backend-sbom.json
       - name: Upload updater SBOM
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: history-updater-sbom.json
           path: train-history-updater/target/history-updater-sbom.json
@@ -173,7 +185,7 @@ jobs:
           desired-count: 1
 
       - name: Download ${{ matrix.app }} SBOM
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ${{ matrix.app}}-sbom.json
 
@@ -238,6 +250,10 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: ./train-history-backend
 
+      - name: Remove .env.playwright (CI uses env vars)
+        run: rm -f .env.playwright
+        working-directory: ./train-history-backend
+
       - name: Install dependencies for E2E-tests
         working-directory: ./train-history-backend
         run: pnpm install
@@ -257,7 +273,7 @@ jobs:
         run: pnpm run e2e
 
       - name: Upload Playwright report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-report

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.0.0-beta/schema.json",
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      // In a folder with a biome.jsonc that extends this one, that path seen is one
+      // starting from that folder. Therefore, these need ot be fairly generic.
+      // Remember to exclude e.t. for dir is final, so include after under it will not work.
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.json",
+      "**/*.jsonc",
+      "**/*.html",
+      // Rush managed
+      "!common/scripts",
+      // This should be covered by biome automatically, but just in case.
+      "!**/node_modules",
+      "!**/cdk.out",
+      "!**/dist",
+      "!**/build",
+      "!**/output",
+      "!**/temp",
+      // Exclude projects lib folders
+      "!afir/**/lib",
+      // Exclude digitraffic-common subtree project
+      "!lib/digitraffic-common"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "html": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "assist": { "enabled": true },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        // Should we go for: Prefer for...of statement instead of Array.forEach.
+        // https://biomejs.dev/linter/rules/no-for-each/
+        // "noForEach": "error",
+        "noForEach": "off",
+        // Enforce the usage of a literal access to properties over computed property access.
+        // Conflicts with typescript "noUncheckedIndexedAccess"
+        "useLiteralKeys": "warn"
+      },
+      "suspicious": {
+        // Disallow "any" type usage.
+        "noExplicitAny": "error"
+      },
+      "style": {
+        "useImportType": {
+          "level": "error", // "error", "warn", "off"
+          "options": {
+            // Creates combined import for types and combined import for non types. Can make bundled lambda size smaller.
+            "style": "separatedType" // "inlineType", "separatedType", "auto"
+          }
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      // Allow more lenient rules in tests.
+      "includes": ["**/__test__/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noNonNullAssertion": "off"
+          },
+          "suspicious": {
+            "noExtraNonNullAssertion": "off"
+          }
+        }
+      }
+    },
+    {
+      // Allow rush configs etc. to have comments without jsonc extension.
+      "includes": [
+        "rush.json",
+        "common/config/rush/*.json",
+        "**/rig.json",
+        "**/config/*.json",
+        "**/tsconfig-esm.json"
+      ],
+      "json": {
+        "parser": {
+          "allowComments": true
+        }
+      }
+    }
+  ],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    // For some reason this is ignoring way too much, but this
+    // should be safe as we check only staged files
+    "useIgnoreFile": false,
+    "defaultBranch": "master"
+  }
+}
