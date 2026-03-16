@@ -1,6 +1,5 @@
 package fi.livi.trainhistoryupdater.deserializers;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -8,16 +7,14 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public abstract class AJsonDeserializer<A> extends StdDeserializer<A> {
-    public AJsonDeserializer() {
-        this(null);
-    }
-
-    public AJsonDeserializer(Class<?> vc) {
+    protected AJsonDeserializer(Class<A> vc) {
         super(vc);
     }
 
@@ -78,7 +75,7 @@ public abstract class AJsonDeserializer<A> extends StdDeserializer<A> {
         }
     }
 
-    <B> List<B> deserializeChildren(final JsonParser jsonParser, final JsonNode children, final Class<B[]> childClass) throws IOException {
-        return Arrays.asList(jsonParser.getCodec().readValue(children.traverse(jsonParser.getCodec()), childClass));
+    <B> List<B> deserializeChildren(final DeserializationContext ctxt, final JsonNode children, final Class<B[]> childClass) throws JacksonException {
+        return Arrays.asList(ctxt.readTreeAsValue(children, childClass));
     }
 }

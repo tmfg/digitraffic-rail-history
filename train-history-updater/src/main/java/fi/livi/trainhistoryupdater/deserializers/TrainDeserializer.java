@@ -1,21 +1,23 @@
 package fi.livi.trainhistoryupdater.deserializers;
 
-import java.io.IOException;
-
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
 import fi.livi.trainhistoryupdater.entities.Train;
 import fi.livi.trainhistoryupdater.entities.TrainId;
 
 @Component
 public class TrainDeserializer extends AJsonDeserializer<Train> {
+    public TrainDeserializer() {
+        super(Train.class);
+    }
+
     @Override
-    public Train deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
-        final JsonNode node = jp.getCodec().readTree(jp);
+    public Train deserialize(final JsonParser jp, final DeserializationContext ctxt) throws JacksonException {
+        final JsonNode node = jp.readValueAsTree();
 
         final Train train = new Train();
 
