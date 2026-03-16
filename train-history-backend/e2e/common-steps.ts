@@ -21,10 +21,12 @@ export async function submitTrainInfoForm(
   searchText: string,
 ): Promise<void> {
   const junanumeroInput = page.getByLabel('Junanumero');
+  console.debug(`trainNumber: ${trainNumber.toString()}`)
   await junanumeroInput.fill(trainNumber.toString());
 
   const searchDate = (date).toISOString().split('T')[0]!
   const lahtopaivamaaraInput = page.getByLabel('Lähtöpäivämäärä');
+  console.debug(`searchDate: ${searchDate}`)
   await lahtopaivamaaraInput.fill(searchDate);
 
   const etsiAikatauluButton = page.getByRole('button', {name: searchText});

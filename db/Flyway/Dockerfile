@@ -1,5 +1,5 @@
-FROM flyway/flyway:11-alpine
+FROM flyway/flyway:12.1.0-alpine
 
-ENV MYSQL_DIRVER_VERSION=8.3.0
+ENV MYSQL_DRIVER_VERSION=8.3.0
 
-RUN cd /flyway/drivers && wget "https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/${MYSQL_DIRVER_VERSION}/mysql-connector-j-${MYSQL_DIRVER_VERSION}.jar"
+RUN cd /flyway/drivers && wget "https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/${MYSQL_DRIVER_VERSION}/mysql-connector-j-${MYSQL_DRIVER_VERSION}.jar"
