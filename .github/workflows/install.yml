@@ -122,7 +122,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.34.1
         with:
           scan-type: image
-          image-ref: ${{ secrets.ECR_URL }}/train-history-updater:${{ github.sha }}
+          image-ref: ${{ secrets.ECR_URL }}/train-history-backend:${{ github.sha }}
           format: cyclonedx
           output: history-backend-sbom.json
       - name: Generate updater SBOM
