@@ -139,15 +139,6 @@ jobs:
         with:
           name: history-updater-sbom.json
           path: train-history-updater/target/history-updater-sbom.json
-      - name: Notify Slack
-        if: failure()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: failure
-          text: FAILED Rail-history Install
-          fields: repo, job, took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
   deploy:
     if: ${{ always() && github.repository != 'tmfg/digitraffic-rail-history' && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
@@ -218,16 +209,6 @@ jobs:
       - name: Upload ${{ matrix.app }} SBOM
         run: |
           aws s3 cp ${{ matrix.app }}-sbom.json s3://${{ fromJson(steps.sbom-config.outputs.common).bucketArn }}/${{ fromJson(steps.sbom-config.outputs.config)[github.event.inputs.env][matrix.app] }}/${{ github.run_id }}-${{ github.sha }}.json
-
-      - name: Notify Slack
-        if: failure()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: failure
-          text: FAILED Rail-history Deploy ${{ matrix.app }}
-          fields: repo, job, took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
   E2E:
     if: ${{ github.repository != 'tmfg/digitraffic-rail-history' && github.event.inputs.env == 'beta' && always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}

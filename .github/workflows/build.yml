@@ -56,12 +56,4 @@ jobs:
         run: |
           cd train-history-backend
           mvn -f pom.xml test -Dspring.datasource.url=jdbc:aws-wrapper:mysql://${{ env.db_addr }}/trainhistoryjson -Dspring.datasource.username=rail_history -Dspring.datasource.password=rail_pass123
-      - name: Notify Slack
-        if: failure()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: failure
-          text: FAILED Rail-history Build
-          fields: repo, job, took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
