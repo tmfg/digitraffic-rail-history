@@ -1,11 +1,23 @@
-import 'htmx.org'
-import 'htmx-ext-path-params'
-import { createIcons, Loader } from 'lucide';
+import "htmx-ext-path-params";
+import "htmx.org";
+import { createIcons, Loader } from "lucide";
 
-window.addEventListener("DOMContentLoaded", function() {
-  createIcons({
-    icons: {
-      Loader
-    }
-  });
-}, false)
+document.body.addEventListener(
+  "htmx:configRequest",
+  function (event: CustomEvent) {
+    event.detail.headers["Digitraffic-User"] =
+      "internal-digitraffic-rail-history-ui";
+  },
+);
+
+window.addEventListener(
+  "DOMContentLoaded",
+  function () {
+    createIcons({
+      icons: {
+        Loader,
+      },
+    });
+  },
+  false,
+);
