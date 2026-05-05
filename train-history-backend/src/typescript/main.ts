@@ -5,8 +5,7 @@ import { createIcons, Loader } from "lucide";
 document.body.addEventListener(
   "htmx:configRequest",
   function (event: CustomEvent) {
-    event.detail.headers["Digitraffic-User"] =
-      "internal-digitraffic-rail-history-ui";
+    event.detail.headers["Digitraffic-User"] = "digitraffic-rail-history-ui";
   },
 );
 

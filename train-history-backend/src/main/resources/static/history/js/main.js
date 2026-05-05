@@ -5396,8 +5396,7 @@
   };
 
   document.body.addEventListener("htmx:configRequest", function (event) {
-      event.detail.headers["Digitraffic-User"] =
-          "internal-digitraffic-rail-history-ui";
+      event.detail.headers["Digitraffic-User"] = "digitraffic-rail-history-ui";
   });
   window.addEventListener("DOMContentLoaded", function () {
       createIcons({
