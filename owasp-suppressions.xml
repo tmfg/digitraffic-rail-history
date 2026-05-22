@@ -8,27 +8,29 @@
     <!-- This is only a problem if the user input is used as the template name with include.
          Also, Spring Boot TemplateViewResolver adds prefix and suffix to the template path
          so the included file has to have those in the name:
-         All versions of the package io.pebbletemplates:pebble are vulnerable to External Control of File Name or Path via the include tag.-->
-    <suppress until="2026-06-01">
+         All versions of the package io.pebbletemplates:pebble are vulnerable to External Control of File
+    Name or Path via the include tag.-->
+    <suppress until="2026-07-01">
         <notes><![CDATA[file name: pebble-spring6-3.2.4.jar]]></notes>
         <packageUrl regex="true">^pkg:maven/io\.pebbletemplates/pebble-spring6@.*$</packageUrl>
         <cve>CVE-2025-1686</cve>
     </suppress>
     <!-- See previous suppression for details -->
-    <suppress until="2026-06-01">
+    <suppress until="2026-07-01">
         <notes><![CDATA[file name: pebble-3.2.4.jar]]></notes>
         <packageUrl regex="true">^pkg:maven/io\.pebbletemplates/pebble@.*$</packageUrl>
         <cve>CVE-2025-1686</cve>
     </suppress>
     <!-- See previous suppression for details -->
-    <suppress until="2026-06-01">
+    <suppress until="2026-07-01">
         <notes><![CDATA[file name: pebble-spring-boot-starter-3.2.4.jar]]></notes>
         <packageUrl regex="true">^pkg:maven/io\.pebbletemplates/pebble-spring-boot-starter@.*$</packageUrl>
         <cve>CVE-2025-1686</cve>
     </suppress>
 
-    <!-- We dont use logger to send logs to remote servers -->
-    <suppress until="2026-06-01">
+    <!-- We dont use logger to send logs to remote servers.
+         TODO: Remove once confirmed that Spring Boot 4.0.6 includes Log4j >= 2.25.4 which fixes this -->
+    <suppress until="2026-07-01">
         <notes><![CDATA[file name: log4j-api-2.24.3.jar]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j-api@.*$</packageUrl>
         <cve>CVE-2025-68161</cve>

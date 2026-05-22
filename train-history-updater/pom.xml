@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fi.livi</groupId>
@@ -13,13 +14,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>4.0.6</version>
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- TODO: Remove overrides when Spring Boot includes Netty ≥4.2.13 and Tomcat ≥11.0.22
+             Added 2026-05-22 to fix CVE-2026-42581 (Netty) and CVE-2026-41293 (Tomcat) -->
+        <netty.version>4.2.13.Final</netty.version>
+        <tomcat.version>11.0.22</tomcat.version>
         <aws.advanced.jdbc.wrapper.version>3.3.0</aws.advanced.jdbc.wrapper.version>
         <com.mysql.mysql-connector-j>9.7.0</com.mysql.mysql-connector-j>
         <com.google.guava.version>33.6.0-jre</com.google.guava.version>
@@ -82,7 +87,8 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--This is used to add support for bootstrap.properties file-->
+        <!--This
+        is used to add support for bootstrap.properties file-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
@@ -169,7 +175,8 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.18.0</version>
                 <configuration>
-                    <rulesUri>file:///${maven.multiModuleProjectDirectory}/versions-maven-plugin-rules.xml</rulesUri>
+                    <rulesUri>
+                        file:///${maven.multiModuleProjectDirectory}/versions-maven-plugin-rules.xml</rulesUri>
                 </configuration>
             </plugin>
 
