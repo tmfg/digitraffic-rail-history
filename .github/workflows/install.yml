@@ -56,7 +56,7 @@ jobs:
           distribution: corretto
           cache: maven
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.3
+        uses: pnpm/action-setup@v6.0.8
         with:
           version: 10
       - name: Setup Node.js
@@ -222,7 +222,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.commit-hash }}
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.3
+        uses: pnpm/action-setup@v6.0.8
         with:
           version: 10
       - name: Setup Node.js
