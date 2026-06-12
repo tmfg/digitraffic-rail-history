@@ -21,7 +21,7 @@ test("Train timetable page finds results", async ({ browser }) => {
 
     const latestTrain = isLocalTest
       ? await getLatestTrainInfo()
-      : { train_number: 46, departure_date: new Date().toISOString().slice(0, 10) };
+      : { train_number: 1, departure_date: new Date().toISOString().slice(0, 10) };
     console.log(`Latest train (isLocalTest: ${isLocalTest}): ${JSON.stringify(latestTrain)}`);
 
     await submitTrainInfoForm(
