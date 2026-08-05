@@ -14,18 +14,20 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- TODO: Remove overrides when Spring Boot includes Netty ≥4.2.13 and Tomcat ≥11.0.22
-             Added 2026-05-22 to fix CVE-2026-42581 (Netty) and CVE-2026-41293 (Tomcat) -->
-        <netty.version>4.2.13.Final</netty.version>
-        <tomcat.version>11.0.22</tomcat.version>
-        <aws.advanced.jdbc.wrapper.version>3.3.0</aws.advanced.jdbc.wrapper.version>
+        <!-- TODO: Remove overrides when Spring Boot includes Netty ≥4.2.16 and Tomcat ≥11.0.24
+             Added 2026-05-22 to fix CVE-2026-42581 (Netty) and CVE-2026-41293 (Tomcat)
+             Updated 2026-08-05 to fix a lot of new CVEs
+        -->
+        <netty.version>4.2.16.Final</netty.version>
+        <tomcat.version>11.0.24</tomcat.version>
+        <aws.advanced.jdbc.wrapper.version>4.3.0</aws.advanced.jdbc.wrapper.version>
         <com.mysql.mysql-connector-j>9.7.0</com.mysql.mysql-connector-j>
         <com.google.guava.version>33.6.0-jre</com.google.guava.version>
         <net.logstash.logback.version>9.0</net.logstash.logback.version>
@@ -45,7 +47,7 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>12.2.0</version>
+                        <version>12.2.2</version>
                         <configuration>
                             <failBuildOnCVSS>7</failBuildOnCVSS>
                             <formats>html,xml</formats>
@@ -98,7 +100,7 @@
         <dependency>
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-secrets-manager</artifactId>
-            <version>4.0.2</version>
+            <version>4.1.0</version>
         </dependency>
         <!-- JDBC Driver -->
         <dependency>
