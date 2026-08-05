@@ -39,11 +39,11 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
         shell: bash
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.inputs.ref }}
       - name: Checkout CI-repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ${{ secrets.CONFIG_REPO_NAME }}
           ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
@@ -182,7 +182,7 @@ jobs:
           name: ${{ matrix.app}}-sbom.json
 
       - name: Checkout CI-repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ${{ secrets.CONFIG_REPO_NAME }}
           ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
@@ -218,7 +218,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.inputs.commit-hash }}
       - name: Setup pnpm
