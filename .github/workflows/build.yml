@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '22'
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.8
+        uses: pnpm/action-setup@v6.0.9
         with:
           version: 10
       - name: Run initialize
