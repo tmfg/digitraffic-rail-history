@@ -27,8 +27,8 @@
         -->
         <netty.version>4.2.16.Final</netty.version>
         <tomcat.version>11.0.24</tomcat.version>
-        <aws.advanced.jdbc.wrapper.version>4.3.0</aws.advanced.jdbc.wrapper.version>
-        <com.mysql.mysql-connector-j>9.7.0</com.mysql.mysql-connector-j>
+        <aws.advanced.jdbc.wrapper.version>4.4.0</aws.advanced.jdbc.wrapper.version>
+        <com.mysql.mysql-connector-j>26.7.0</com.mysql.mysql-connector-j>
         <com.google.guava.version>33.6.0-jre</com.google.guava.version>
         <net.logstash.logback.version>9.0</net.logstash.logback.version>
         <org.flywaydb.version>12.9.0</org.flywaydb.version>
