@@ -11,6 +11,11 @@ on:
         description: 'Branch/tag/SHA of digitraffic-rail-history-private'
         required: true
         default: 'master'
+      diff-only:
+        description: "Only run diff"
+        required: true
+        type: boolean
+        default: false
       config-repo-branch:
         description: 'Config repo branch'
         default: master
@@ -34,6 +39,7 @@ jobs:
           echo "| actor | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
           echo "| env | ${{ github.event.inputs.env }} |" >> $GITHUB_STEP_SUMMARY
           echo "| ref | ${{ github.event.inputs.ref }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| diff-only | ${{ github.event.inputs.diff-only }} |" >> $GITHUB_STEP_SUMMARY
           echo "| config-repo-branch | ${{ github.event.inputs.config-repo-branch }} |" >> $GITHUB_STEP_SUMMARY
           # echo "| db-install | ${{ github.event.inputs.db-install }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -92,14 +98,23 @@ jobs:
             --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
             --build-arg APP_FILE=train-history-backend.jar \
-            --build-arg PROPERTY_FILE=conf/train-history-backend-${{ github.event.inputs.env }}.properties \
+            --build-arg PROPERTY_FILE=conf/rail/train-history-backend-${{ github.event.inputs.env }}.properties \
             --platform linux/arm64 \
             --output type=docker \
-            --tag ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA} \
+            --tag ${{ secrets.ECR_URL }}/dt-rail-train-history-backend-repository:${{ github.sha }}-${{ github.run_id }} \
             --pull=true \
             --file=docker/Dockerfile-rail-train-history-backend .
           
-          docker push ${{ secrets.ECR_URL }}/train-history-backend:${GITHUB_SHA}
+          docker push ${{ secrets.ECR_URL }}/dt-rail-train-history-backend-repository:${{ github.sha }}-${{ github.run_id }}
+      - name: Put backend tag in Parameter Store
+        run: |
+          aws ssm put-parameter \
+            --name "/rail/train-history-backend/image-tag" \
+            --value "${{ github.sha }}-${{ github.run_id }}" \
+            --type "String" \
+            --overwrite
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
       - name: Build updater
         run: |
           cd train-history-updater
@@ -110,21 +125,30 @@ jobs:
             --no-cache \
             --build-arg ENV=${{ github.event.inputs.env }} \
             --build-arg APP_FILE=train-history-updater.jar \
-            --build-arg PROPERTY_FILE=conf/train-history-updater-${{ github.event.inputs.env }}.properties \
+            --build-arg PROPERTY_FILE=conf/rail/train-history-updater-${{ github.event.inputs.env }}.properties \
             --platform linux/arm64 \
             --output type=docker \
-            --tag ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA} \
+            --tag ${{ secrets.ECR_URL }}/dt-rail-train-history-updater-repository:${{ github.sha }}-${{ github.run_id }} \
             --pull=true \
             --file=docker/Dockerfile-rail-train-history-updater .
           
-          docker push ${{ secrets.ECR_URL }}/train-history-updater:${GITHUB_SHA}
+          docker push ${{ secrets.ECR_URL }}/dt-rail-train-history-updater-repository:${{ github.sha }}-${{ github.run_id }}
+      - name: Put updater tag in Parameter Store
+        run: |
+          aws ssm put-parameter \
+            --name "/rail/train-history-updater/image-tag" \
+            --value "${{ github.sha }}-${{ github.run_id }}" \
+            --type "String" \
+            --overwrite
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
 
       - name: Generate backend SBOM
         uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 #v0.24.0
         env:
           SYFT_FILE_METADATA_SELECTION: "none"
         with:
-          image: ${{ secrets.ECR_URL }}/train-history-backend:${{ github.sha }}
+          image: ${{ secrets.ECR_URL }}/dt-rail-train-history-backend-repository:${{ github.sha }}-${{ github.run_id }}
           format: cyclonedx-json
           output-file: history-backend-sbom.json
 
@@ -147,49 +171,64 @@ jobs:
     if: ${{ always() && github.repository != 'tmfg/digitraffic-rail-history' && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
     environment: ${{ github.event.inputs.env }}
     needs: install
-    strategy:
-      matrix:
-        app: [ history-backend, history-updater ]
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
       contents: read
       actions: read
     steps:
-      - name: Update ${{ matrix.app }} task definition
-        uses: tmfg/digitraffic-actions@update-task-def/v2
-        with:
-          task-def-file-name: rail-${{ github.event.inputs.env }}-train-${{ matrix.app }}
-          family-name: train-${{ matrix.app }}
-          image-arn: ${{ secrets.ECR_URL }}/train-${{ matrix.app }}:${{ github.sha }}
-          aws-role: ${{ secrets.AWS_ROLE }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          ci-repo-url: ${{ secrets.CONFIG_REPO_NAME }}
-          ci-repo-branch: ${{ github.event.inputs.config-repo-branch }}
-          ci-ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
-
-      - name: Update ${{ matrix.app }} ECS service
-        uses: tmfg/digitraffic-actions@ecs-service-update/v1
-        with:
-          aws-role: ${{ secrets.AWS_ROLE }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          service-name: train-${{ matrix.app }}
-          task-definition: train-${{ matrix.app }}
-          cluster-name: ${{ secrets.CLUSTER_NAME }}
-          desired-count: 1
-
-      - name: Download ${{ matrix.app }} SBOM
-        uses: actions/download-artifact@v8
-        with:
-          name: ${{ matrix.app}}-sbom.json
-
       - name: Checkout CI-repo
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           repository: ${{ secrets.CONFIG_REPO_NAME }}
           ssh-key: ${{ secrets.CONFIG_SSH_PRIVATE_KEY }}
           ref: ${{ inputs.config-repo-branch }}
           path: digitraffic-ci
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: gh-actions-install-rail-${{ github.event.inputs.env }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Build CI/CDK Infra project
+        working-directory: digitraffic-ci/aws/cdk/infra
+        run: |
+          pnpm install
+          pnpm build:ci
+
+      - name: Diff and deploy
+        env:
+          DEPLOY_ALL_CHANGES: true
+          DIFF_ONLY: ${{ github.event.inputs['diff-only'] }}
+          # the value of AWS_PROFILE is only used by the stack code, local AWS profile configurations are not being set up
+          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
+          STACK_NAME: TrainHistory${{ github.event.inputs['env'] == 'prod' && 'Prod' || 'Test' }}
+        working-directory: digitraffic-ci/aws/cdk/infra/scripts
+        run: |
+          pnpm install
+          pnpm build
+          pnpm run start:diff-and-deploy $STACK_NAME      
+
+      - name: Download backend SBOM
+        uses: actions/download-artifact@v8
+        with:
+          name: history-backend-sbom.json
+
+      - name: Download updater SBOM
+        uses: actions/download-artifact@v8
+        with:
+          name: history-updater-sbom.json
 
       - name: Read SBOM config
         id: sbom-config
@@ -206,12 +245,13 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6.1.2
         with:
           role-to-assume: ${{ fromJson(steps.sbom-config.outputs.common).sbomUploadRoleArn }}
-          role-session-name: gh-actions-upload-sbom-rail-${{ matrix.app }}-${{ github.event.inputs.env }}
+          role-session-name: gh-actions-upload-sbom-rail-${{ github.event.inputs.env }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Upload ${{ matrix.app }} SBOM
+      - name: Upload SBOM files
         run: |
-          aws s3 cp ${{ matrix.app }}-sbom.json s3://${{ fromJson(steps.sbom-config.outputs.common).bucketArn }}/${{ fromJson(steps.sbom-config.outputs.config)[github.event.inputs.env][matrix.app] }}/${{ github.run_id }}-${{ github.sha }}.json
+          aws s3 cp history-backend-sbom.json s3://${{ fromJson(steps.sbom-config.outputs.common).bucketArn }}/${{ fromJson(steps.sbom-config.outputs.config)[github.event.inputs.env]['history-backend'] }}/${{ github.run_id }}-${{ github.sha }}.json
+          aws s3 cp history-updater-sbom.json s3://${{ fromJson(steps.sbom-config.outputs.common).bucketArn }}/${{ fromJson(steps.sbom-config.outputs.config)[github.event.inputs.env]['history-updater'] }}/${{ github.run_id }}-${{ github.sha }}.json
 
   E2E:
     if: ${{ github.repository != 'tmfg/digitraffic-rail-history' && github.event.inputs.env == 'beta' && always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}

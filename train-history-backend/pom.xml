@@ -83,18 +83,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!--This
-		is used to add support for bootstrap.properties file-->
+		<!--This is used to add support for bootstrap.properties file -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>
 			<version>5.0.2</version>
-		</dependency>
-		<!-- AWS Secret manager -->
-		<dependency>
-			<groupId>io.awspring.cloud</groupId>
-			<artifactId>spring-cloud-aws-starter-secrets-manager</artifactId>
-			<version>4.1.0</version>
 		</dependency>
 		<!-- JDBC Driver -->
 		<dependency>
