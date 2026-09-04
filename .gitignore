@@ -58,6 +58,7 @@
 !train-history-backend/css-handling.mjs
 !train-history-backend/package.json
 !train-history-backend/pnpm-lock.yaml
+!train-history-backend/.npmrc
 !train-history-backend/rollup.config.mjs
 !train-history-backend/tsconfig.json
 train-history-backend/target/
