@@ -20,4 +20,4 @@ jobs:
           status: failure
           text: FAILED Rail-history Mirror
           fields: repo, job, took
-          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          webhook-url: ${{ secrets.SLACK_ALARMS_WEBHOOK_URL }}
