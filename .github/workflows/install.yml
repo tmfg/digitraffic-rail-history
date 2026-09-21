@@ -24,7 +24,7 @@ on:
 jobs:
   install:
     if: github.repository != 'tmfg/digitraffic-rail-history'
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       id-token: write
       contents: read
@@ -171,7 +171,7 @@ jobs:
     if: ${{ always() && github.repository != 'tmfg/digitraffic-rail-history' && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
     environment: ${{ github.event.inputs.env }}
     needs: install
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       id-token: write
       contents: read
@@ -257,7 +257,7 @@ jobs:
     if: ${{ github.repository != 'tmfg/digitraffic-rail-history' && github.event.inputs.env == 'beta' && always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure')) }}
     needs: deploy
     environment: ${{ github.event.inputs.env }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
