@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - name: mirror
-        uses: tmfg/digitraffic-actions@mirror/v2
+        uses: tmfg/digitraffic-actions@c8414c3b4233ad587eee5b6e9c844cd6821cf22c # mirror/v2
         with:
           mirror-repo: git@github.com:tmfg/digitraffic-rail-history
           ssh-private-key: ${{ secrets.MIRROR_SSH_PRIVATE_KEY }}
       - name: Notify Slack
         if: failure()
-        uses: tmfg/digitraffic-actions@slack-notify/v1
+        uses: tmfg/digitraffic-actions@88cc4d1a9c5cb96c037cb0dec41e1c64804b4d0e # slack-notify/v1
         with:
           status: failure
           text: FAILED Rail-history Mirror
