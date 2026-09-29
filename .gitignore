@@ -87,3 +87,4 @@ train-history-backend/src/main/resources/static/history/js/*.js
 train-history-backend/src/main/resources/static/history/js/*.js.map
 train-history-backend/src/main/resources/static/history/js/*.d.ts
 train-history-backend/src/main/resources/static/history/js/*.d.ts.map
+**/docker-compose.override.yml
