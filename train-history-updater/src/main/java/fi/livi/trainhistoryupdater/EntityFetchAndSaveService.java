@@ -48,7 +48,7 @@ public class EntityFetchAndSaveService {
             urlString = String.format(url, DIGITRAFFIC_URL, maxVersion);
         }
 
-        log.debug("Getting new versions from {}", urlString);
+        log.info("Getting new versions from {}", urlString);
 
         final byte[] responseBytes = webClient.get().uri(urlString).retrieve().bodyToMono(byte[].class).block();
         final JsonNode jsonNode = objectMapper.getObjectMapper().readTree(responseBytes);
