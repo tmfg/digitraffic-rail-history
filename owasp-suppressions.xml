@@ -35,6 +35,15 @@
         <cpe>cpe:/a:oracle:mysql_connectors</cpe>
     </suppress>
 
+    <suppress until="2026-11-01">
+        <notes><![CDATA[Fixed in mysql-connector-j 26.7.0, which needs the database on MySQL 8.4 first.]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.mysql/mysql-connector-j@.*$</packageUrl>
+        <vulnerabilityName>CVE-2026-60586</vulnerabilityName>
+        <vulnerabilityName>CVE-2026-60623</vulnerabilityName>
+        <vulnerabilityName>CVE-2026-60624</vulnerabilityName>
+        <vulnerabilityName>CVE-2026-61082</vulnerabilityName>
+    </suppress>
+
     <!--
   Permanent suppressions
   -->

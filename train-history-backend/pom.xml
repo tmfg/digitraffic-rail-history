@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.1.0</version>
+		<version>4.1.1</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -22,11 +22,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>21</java.version>
-		<!-- TODO: Remove overrides when Spring Boot includes Netty ≥4.2.16 and Tomcat ≥11.0.24
-		     Added 2026-05-22 to fix CVE-2026-42581 (Netty) and CVE-2026-41293 (Tomcat)
-   	    	 Updated 2026-08-05 to fix a lot of new CVEs -->
-		<netty.version>4.2.16.Final</netty.version>
-		<tomcat.version>11.0.24</tomcat.version>
+		<!-- TODO: Remove override when Spring Boot includes Tomcat ≥11.0.26 -->
+		<tomcat.version>11.0.26</tomcat.version>
 		<aws.advanced.jdbc.wrapper.version>4.4.0</aws.advanced.jdbc.wrapper.version>
 		<!-- do no upgrade to 26.7.0 before db is updated to 8.4! -->
 		<com.mysql.mysql-connector-j>9.7.0</com.mysql.mysql-connector-j>
@@ -88,7 +85,7 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>
-			<version>5.0.2</version>
+			<version>5.0.3</version>
 		</dependency>
 		<!-- JDBC Driver -->
 		<dependency>
