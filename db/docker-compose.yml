@@ -1,6 +1,6 @@
 services:
   rail_history_mysql:
-    image: mysql:8.0.45-debian
+    image: mysql:8.0.46-debian@sha256:9382e4f6f7f013231049ab854de9d0810594d028f4237b67102acc7ade8e3a99
     restart: unless-stopped
     platform: linux/amd64
     environment:
