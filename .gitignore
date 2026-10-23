@@ -47,6 +47,7 @@
 !train-history-backend/src/main/resources/secretsmanager.properties
 !train-history-backend/src/test
 !train-history-backend/src/test/**/
+!train-history-backend/src/test/java/**/*.java
 !train-history-backend/src/test/resources/compositions/*.sql
 !train-history-backend/src/test/resources/trains/*.sql
 !train-history-backend/src/sass

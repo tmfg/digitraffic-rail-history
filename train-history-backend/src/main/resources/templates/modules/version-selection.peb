@@ -12,10 +12,10 @@
             <option value="">Valitse versio...</option>
             {% for version in versions %}
             <option value="{{ version.getVersion() }}"{% if selectedVersion is not empty and version.getVersion() == selectedVersion.getVersion() %} selected{% endif %}>
-                {{ version.getFetchDateTime() | date("dd.MM.yyyy HH:mm:ss", timeZone="Europe/Helsinki") }} (v{{ version.getVersion() }})
+                {{ version.getFetchDateTime() | dateString("dd.MM.yyyy HH:mm:ss", "Europe/Helsinki") }} (v{{ version.getVersion() }})
             </option>
             {% endfor %}
         </select>
-        <div class="version-selection__help">Tippi: voit käyttää nuolinäppäimiä</div>
+        <div class="version-selection__help">Vinkki: voit käyttää nuolinäppäimiä</div>
     </div>
 </div>
