@@ -1,1 +1,4 @@
 target/dependency-check-report.html
+README\.md
+db/docker-compose\.yml
+train-history-(backend|updater)/src/main/resources/application\.properties
